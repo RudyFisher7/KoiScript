@@ -1,0 +1,1 @@
+id<main> = func(): int<{ id<x> = text<hi>; ref<x> = text<bye>; return int<0>; }>;
