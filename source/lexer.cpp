@@ -19,8 +19,6 @@ void Lexer::lex(const char* script, unsigned long size) {
     char token_buffer[64];
     unsigned int i = 0u;
     while (it < end && i < 64u) {
-        std::cout << *it << ' ';
-
         while (it != end && !std::isspace(*it)) {
             Token end_result = evaluate(it, 1u);
 
@@ -34,6 +32,12 @@ void Lexer::lex(const char* script, unsigned long size) {
                     i = 0u;
                 }
 
+            } else if (end_result.type == Token::Type::SCRIPTING_TOKEN_TYPE_TEXT_BOOKEND) {
+                //todo:: emplace with buffer result if any
+                tokens.emplace_back(end_result);
+
+                //todo:: iterate through the literal text value until bookend reached again
+//                while (it != end && )
             } else {
                 if (i > 0u) {
                     if (end_result.type == Token::SCRIPTING_TOKEN_TYPE_VALUE_START) {

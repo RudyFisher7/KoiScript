@@ -1,1 +1,5 @@
-id<main> = func(): int<{ id<x> = text<hi>; ref<x> = text<bye>; return int<0>; }>;
+id<main> = func(): int<{ return int<0>; }>;
+id<std> = lib<stdlib>; id<main> = func(): int<{ id<x> = text<hi>; ref<std.print>(ref<x>); ref<x> = text<bye>; ref<std.print>(ref<x>); return int<0>; }>;
+id<main> = func(): int<{ id<std> = lib<stdlib>; id<x> = text<hi>; ref<std.print>(ref<x>); ref<x> = text<bye>; ref<std.print>(ref<x>); return int<0>; }>;
+id<main> = func(): int<{ id<myfunc> = func(): void<{id id<msg> = text<'hi from my func too bad spaces aren't supported in strings yet'>;}>; id<msgcpy> = ref<myfunc.msg>; return int<0>; }>;
+id<std> = lib<stdlib>; id<main> = func(): int<{ ref<std.print(ref<std.print.formatting>)>; return int<0>; }>;

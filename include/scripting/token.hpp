@@ -20,16 +20,17 @@ public:
         SCRIPTING_TOKEN_TYPE_MIN = 0,
         SCRIPTING_TOKEN_TYPE_VALUE = SCRIPTING_TOKEN_TYPE_MIN,
         SCRIPTING_TOKEN_TYPE_TYPE,
-        SCRIPTING_TOKEN_TYPE_IDENTIFIER,
         SCRIPTING_TOKEN_TYPE_GROUPING_START,
         SCRIPTING_TOKEN_TYPE_GROUPING_END,
         SCRIPTING_TOKEN_TYPE_SCOPE_START,
         SCRIPTING_TOKEN_TYPE_SCOPE_END,
         SCRIPTING_TOKEN_TYPE_VALUE_START,
         SCRIPTING_TOKEN_TYPE_VALUE_END,
-        SCRIPTING_TOKEN_TYPE_DELIMITER,
+        SCRIPTING_TOKEN_TYPE_TEXT_BOOKEND,
         SCRIPTING_TOKEN_TYPE_FUNCTION_BODY_START,
+        SCRIPTING_TOKEN_TYPE_ACCESSOR,
         SCRIPTING_TOKEN_TYPE_ASSIGNER,
+        SCRIPTING_TOKEN_TYPE_DELIMITER,
         SCRIPTING_TOKEN_TYPE_RESULTER,
         SCRIPTING_TOKEN_TYPE_SIZE
     };
@@ -41,12 +42,12 @@ public:
     Token(Type in_type, Variant in_value);
 
     Token(const Token& rhs) = default;
-    Token(Token&& rhs) = default;
+    Token(Token&& rhs) noexcept = default;
 
     virtual ~Token() = default;
 
     Token& operator=(const Token& rhs) = default;
-    Token& operator=(Token&& rhs) = default;
+    Token& operator=(Token&& rhs) noexcept = default;
 };
 
 }
