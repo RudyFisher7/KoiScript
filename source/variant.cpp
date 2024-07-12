@@ -41,7 +41,7 @@ Variant Variant::from_variant(const Variant& rhs) {
 }
 
 
-Variant::Variant() : _current_type(Type::SCRIPTING_VARIANT_TYPE_CHAR), _value_char('A') {
+Variant::Variant() : _current_type(Type::SCRIPTING_VARIANT_TYPE_VOID), _value_bool(false) {
 
 }
 

@@ -62,6 +62,20 @@ dec<func1>:(dec<param1>:()int, dec<param2>:()int)int = int<{
 # call like this #
 val<func1>(int<9>(), int<5>()); # returns 14 #
 
+# a function that returns an id to a function the signature of ()int
+  (takes no params and returns an int).
+  ref keyword tells the interpreter that it will check current and parent
+  scopes for a function that has already been declared of matching
+  signature #
+dec<func1>:(dec<param1>:()int, dec<param2>:()int)ref()int = ref()int<{
+    return:ref<var3>(); # scopes inherit all parent scopes #
+}>();
+
+# ids the same function as var3. #
+dec<func2>:()int = val<func1>(int<1>(), int<1>());
+
+val<func2>(); # returns 8 #
+
 # a function with some logic and control statements (implemented as built-in functions) #
 dec<myfuncid>:(dec<x>:()int, dec<y>:()text)bool = bool<{
     # if-else. if is a built-in function and takes any number of pairs of if-then_block's and optionally a final else-block as arguments #

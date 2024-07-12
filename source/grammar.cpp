@@ -16,6 +16,7 @@ Grammar::Grammar() {
             {"int", Token::Type::SCRIPTING_TOKEN_TYPE_TYPE},
             {"float", Token::Type::SCRIPTING_TOKEN_TYPE_TYPE},
             {"text", Token::Type::SCRIPTING_TOKEN_TYPE_TYPE},
+            {"func", Token::Type::SCRIPTING_TOKEN_TYPE_TYPE},
 
             // metas
             {"dec", Token::Type::SCRIPTING_TOKEN_TYPE_META},

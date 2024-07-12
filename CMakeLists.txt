@@ -17,8 +17,10 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/parser.hpp
     source/std_lib.cpp
     include/scripting/std_lib.hpp
-    include/scripting/lib_registrar.cpp
+    source/lib_registrar.cpp
     include/scripting/lib_registrar.hpp
+    source/scope.cpp
+    include/scripting/scope.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

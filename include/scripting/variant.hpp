@@ -18,22 +18,23 @@ class Variant final {
 public:
     enum Type : int {
         SCRIPTING_VARIANT_TYPE_MIN = 0,
-        SCRIPTING_VARIANT_TYPE_CHAR = SCRIPTING_VARIANT_TYPE_MIN,
+        SCRIPTING_VARIANT_TYPE_VOID = SCRIPTING_VARIANT_TYPE_MIN,
+        SCRIPTING_VARIANT_TYPE_BOOL,
         SCRIPTING_VARIANT_TYPE_INT,
         SCRIPTING_VARIANT_TYPE_FLOAT,
-        SCRIPTING_VARIANT_TYPE_DOUBLE,
-        SCRIPTING_VARIANT_TYPE_STRING,
+        SCRIPTING_VARIANT_TYPE_TEXT,
+        SCRIPTING_VARIANT_TYPE_REF,
         SCRIPTING_VARIANT_TYPE_SIZE
     };
 
 private:
-    Type _current_type = SCRIPTING_VARIANT_TYPE_CHAR;
+    Type _current_type = SCRIPTING_VARIANT_TYPE_VOID;
     union {
-        char _value_char = 'A';
+        bool _value_bool = false;
         int _value_int;
         float _value_float;
-        double _value_double;
-        char* _value_string;
+        char* _value_text;
+        int _value_ref;
     };
 
 public:
@@ -99,6 +100,9 @@ public:
 
 
     int get_type() const;
+
+
+    operator void() const;//todo::
 
 
     operator char() const;
