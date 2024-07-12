@@ -105,6 +105,9 @@ public:
     operator void() const;//todo::
 
 
+    operator bool() const;
+
+
     operator char() const;
 
 
@@ -117,8 +120,13 @@ public:
     operator double() const;
 
 
+    operator char*() const;
+
+
     operator std::string() const;
 
+
+    bool get_bool() const;
 
     /**
      * @brief Function that can be used to explicitly get the char
@@ -135,10 +143,10 @@ public:
     float get_float() const;
 
 
-    double get_double() const;
-
-
     std::string get_string() const;
+
+
+    void set_value(bool value);
 
 
     void set_value(char value);
@@ -154,6 +162,7 @@ public:
 
 
     void set_value(const char* value, size_t size);
+    void set_value(const char* value);//must be null terminated
 
 
     void set_value(const std::string& value);
@@ -163,6 +172,8 @@ public:
 
 
 private:
+    void _copy(const Variant& rhs);
+
     bool _set_string_value(const std::string& in_value);
 
 

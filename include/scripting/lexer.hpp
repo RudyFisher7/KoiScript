@@ -7,7 +7,7 @@
 #define KOI_SCRIPTING_LEXER_HPP
 
 
-#include "../include/scripting/grammar.hpp"
+#include "../include/scripting/lexicon.hpp"
 #include "../include/scripting/token.hpp"
 
 #include <vector>
@@ -17,7 +17,7 @@ namespace Koi { namespace Scripting {
 
 class Lexer {
 protected:
-    Grammar _grammar;
+    Lexicon _grammar;
     std::vector<Token> _tokens;
 public:
     std::vector<Token>& lex(const char* script, unsigned long size);

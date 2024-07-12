@@ -11,8 +11,8 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/variant.hpp
     source/token.cpp
     include/scripting/token.hpp
-    source/grammar.cpp
-    include/scripting/grammar.hpp
+    source/lexicon.cpp
+    include/scripting/lexicon.hpp
     source/parser.cpp
     include/scripting/parser.hpp
     source/std_lib.cpp

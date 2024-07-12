@@ -2,13 +2,13 @@
 // Created by rfish on 7/10/2024.
 //
 
-#include "scripting/grammar.hpp"
+#include "scripting/lexicon.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 
-Grammar::Grammar() {
+Lexicon::Lexicon() {
     _keywords = {
             // types
             {"void", Token::Type::SCRIPTING_TOKEN_TYPE_TYPE},
@@ -48,7 +48,7 @@ Grammar::Grammar() {
 }
 
 
-Token::Type Grammar::get_type(const std::string& key) const {
+Token::Type Lexicon::get_type(const std::string& key) const {
     Token::Type result = Token::Type::SCRIPTING_TOKEN_TYPE_INVALID;
 
     auto it = _keywords.find(key);
@@ -60,7 +60,7 @@ Token::Type Grammar::get_type(const std::string& key) const {
     return result;
 }
 
-Token::Type Grammar::get_type(const char* key) const {
+Token::Type Lexicon::get_type(const char* key) const {
     Token::Type result = Token::Type::SCRIPTING_TOKEN_TYPE_INVALID;
 
     auto it = _keywords.find(std::string(key, 1));
