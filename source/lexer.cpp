@@ -6,16 +6,15 @@
 #include "../include/scripting/lexer.hpp"
 
 #include <iostream>
-#include <vector>
+#include <string>
 
 
 namespace Koi { namespace Scripting {
 
-void Lexer::lex(const char* script, unsigned long size) {
+std::vector<Token>& Lexer::lex(const char* script, unsigned long size) {
     const char* it = script;
     const char* end = script + size;
 
-    std::vector<Token> tokens;
     char token_buffer[64];
     unsigned int i = 0u;
     while (it < end && i < 64u) {
@@ -28,28 +27,63 @@ void Lexer::lex(const char* script, unsigned long size) {
 
                 Token buffer_result = evaluate(token_buffer, i);
                 if (buffer_result.type != Token::Type::SCRIPTING_TOKEN_TYPE_INVALID) {
-                    tokens.emplace_back(buffer_result);
+                    _tokens.emplace_back(buffer_result);
                     i = 0u;
                 }
 
-            } else if (end_result.type == Token::Type::SCRIPTING_TOKEN_TYPE_TEXT_BOOKEND) {
-                //todo:: emplace with buffer result if any
-                tokens.emplace_back(end_result);
+            } else if (end_result.type == Token::Type::SCRIPTING_TOKEN_TYPE_COMMENT_BOOKEND) {
+                if (i > 0u) {
+                    _tokens.emplace_back(evaluate(token_buffer, i));
+                    i = 0u;
+                }
+
+                ++it;
+
+                bool is_bookend_found = false;
+                const char* verbatim_it = it;
+                while (verbatim_it != end && !is_bookend_found) {
+                    is_bookend_found = _grammar.get_type(verbatim_it) == Token::Type::SCRIPTING_TOKEN_TYPE_COMMENT_BOOKEND;
+                    ++verbatim_it;
+                }
+
+                it = verbatim_it;
+            } else if (end_result.type == Token::Type::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND) {
+                if (i > 0u) {
+                    _tokens.emplace_back(evaluate(token_buffer, i));
+                    i = 0u;
+                }
+
+                _tokens.emplace_back(end_result);
+                ++it;
 
                 //todo:: iterate through the literal text value until bookend reached again
-//                while (it != end && )
+                bool is_bookend_found = false;
+                const char* verbatim_it = it;
+                while (verbatim_it != end && !is_bookend_found) {
+                    is_bookend_found =
+                            _grammar.get_type(verbatim_it) == Token::Type::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND;
+                    ++verbatim_it;
+                }
+
+                unsigned long verbatim_size = verbatim_it - it - 1u;
+                Token text(Token::Type::SCRIPTING_TOKEN_TYPE_VALUE, std::string(it, verbatim_size));
+                _tokens.emplace_back(text);
+                _tokens.emplace_back(evaluate(verbatim_it, 1u));
+
+                it = verbatim_it + 1u;
+
             } else {
                 if (i > 0u) {
                     if (end_result.type == Token::SCRIPTING_TOKEN_TYPE_VALUE_START) {
-                        tokens.emplace_back(evaluate(token_buffer, i));
+                        _tokens.emplace_back(evaluate(token_buffer, i));
                     } else if (end_result.type == Token::SCRIPTING_TOKEN_TYPE_VALUE_END) {
-                        tokens.emplace_back(Token::Type::SCRIPTING_TOKEN_TYPE_VALUE, Variant(token_buffer, i));
+                        _tokens.emplace_back(Token::Type::SCRIPTING_TOKEN_TYPE_VALUE, std::string(token_buffer, i));
                     }
 
                     i = 0u;
                 }
 
-                tokens.emplace_back(end_result);
+                _tokens.emplace_back(end_result);
             }
 
             ++it;
@@ -58,15 +92,15 @@ void Lexer::lex(const char* script, unsigned long size) {
         ++it;
     }
 
-    std::cout << std::endl;
+    return _tokens;
 }
 
 
 Token Lexer::evaluate(const char* token_string, unsigned long size) const {
     Token result;
 
-    result.value = Variant(token_string, size);
-    result.type = _grammar.get_type(result.value.get_string());
+    result.value = std::string(token_string, size);
+    result.type = _grammar.get_type(result.value);
 
     return result;
 }

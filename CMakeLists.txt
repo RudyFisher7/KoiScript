@@ -13,6 +13,12 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/token.hpp
     source/grammar.cpp
     include/scripting/grammar.hpp
+    source/parser.cpp
+    include/scripting/parser.hpp
+    source/std_lib.cpp
+    include/scripting/std_lib.hpp
+    include/scripting/lib_registrar.cpp
+    include/scripting/lib_registrar.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

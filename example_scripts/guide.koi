@@ -1,0 +1,89 @@
+# declares a function with the id 'var1'.
+  var1 is assigned with the default value for int. #
+dec<vardecl>:()int;
+
+# equivalent to above declaration, but with more
+  parsing steps. #
+dec<vardecandassign>:()int = int<0>();
+
+# since everything is a function, this is how you can
+  simulate a variable (i.e., a function that returns
+  8 as an integer value. #
+id<var1> = int<8>();
+
+# declares var2 as a function that returns an integer
+  value and assigns it to return the same value as
+  var1 (the integer value 8). #
+dec<var2>:()int = val<var1>();
+
+# assigns var1 to return the integer value of 4.
+  var2 will not be affected by this assignment. #
+id<var1> = int<4>();
+
+# declares var3 and assigns it to the same function
+  as var2. this is essentially assign-by-reference.
+  var2 and var3 are now the same function. #
+dec<var3>:()int = ref<var2>();
+
+# a string "variable", except KoiScript calls it
+  text.
+  the '' are called "verbatim bookends". use them
+  for text literals to that whitespace is preserved.
+  char is not supported. use '\r' as text instead. #
+dec<var4>:()text = text<'hello KoiScript!'>();
+
+val<var1>(); # returns 4 #
+val<var2>(); # returns 8 #
+val<var3>(); # returns 8 #
+
+ref<var1>(); # returns the function that var1 ids #
+ref<var2>(); # same as previous line, but for var2 #
+ref<var3>(); # same as previous line, but note that var2 and var3 id the same function #
+
+# doesn't work. signatures are different. #
+#dec<var4>(dec<param1>:()bool):int = ref<var3>();#
+
+# also doesn't work. #
+#dec<var5>(dec<param1>:()bool):int = int<0>();#
+
+# since a param is declared, must do this instead #
+dec<var6>(dec<param1>:()bool):int = int<{return:int<0>();}>();
+
+
+# a function that add the parameters and returns the result
+  notice the {} that wraps the function's body.
+  {} are used similarly as in most other languages as scope delimiters.
+  the only things that penetrate {} are the args in () on the lhs of
+  the assignment operator. #
+dec<func1>:(dec<param1>:()int, dec<param2>:()int)int = int<{
+    return:val<add>(val<param1>(), val<param2>()); # add is a built-in function, equivalent to + operator in most languages but takes any number of arguments #
+}>();
+
+# call like this #
+val<func1>(int<9>(), int<5>()); # returns 14 #
+
+# a function with some logic and control statements (implemented as built-in functions) #
+dec<myfuncid>:(dec<x>:()int, dec<y>:()text)bool = bool<{
+    # if-else. if is a built-in function and takes any number of pairs of if-then_block's and optionally a final else-block as arguments #
+    val<if>(val<equals>(val<x>(), int<6>()), void<{
+        val<print>(val<y>()); # print value of y if x == 6 #
+    }>, val<greater>(val<x>(), int<7>()), void<{
+        val<print>(text<'x is greater than 7'>);
+    }>, void<{
+        val<print>(text<'nothing is true'>());
+    }>);
+
+    # while-else. second arg executes until first arg evaluates to false.
+      optional third arg executes exactly once if first arg is false. #
+    val<while>(val<notequal>(int<5>, val<x>), void<{}>, void<{}>);
+
+    return:val<equals>(val<x>(), int<6>);
+}>();
+
+# WIP a type definition example
+  stdec declares variables with persisting state (stdec = state + declaration)
+dec<object>:(stdec<publicmember1>:()text = text<'hello world object'>)type = type<{
+    stdec<privatemember1>:()bool;
+}>;
+
+dec<myoobject>:()object #

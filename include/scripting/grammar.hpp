@@ -17,11 +17,12 @@ namespace Scripting {
 
 class Grammar {
 protected:
-    std::unordered_map<std::string, Token::Type> _key_words;
+    std::unordered_map<std::string, Token::Type> _keywords;
 
 public:
     Grammar();
     Token::Type get_type(const std::string& key) const;
+    Token::Type get_type(const char* key) const;
 };
 
 } // Scripting

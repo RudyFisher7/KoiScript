@@ -1,0 +1,28 @@
+dec<vardecl>:()int;
+# comment to be ignored #
+dec<vardecandassign>:()int = int<0>();
+
+#
+ignore
+this too#
+
+#thisto
+#
+
+id<var1> = int<8>();
+
+dec<var2>:()int = val<var1>();
+
+id<var1> = int<4>();
+
+dec<var3>:()int = ref<var2>();
+
+dec<var4>:()text = text<'hello KoiScript!'>();
+
+val<var1>();
+val<var2>();
+val<var3>();
+
+ref<var1>();
+ref<var2>();
+ref<var3>();

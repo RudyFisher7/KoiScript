@@ -1,0 +1,39 @@
+# doesn't work. signatures are different. #
+#dec<var4>(dec<param1>:()bool):int = ref<var3>();#
+
+# also doesn't work. #
+#dec<var5>(dec<param1>:()bool):int = int<0>();#
+
+# since a param is declared, must do this instead #
+dec<var6>(dec<param1>:()bool):int = int<{return:int<0>();}>();
+
+
+# a function that add the parameters and returns the result
+  notice the {} that wraps the function's body.
+  {} are used similarly as in most other languages as scope delimiters.
+  the only things that penetrate {} are the args in () on the lhs of
+  the assignment operator. #
+dec<func1>:(dec<param1>:()int, dec<param2>:()int)int = int<{
+    return:val<add>(val<param1>(), val<param2>()); # add is a built-in function, equivalent to + operator in most languages but takes any number of arguments #
+}>();
+
+# call like this #
+val<func1>(int<9>(), int<5>()); # returns 14 #
+
+# a function with some logic and control statements (implemented as built-in functions) #
+dec<myfuncid>:(dec<x>:()int, dec<y>:()text)bool = bool<{
+    # if-else. if is a built-in function and takes any number of pairs of if-then_block's and optionally a final else-block as arguments #
+    val<if>(val<equals>(val<x>(), int<6>()), void<{
+        val<print>(val<y>()); # print value of y if x == 6 #
+    }>, val<greater>(val<x>(), int<7>()), void<{
+        val<print>(text<'x is greater than 7'>);
+    }>, void<{
+        val<print>(text<'nothing is true'>());
+    }>);
+
+    # while-else. second arg executes until first arg evaluates to false.
+      optional third arg executes exactly once if first arg is false. #
+    val<while>(val<notequal>(int<5>, val<x>), void<{}>, void<{}>);
+
+    return:val<equals>(val<x>(), int<6>);
+}>();

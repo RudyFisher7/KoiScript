@@ -6,9 +6,9 @@
 #define KOI_SCRIPTING_TOKEN_HPP
 
 
+#include <string>
 #include <utility>
-
-#include "scripting/variant.hpp"
+#include <ostream>
 
 
 namespace Koi { namespace Scripting {
@@ -20,15 +20,16 @@ public:
         SCRIPTING_TOKEN_TYPE_MIN = 0,
         SCRIPTING_TOKEN_TYPE_VALUE = SCRIPTING_TOKEN_TYPE_MIN,
         SCRIPTING_TOKEN_TYPE_TYPE,
+        SCRIPTING_TOKEN_TYPE_META,
         SCRIPTING_TOKEN_TYPE_GROUPING_START,
         SCRIPTING_TOKEN_TYPE_GROUPING_END,
         SCRIPTING_TOKEN_TYPE_SCOPE_START,
         SCRIPTING_TOKEN_TYPE_SCOPE_END,
         SCRIPTING_TOKEN_TYPE_VALUE_START,
         SCRIPTING_TOKEN_TYPE_VALUE_END,
-        SCRIPTING_TOKEN_TYPE_TEXT_BOOKEND,
-        SCRIPTING_TOKEN_TYPE_FUNCTION_BODY_START,
-        SCRIPTING_TOKEN_TYPE_ACCESSOR,
+        SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND,
+        SCRIPTING_TOKEN_TYPE_COMMENT_BOOKEND,
+        SCRIPTING_TOKEN_TYPE_COMBINER,
         SCRIPTING_TOKEN_TYPE_ASSIGNER,
         SCRIPTING_TOKEN_TYPE_DELIMITER,
         SCRIPTING_TOKEN_TYPE_RESULTER,
@@ -36,10 +37,10 @@ public:
     };
 
     Type type = SCRIPTING_TOKEN_TYPE_VALUE;
-    Variant value;
+    std::string value;
 
     Token() = default;
-    Token(Type in_type, Variant in_value);
+    Token(Type in_type, const std::string& in_value);
 
     Token(const Token& rhs) = default;
     Token(Token&& rhs) noexcept = default;
@@ -48,7 +49,14 @@ public:
 
     Token& operator=(const Token& rhs) = default;
     Token& operator=(Token&& rhs) noexcept = default;
+
+    friend std::ostream& operator<<(std::ostream& lhs, const Token& rhs);
+
+
+protected:
+    static std::string _get_name_of_type(Type in_type);
 };
+
 
 }
 }
