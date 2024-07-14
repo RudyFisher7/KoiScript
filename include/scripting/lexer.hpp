@@ -10,6 +10,7 @@
 #include "../include/scripting/lexicon.hpp"
 #include "../include/scripting/token.hpp"
 
+#include <array>
 #include <vector>
 
 
@@ -24,15 +25,20 @@ public:
         SCRIPTING_LEXER_ERROR_UNEXPECTED_EOF,
         SCRIPTING_LEXER_ERROR_SIZE
     };
+
 protected:
+    static const unsigned int TOKEN_BUFFER_SIZE = 64u;
     Lexicon _grammar;
+    std::array<char, TOKEN_BUFFER_SIZE> _token_buffer;
     std::vector<Token> _tokens;
 public:
     std::vector<Token>& lex(const char* script, unsigned long size);
 
 protected:
-    Error _skip_comment(const char** in_it, const char* end) const;
     Token _evaluate(const char* token_string, unsigned long size) const;
+    Error _skip_comment(const char** in_it, const char* end) const;
+    Error _fill_text(const char** in_it, const char* end, std::array<char, TOKEN_BUFFER_SIZE>& buffer) const;
+    Error _fill_group(const char** in_it, const char* end, std::array<char, TOKEN_BUFFER_SIZE>& buffer) const;
 
 };
 
