@@ -13,7 +13,7 @@
 
 int main() {
     std::cout << "KoiScript debug project started" << std::endl;
-    std::string script_file_path(R"(C:\dev\koilang\example_scripts\funcs.koi)");
+    std::string script_file_path(R"(C:\dev\koilang\example_scripts\master.koi)");
 
     std::cout << "Loading " << script_file_path << std::endl;
 

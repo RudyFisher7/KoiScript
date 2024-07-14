@@ -21,6 +21,9 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/lib_registrar.hpp
     source/scope.cpp
     include/scripting/scope.hpp
+    source/koi_script.cpp
+    include/scripting/koi_script.hpp
+    include/scripting/type_defs.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

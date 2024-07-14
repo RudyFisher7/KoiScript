@@ -4,7 +4,7 @@ dec<vardecl>:()int;
 
 # equivalent to above declaration, but with more
   parsing steps. #
-dec<vardecandassign>:()int = int<0>();
+dec<vardecandassign>:()int = 0;
 
 # since everything is a function, this is how you can
   simulate a variable (i.e., a function that returns

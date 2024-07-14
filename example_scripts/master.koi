@@ -1,0 +1,33 @@
+#
+the master script file to test against all regressions.
+#
+
+
+var<var1>:float = 0.3;
+var<var2>:text = 'toasty bananas';
+var<var3>:float[2] = { 4.1, 9.0 };
+var<var4>:float[] = { 4.1, 9.2 };
+var<var5>:float[2] = {}; # 0.0, 0.0 #
+var<var6>:bool = true;
+fun<fun1>:()bool = { ret:true; };
+fun<fun2>:()void = { exe<add>(4, 5); };
+fun<fun3>:(bool)bool = { ret:val<_args>(0); };
+fun<fun4>:(bool)bool = { var<y>:bool = val<_args>(0); ret:val<y>(); };
+fun<fun5>:(bool, int)bool = { var<y>:bool = val<_args>(0); ret:val<y>(); };
+fun<fun6>:(float[])bool = { var<y>:float = val<_args>(0, 0); ret:val<y>(); };
+fun<fun7>:(float[])bool = { var<y>:float = val<_args>(0, 0); ret:val<y>(); };
+fun<fun8>:(float[])bool = { var<y>:float[] = val<_args>(0); ret:val<y>(); };
+
+fun<fun9>:(bool)bool = { ret:val<_args>(0); };
+fun<fun10>:(float[])(bool)bool = { var<y>:float[] = val<_args>(0); ret:val<fun9>(); };
+fun<fun11>:(float[])(bool)bool = { var<y>:float[] = val<_args>(0); ret:val<fun9>(); };
+fun<fun12>:(int, float)(float[])(bool)bool = { var<y>:float[] = val<_args>(1); ret:val<fun11>(); };
+
+id<var1>:float = val<var3>(0);
+var<my_var1>:float = val<var1>();
+fun<my_fun1>:()bool = val<fun1>();
+var<my_var2>:bool = exe<fun1>();
+exe<fun3>(true);
+exe<fun5>(false, val<var1>());
+exe<fun3>(ref<var6>());
+fun<my_fun2>:(bool)bool = exe<fun10>(val<var3>());

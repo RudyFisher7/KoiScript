@@ -10,19 +10,22 @@ namespace Scripting {
 
 Lexicon::Lexicon() {
     _keywords = {
-            // types
+            // var types
             {"void", Token::Type::SCRIPTING_TOKEN_TYPE_TYPE},
             {"bool", Token::Type::SCRIPTING_TOKEN_TYPE_TYPE},
             {"int", Token::Type::SCRIPTING_TOKEN_TYPE_TYPE},
             {"float", Token::Type::SCRIPTING_TOKEN_TYPE_TYPE},
             {"text", Token::Type::SCRIPTING_TOKEN_TYPE_TYPE},
-            {"func", Token::Type::SCRIPTING_TOKEN_TYPE_TYPE},
 
-            // metas
-            {"dec", Token::Type::SCRIPTING_TOKEN_TYPE_META},
-            {"id", Token::Type::SCRIPTING_TOKEN_TYPE_META},
-            {"ref", Token::Type::SCRIPTING_TOKEN_TYPE_META},
-            {"val", Token::Type::SCRIPTING_TOKEN_TYPE_META},
+            // left metas
+            {"var", Token::Type::SCRIPTING_TOKEN_TYPE_LEFT_META},
+            {"fun", Token::Type::SCRIPTING_TOKEN_TYPE_LEFT_META},
+            {"id", Token::Type::SCRIPTING_TOKEN_TYPE_LEFT_META},
+
+            // right metas
+            {"ref", Token::Type::SCRIPTING_TOKEN_TYPE_RIGHT_META},
+            {"val", Token::Type::SCRIPTING_TOKEN_TYPE_RIGHT_META},
+            {"exe", Token::Type::SCRIPTING_TOKEN_TYPE_RIGHT_META},
 
             // mirrored enclosures
             {"(", Token::Type::SCRIPTING_TOKEN_TYPE_GROUPING_START},
@@ -31,6 +34,8 @@ Lexicon::Lexicon() {
             {"}", Token::Type::SCRIPTING_TOKEN_TYPE_SCOPE_END},
             {"<", Token::Type::SCRIPTING_TOKEN_TYPE_VALUE_START},
             {">", Token::Type::SCRIPTING_TOKEN_TYPE_VALUE_END},
+            {"[", Token::Type::SCRIPTING_TOKEN_TYPE_ARRAY_START},
+            {"]", Token::Type::SCRIPTING_TOKEN_TYPE_ARRAY_END},
 
             // bookend enclosures
             {"'", Token::Type::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND},
@@ -38,12 +43,14 @@ Lexicon::Lexicon() {
 
             // operators
             {"=", Token::Type::SCRIPTING_TOKEN_TYPE_ASSIGNER},
+
+            // delimiters
             {":", Token::Type::SCRIPTING_TOKEN_TYPE_COMBINER},
             {";", Token::Type::SCRIPTING_TOKEN_TYPE_DELIMITER},
             {",", Token::Type::SCRIPTING_TOKEN_TYPE_DELIMITER},
 
-            // resulter
-            {"return", Token::Type::SCRIPTING_TOKEN_TYPE_RESULTER},
+            // resulters
+            {"ret", Token::Type::SCRIPTING_TOKEN_TYPE_RESULTER},
     };
 }
 

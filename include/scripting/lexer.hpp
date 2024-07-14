@@ -16,6 +16,14 @@
 namespace Koi { namespace Scripting {
 
 class Lexer {
+public:
+    enum Error: int {
+        SCRIPTING_LEXER_ERROR_UNKNOWN = -1,
+        SCRIPTING_LEXER_ERROR_MIN = 0,
+        SCRIPTING_LEXER_ERROR_OK = SCRIPTING_LEXER_ERROR_MIN,
+        SCRIPTING_LEXER_ERROR_UNEXPECTED_EOF,
+        SCRIPTING_LEXER_ERROR_SIZE
+    };
 protected:
     Lexicon _grammar;
     std::vector<Token> _tokens;
@@ -23,7 +31,8 @@ public:
     std::vector<Token>& lex(const char* script, unsigned long size);
 
 protected:
-    Token evaluate(const char* token_string, unsigned long size) const;
+    Error _skip_comment(const char** in_it, const char* end) const;
+    Token _evaluate(const char* token_string, unsigned long size) const;
 
 };
 

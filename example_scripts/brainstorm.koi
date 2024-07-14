@@ -1,0 +1,122 @@
+# brainstorming what the syntax should be #
+
+
+#
+meta functions for lhs: fun, var, id
+    var<var1>:float = 0.3;
+    var<var2>:text = 'toasty bananas';
+    var<var3>:float[2] = { 4.1, 9.0 };
+    var<var4>:float[] = { 4.1, 9.2 };
+    var<var5>:float[2] = {}; # 0.0, 0.0 #
+    var<var6>:bool = true;
+    fun<fun1>:()bool = { ret:true; };
+    fun<fun2>:()void = { exe<add>(4, 5); };
+    fun<fun3>:(bool)bool = { ret:val<_args>(0); };
+    fun<fun4>:(bool)bool = { var<y>:bool = val<_args>(0); ret:val<y>(); };
+    fun<fun5>:(bool, int)bool = { var<y>:bool = val<_args>(0); ret:val<y>(); };
+    fun<fun6>:(float[])bool = { var<y>:float = val<_args>(0, 0); ret:val<y>(); };
+    fun<fun7>:(float[])bool = { var<y>:float = val<_args>(0, 0); ret:val<y>(); };
+    fun<fun8>:(float[])bool = { var<y>:float[] = val<_args>(0); ret:val<y>(); };
+
+    fun<fun9>:(bool)bool = { ret:val<_args>(0); };
+    fun<fun10>:(float[])(bool)bool = { var<y>:float[] = val<_args>(0); ret:val<fun9>(); };
+    fun<fun11>:(float[])(bool)bool = { var<y>:float[] = val<_args>(0); ret:val<fun9>(); };
+    fun<fun12>:(int, float)(float[])(bool)bool = { var<y>:float[] = val<_args>(1); ret:val<fun11>(); };
+
+meta functions for rhs: val, ref, exe
+    id<var1>:float = val<var3>(0);
+    var<my_var1>:float = val<var1>();
+    fun<my_fun1>:()bool = val<fun1>();
+    var<my_var2>:bool = exe<fun1>();
+    exe<fun3>(true);
+    exe<fun5>(false, val<var1>());
+    exe<fun3>(ref<var6>());
+    fun<my_fun2>:(bool)bool = exe<fun10>(val<var3>());
+
+extension for rvalues: arg, args, sig (function signature)
+    tbd - also need lvalues to correspond
+
+#
+
+
+# lval = rval #
+var<var1>:bool = bool:true;
+fun<func1>:()bool = bool():{ return:true; };
+fun<func2>:()bool = bool():{ return:false; };
+
+# these are equivalent. #
+id<var1> = false;
+id<var1> = bool:false;
+
+#
+these aren't valid; signatures are established with dec and cannot be changed or redeclared
+--
+id<func1>:()bool = bool():{ return:false; };
+id<func1>:(int())bool = bool(int()):{ return:false; };
+id<func1>:(dec<x>:()int)bool = bool(int()):{ return:false; };
+#
+
+#
+also not valid.
+--
+id<func1> = false;
+id<func1> = bool:false;
+id<func1> = val<var1>();
+id<func1> = ref<var1>();
+id<func1> = val<func2>();
+#
+
+# valid. the first does shallow copy, the second does deep copy. #
+id<func1> = ref<func2>();
+id<func1> = val<func2>();
+
+dec<func3>:()bool;
+dec<func4>:(dec<x>:int, dec<routine>:(dec<x>:int)bool))bool;
+
+# param binding examples. #
+id<func1> = ref<func2>(int:3);
+id<func1> = val<func2>(int:5);
+
+# this is different than the 3 above; more logic executes. note there are also local declarations in this one. #
+id<func1> = bool():{
+    dec<result>:bool = bool:false;
+    dec<x>:int = int:3;
+    dec<y>:int = int:5;
+    dec<routine>:()void = void():{ id<result> = bool:true; };
+
+    exe<if>(val<equals>(val<x>(), val<y>()),
+        ref<routine>()
+    );
+
+    id<result> = false;
+
+    return:exe<result>();
+};
+
+dec<var2>:bool = true;
+dec<var3>:bool;
+
+# equivalent #
+id<var3> = true;
+id<var3> = bool():true;
+id<var3> = bool():{ return:true; };
+id<var3> = val<var2>();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+dec<func1>:()int = int():{ return:1; };
+dec<func2>:(dec<x>:()int, dec<y>:()int)int = int(int(), int()):{ return:1; };
