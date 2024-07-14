@@ -16,8 +16,7 @@ std::vector<Token>& Lexer::lex(const char* script, unsigned long size) {
     const char* it = script;
     const char* end = script + size;
 
-    unsigned int i = 0u;
-    while (it < end && i < _token_buffer.size()) {
+    while (it < end && _token_buffer.current_index < _token_buffer.buffer.size()) {
         while (it != end && !std::isspace(*it)) {
             Token end_result = _evaluate(it, 1u);
 
@@ -30,11 +29,13 @@ std::vector<Token>& Lexer::lex(const char* script, unsigned long size) {
                 case Token::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND:
                     _tokens.push_back(end_result);
                     result = _fill_text(&it, end, _token_buffer);
-                    _tokens.emplace_back(_evaluate(_token_buffer.data(), _token_buffer.size()));
+                    _tokens.emplace_back(_evaluate(_token_buffer.buffer.data(), _token_buffer.current_index));
+                    _token_buffer.current_index = 0u;
                     _tokens.emplace_back(_evaluate(it, 1u));
                     break;
                 case Token::SCRIPTING_TOKEN_TYPE_GROUPING_START:
                     _tokens.push_back(end_result);
+                    result = _fill_group(&it, end, _token_buffer);
                     _tokens.emplace_back(_evaluate(it, 1u));
                     break;
                 case Token::SCRIPTING_TOKEN_TYPE_SCOPE_START:
@@ -90,21 +91,20 @@ Lexer::Error Lexer::_skip_comment(const char** in_it, const char* end) const {
 }
 
 
-Lexer::Error Lexer::_fill_text(const char** in_it, const char* end, std::array<char, TOKEN_BUFFER_SIZE>& buffer) const {
+Lexer::Error Lexer::_fill_text(const char** in_it, const char* end, TokenBuffer& buffer) const {
     Error result = Lexer::SCRIPTING_LEXER_ERROR_OK;
     const char* it = *in_it;
-    unsigned int i = 0u;
     Token lex_result = _evaluate(++it, 1u);
 
     while (it != end && lex_result.type != Token::Type::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND) {
-        buffer.at(i++) = *it;
+        buffer.buffer.at(buffer.current_index++) = *it;
         lex_result = _evaluate(++it, 1u);
     }
 
     if (it == end) {
         result = SCRIPTING_LEXER_ERROR_UNEXPECTED_EOF;
     } else {
-        lex_result = _evaluate(buffer.data(), buffer.size());
+        lex_result = _evaluate(buffer.buffer.data(), buffer.current_index);
         *in_it = it;
     }
 
@@ -112,15 +112,14 @@ Lexer::Error Lexer::_fill_text(const char** in_it, const char* end, std::array<c
 }
 
 
-Lexer::Error Lexer::_fill_group(const char** in_it, const char* end, std::array<char, TOKEN_BUFFER_SIZE>& buffer) const {
+Lexer::Error Lexer::_fill_group(const char** in_it, const char* end, TokenBuffer& buffer) const {
     Error result = Lexer::SCRIPTING_LEXER_ERROR_OK;
     const char* it = *in_it;
-    unsigned int i = 0u;
     Token lex_result = _evaluate(++it, 1u);
 
     while (it != end && lex_result.type != Token::Type::SCRIPTING_TOKEN_TYPE_GROUPING_END) {
         while (it != end && lex_result.type != Token::Type::SCRIPTING_TOKEN_TYPE_TYPE) {
-            buffer.at(i++) = *it;
+            buffer.buffer.at(buffer.current_index++) = *it;
             lex_result = _evaluate(++it, 1u);
         }
     }
@@ -128,7 +127,7 @@ Lexer::Error Lexer::_fill_group(const char** in_it, const char* end, std::array<
     if (it == end) {
         result = SCRIPTING_LEXER_ERROR_UNEXPECTED_EOF;
     } else {
-        lex_result = _evaluate(buffer.data(), buffer.size());
+        lex_result = _evaluate(buffer.buffer.data(), buffer.current_index);
         *in_it = it;
     }
 

@@ -27,9 +27,15 @@ public:
     };
 
 protected:
-    static const unsigned int TOKEN_BUFFER_SIZE = 64u;
+    struct TokenBuffer final {
+    public:
+        static const unsigned int TOKEN_BUFFER_SIZE = 64u;
+        std::array<char, TOKEN_BUFFER_SIZE> buffer {};
+        unsigned int current_index = 0u;
+    };
+
+    TokenBuffer _token_buffer;
     Lexicon _grammar;
-    std::array<char, TOKEN_BUFFER_SIZE> _token_buffer;
     std::vector<Token> _tokens;
 public:
     std::vector<Token>& lex(const char* script, unsigned long size);
@@ -37,8 +43,8 @@ public:
 protected:
     Token _evaluate(const char* token_string, unsigned long size) const;
     Error _skip_comment(const char** in_it, const char* end) const;
-    Error _fill_text(const char** in_it, const char* end, std::array<char, TOKEN_BUFFER_SIZE>& buffer) const;
-    Error _fill_group(const char** in_it, const char* end, std::array<char, TOKEN_BUFFER_SIZE>& buffer) const;
+    Error _fill_text(const char** in_it, const char* end, TokenBuffer& buffer) const;
+    Error _fill_group(const char** in_it, const char* end, TokenBuffer& buffer) const;
 
 };
 
