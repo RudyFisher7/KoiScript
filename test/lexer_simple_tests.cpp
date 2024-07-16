@@ -6,6 +6,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <string>
+#include <iostream>
 #include <limits>
 #include <vector>
 
@@ -305,9 +306,10 @@ TEST_CASE("Declare var", "[VAR][VALID_INPUT]") {
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
     }
 
-    REQUIRE(error == KoiScript::Lexer::SCRIPTING_LEXER_ERROR_OK);
+    CHECK(error == KoiScript::Lexer::SCRIPTING_LEXER_ERROR_OK);
     REQUIRE(tokens.size() == expected.size());
     for (unsigned int i = 0; i < tokens.size(); ++i) {
+        std::cout << tokens.at(i) << std::endl;
         CHECK(tokens.at(i) == expected.at(i));
     }
 }
@@ -495,9 +497,10 @@ TEST_CASE("Declare fun", "[FUN][VALID_INPUT]") {
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
     }
 
-    REQUIRE(error == KoiScript::Lexer::SCRIPTING_LEXER_ERROR_OK);
+    CHECK(error == KoiScript::Lexer::SCRIPTING_LEXER_ERROR_OK);
     REQUIRE(tokens.size() == expected.size());
     for (unsigned int i = 0; i < tokens.size(); ++i) {
+        std::cout << tokens.at(i) << std::endl;
         CHECK(tokens.at(i) == expected.at(i));
     }
 }

@@ -1,1 +1,1 @@
-dec<vardecl>:()int;
+var<easy_enough>:bool;
