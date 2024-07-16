@@ -30,8 +30,11 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
         case SCRIPTING_TOKEN_TYPE_TYPE:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_TYPE);
             break;
-        case SCRIPTING_TOKEN_TYPE_META:
-            result = NAMEOF(SCRIPTING_TOKEN_TYPE_META);
+        case SCRIPTING_TOKEN_TYPE_LEFT_META:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_LEFT_META);
+            break;
+        case SCRIPTING_TOKEN_TYPE_RIGHT_META:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_RIGHT_META);
             break;
         case SCRIPTING_TOKEN_TYPE_GROUPING_START:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_GROUPING_START);
@@ -45,11 +48,11 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
         case SCRIPTING_TOKEN_TYPE_SCOPE_END:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_SCOPE_END);
             break;
-        case SCRIPTING_TOKEN_TYPE_VALUE_START:
-            result = NAMEOF(SCRIPTING_TOKEN_TYPE_VALUE_START);
+        case SCRIPTING_TOKEN_TYPE_ID_START:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_ID_START);
             break;
-        case SCRIPTING_TOKEN_TYPE_VALUE_END:
-            result = NAMEOF(SCRIPTING_TOKEN_TYPE_VALUE_END);
+        case SCRIPTING_TOKEN_TYPE_ID_END:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_ID_END);
             break;
         case SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND);
@@ -81,8 +84,21 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
 }
 
 
+bool Token::operator==(const Token& rhs) const {
+    return (
+            type == rhs.type
+            && value == rhs.value
+    );
+}
+
+
+bool Token::operator!=(const Token& rhs) const {
+    return !(*this == rhs);
+}
+
+
 std::ostream& operator<<(std::ostream& lhs, const Token& rhs) {
-    lhs << "value: '" << rhs.value << "', type: " << Token::_get_name_of_type(rhs.type);
+    lhs << "Token({value: " << rhs.value << ", type: " << Token::_get_name_of_type(rhs.type) << "})";
 
     return lhs;
 }

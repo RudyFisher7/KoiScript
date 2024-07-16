@@ -36,7 +36,8 @@ int main() {
     std::cout << "Script: " << script_buffer << std::endl;
 
     Koi::Scripting::Lexer lexer;
-    std::vector<Koi::Scripting::Token>& tokens = lexer.lex(script_buffer, script_size);
+    std::vector<Koi::Scripting::Token> tokens;
+    lexer.lex(script_buffer, script_size, tokens);
 
     for(const auto& token : tokens) {
         std::cout << token << "\n";

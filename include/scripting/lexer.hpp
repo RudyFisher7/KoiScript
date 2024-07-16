@@ -7,8 +7,8 @@
 #define KOI_SCRIPTING_LEXER_HPP
 
 
-#include "../include/scripting/lexicon.hpp"
-#include "../include/scripting/token.hpp"
+#include "scripting/lexicon.hpp"
+#include "scripting/token.hpp"
 
 #include <array>
 #include <vector>
@@ -23,28 +23,23 @@ public:
         SCRIPTING_LEXER_ERROR_MIN = 0,
         SCRIPTING_LEXER_ERROR_OK = SCRIPTING_LEXER_ERROR_MIN,
         SCRIPTING_LEXER_ERROR_UNEXPECTED_EOF,
+        SCRIPTING_LEXER_ERROR_RESERVED_ID,
         SCRIPTING_LEXER_ERROR_SIZE
     };
 
 protected:
-    struct TokenBuffer final {
-    public:
-        static const unsigned int TOKEN_BUFFER_SIZE = 64u;
-        std::array<char, TOKEN_BUFFER_SIZE> buffer {};
-        unsigned int current_index = 0u;
-    };
-
-    TokenBuffer _token_buffer;
     Lexicon _grammar;
-    std::vector<Token> _tokens;
+
 public:
-    std::vector<Token>& lex(const char* script, unsigned long size);
+    Error lex(const char* script, unsigned long size, std::vector<Token>& out_tokens) const;
 
 protected:
     Token _evaluate(const char* token_string, unsigned long size) const;
-    Error _skip_comment(const char** in_it, const char* end) const;
-    Error _fill_text(const char** in_it, const char* end, TokenBuffer& buffer) const;
-    Error _fill_group(const char** in_it, const char* end, TokenBuffer& buffer) const;
+    Token _evaluate(const char* token_string, const char* end) const;
+    Error _skip_comment(const char** in_it, const char* end, std::vector<Token>& out_tokens) const;
+    Error _fill_text(const char** in_it, const char* end, std::vector<Token>& out_tokens) const;
+    Error _fill_group(const char** in_it, const char* end, std::vector<Token>& out_tokens) const;
+    Error _fill_id(const char** in_it, const char* end, std::vector<Token>& out_tokens) const;
 
 };
 

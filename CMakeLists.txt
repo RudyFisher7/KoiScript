@@ -24,6 +24,8 @@ add_library(${PROJECT_NAME} STATIC
     source/koi_script.cpp
     include/scripting/koi_script.hpp
     include/scripting/type_defs.hpp
+    include/scripting/token_buffer.cpp
+    include/scripting/token_buffer.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -32,3 +34,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 
 add_subdirectory(debug)
+
+# fixme:: toggle with build option
+add_subdirectory(test)

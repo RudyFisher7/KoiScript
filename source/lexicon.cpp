@@ -32,10 +32,10 @@ Lexicon::Lexicon() {
             {")", Token::Type::SCRIPTING_TOKEN_TYPE_GROUPING_END},
             {"{", Token::Type::SCRIPTING_TOKEN_TYPE_SCOPE_START},
             {"}", Token::Type::SCRIPTING_TOKEN_TYPE_SCOPE_END},
-            {"<", Token::Type::SCRIPTING_TOKEN_TYPE_VALUE_START},
-            {">", Token::Type::SCRIPTING_TOKEN_TYPE_VALUE_END},
-            {"[", Token::Type::SCRIPTING_TOKEN_TYPE_ARRAY_START},
-            {"]", Token::Type::SCRIPTING_TOKEN_TYPE_ARRAY_END},
+            {"<", Token::Type::SCRIPTING_TOKEN_TYPE_ID_START},
+            {">", Token::Type::SCRIPTING_TOKEN_TYPE_ID_END},
+            {"[", Token::Type::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START},
+            {"]", Token::Type::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END},
 
             // bookend enclosures
             {"'", Token::Type::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND},
@@ -46,11 +46,12 @@ Lexicon::Lexicon() {
 
             // delimiters
             {":", Token::Type::SCRIPTING_TOKEN_TYPE_COMBINER},
+            {",", Token::Type::SCRIPTING_TOKEN_TYPE_SEPARATOR},
             {";", Token::Type::SCRIPTING_TOKEN_TYPE_DELIMITER},
-            {",", Token::Type::SCRIPTING_TOKEN_TYPE_DELIMITER},
 
             // resulters
             {"ret", Token::Type::SCRIPTING_TOKEN_TYPE_RESULTER},
+            {"_args", Token::Type::SCRIPTING_TOKEN_TYPE_RESERVED_ID},
     };
 }
 
