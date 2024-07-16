@@ -80,5 +80,10 @@ Token::Type Lexicon::get_type(const char* key) const {
     return result;
 }
 
+
+bool Lexicon::is_valid_id_char(const char& value) const {
+    return std::isalnum(value) || value == '_';
+}
+
 } // Scripting
 } // Koi

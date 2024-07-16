@@ -102,9 +102,6 @@ public:
     int get_type() const;
 
 
-    operator void() const;//todo::
-
-
     operator bool() const;
 
 

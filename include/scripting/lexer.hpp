@@ -24,23 +24,33 @@ public:
         SCRIPTING_LEXER_ERROR_OK = SCRIPTING_LEXER_ERROR_MIN,
         SCRIPTING_LEXER_ERROR_UNEXPECTED_EOF,
         SCRIPTING_LEXER_ERROR_RESERVED_ID,
+        SCRIPTING_LEXER_ERROR_UNRECOGNIZED_TOKEN,
+        SCRIPTING_LEXER_ERROR_INVALID_TOKEN,
+        SCRIPTING_LEXER_ERROR_INVALID_ID,
         SCRIPTING_LEXER_ERROR_SIZE
     };
 
 protected:
-    Lexicon _grammar;
+    static const unsigned int MAX_TOKEN_SIZE = 64u;
+
+    Lexicon _lexicon;
+
+    mutable char _token_buffer[MAX_TOKEN_SIZE];//todo:: cleanup
 
 public:
     Error lex(const char* script, unsigned long size, std::vector<Token>& out_tokens) const;
 
 protected:
-    Token _evaluate(const char* token_string, unsigned long size) const;
+    Token _evaluate(const char* token_string, unsigned int size) const;
     Token _evaluate(const char* token_string, const char* end) const;
+    std::string _get_clean_token_value(const char* token_string, unsigned int size) const;
+    std::string _get_clean_token_value(const char* token_string, const char* end) const;
     Error _skip_comment(const char** in_it, const char* end, std::vector<Token>& out_tokens) const;
+    Error _fill_meta(const char* meta_start, const char* meta_end, std::vector<Token>& out_tokens) const;
+    Error _fill_id(const char** in_it, const char* end, std::vector<Token>& out_tokens) const;
     Error _fill_text(const char** in_it, const char* end, std::vector<Token>& out_tokens) const;
     Error _fill_group(const char** in_it, const char* end, std::vector<Token>& out_tokens) const;
-    Error _fill_id(const char** in_it, const char* end, std::vector<Token>& out_tokens) const;
-
+    Error _fill_array_size(const char** in_it, const char* end, std::vector<Token>& out_tokens) const;
 };
 
 } // Scripting
