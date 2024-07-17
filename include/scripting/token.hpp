@@ -16,12 +16,14 @@ namespace Koi { namespace Scripting {
 struct Token {
 public:
     enum Type : int {
-        SCRIPTING_TOKEN_TYPE_INVALID = -2,
-        SCRIPTING_TOKEN_TYPE_UNKNOWN = -1,
+        SCRIPTING_TOKEN_TYPE_INVALID = -1,
         SCRIPTING_TOKEN_TYPE_MIN = 0,
         SCRIPTING_TOKEN_TYPE_VALUE = SCRIPTING_TOKEN_TYPE_MIN,
+        SCRIPTING_TOKEN_TYPE_BOOL,
+        SCRIPTING_TOKEN_TYPE_INT,
+        SCRIPTING_TOKEN_TYPE_FLOAT,
+        SCRIPTING_TOKEN_TYPE_TEXT,
         SCRIPTING_TOKEN_TYPE_ID,
-        SCRIPTING_TOKEN_TYPE_ARRAY_SIZE,
         SCRIPTING_TOKEN_TYPE_TYPE,
         SCRIPTING_TOKEN_TYPE_LEFT_META,
         SCRIPTING_TOKEN_TYPE_RIGHT_META,
@@ -44,7 +46,7 @@ public:
         SCRIPTING_TOKEN_TYPE_SIZE
     };
 
-    Type type = SCRIPTING_TOKEN_TYPE_UNKNOWN;
+    Type type = SCRIPTING_TOKEN_TYPE_INVALID;
     std::string value;
 
     Token() = default;

@@ -20,7 +20,6 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
     std::string result;
 
     switch (in_type) {
-
         case SCRIPTING_TOKEN_TYPE_INVALID:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_INVALID);
             break;
@@ -71,6 +70,33 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
             break;
         case SCRIPTING_TOKEN_TYPE_RESULTER:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_RESULTER);
+            break;
+        case SCRIPTING_TOKEN_TYPE_BOOL:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_BOOL);
+            break;
+        case SCRIPTING_TOKEN_TYPE_INT:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_INT);
+            break;
+        case SCRIPTING_TOKEN_TYPE_FLOAT:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_FLOAT);
+            break;
+        case SCRIPTING_TOKEN_TYPE_TEXT:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_TEXT);
+            break;
+        case SCRIPTING_TOKEN_TYPE_ID:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_ID);
+            break;
+        case SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START);
+            break;
+        case SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END);
+            break;
+        case SCRIPTING_TOKEN_TYPE_SEPARATOR:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_SEPARATOR);
+            break;
+        case SCRIPTING_TOKEN_TYPE_RESERVED_ID:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_RESERVED_ID);
             break;
         case SCRIPTING_TOKEN_TYPE_SIZE:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_SIZE);

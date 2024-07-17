@@ -26,6 +26,8 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/type_defs.hpp
     include/scripting/token_buffer.cpp
     include/scripting/token_buffer.hpp
+    source/log/log.cpp
+    include/scripting/log/log.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

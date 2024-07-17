@@ -23,7 +23,6 @@ public:
         SCRIPTING_LEXER_ERROR_MIN = 0,
         SCRIPTING_LEXER_ERROR_OK = SCRIPTING_LEXER_ERROR_MIN,
         SCRIPTING_LEXER_ERROR_UNEXPECTED_EOF,
-        SCRIPTING_LEXER_ERROR_RESERVED_ID,
         SCRIPTING_LEXER_ERROR_UNRECOGNIZED_TOKEN,
         SCRIPTING_LEXER_ERROR_INVALID_TOKEN,
         SCRIPTING_LEXER_ERROR_INVALID_ID,
@@ -31,20 +30,19 @@ public:
     };
 
 protected:
-    static const unsigned int MAX_TOKEN_SIZE = 64u;
+    static const unsigned int MAX_TOKEN_SIZE;
 
     Lexicon _lexicon;
-    mutable bool _is_verbatim = false;
-
-    mutable char _token_buffer[MAX_TOKEN_SIZE];//todo:: cleanup
+    bool _is_lexing_verbatim = false;
 
 public:
-    Error lex(const char* script, unsigned long size, std::vector<Token>& out_tokens) const;
+    Error lex(const char* script, unsigned long size, std::vector<Token>& out_tokens);
 
 protected:
-    bool _is_single_char_token(const char* value) const;
-    Error _add_single_char_token(const char* value, std::vector<Token>& out_tokens) const;
-    bool _is_multi_char_token(const char* start, unsigned int size) const;
+    Error _lex(const char** start, const char* end, std::vector<Token>& out_tokens);
+    Error _lex_verbatim(const char** start, const char* end, std::vector<Token>& out_tokens);
+
+    Error _add_single_char_token(const char& value, std::vector<Token>& out_tokens) const;
     Error _add_multi_char_token(const char* start, unsigned int size, std::vector<Token>& out_tokens) const;
 };
 
