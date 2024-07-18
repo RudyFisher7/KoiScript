@@ -15,11 +15,25 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Catch2)
 
 
-add_executable(${PROJECT_NAME}
-    lexer_simple_tests.cpp
+set(LEVER_DECLARATION_TEST LexerDeclarationTest)
+
+add_executable(${LEVER_DECLARATION_TEST}
+    lexer_declaration_test.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(${LEVER_DECLARATION_TEST} PRIVATE
+    KoiScript
+    Catch2::Catch2
+)
+
+
+set(LEVER_META_TEST LexerMetaTest)
+
+add_executable(${LEVER_META_TEST}
+    lexer_meta_test.cpp
+)
+
+target_link_libraries(${LEVER_META_TEST} PRIVATE
     KoiScript
     Catch2::Catch2
 )

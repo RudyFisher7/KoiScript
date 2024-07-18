@@ -20,7 +20,7 @@ add_library(${PROJECT_NAME} STATIC
     source/lib_registrar.cpp
     include/scripting/lib_registrar.hpp
     source/scope.cpp
-    include/scripting/scope.hpp
+    include/scripting/closure.hpp
     source/koi_script.cpp
     include/scripting/koi_script.hpp
     include/scripting/type_defs.hpp
@@ -28,6 +28,10 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/token_buffer.hpp
     source/log/log.cpp
     include/scripting/log/log.hpp
+    source/extensions/extensions.cpp
+    include/scripting/extensions/extensions.hpp
+    source/ast_node.cpp
+    include/scripting/ast_node.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

@@ -31,6 +31,7 @@ public:
     bool is_valid_id(const std::string& value) const;
     bool is_valid_int(const std::string& value) const;
     bool is_valid_float(const std::string& value) const;
+    Token::Type get_non_bool_value_type(const std::string& value) const;
 };
 
 } // Scripting

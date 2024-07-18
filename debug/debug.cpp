@@ -4,6 +4,7 @@
 
 
 #include "scripting/lexer.hpp"
+#include "scripting/extensions/extensions.hpp"
 
 #include <cstring>
 #include <fstream>
@@ -39,34 +40,7 @@ int main() {
     std::vector<Koi::Scripting::Token> tokens;
     lexer.lex(script_buffer, script_size, tokens);
 
-    for(const auto& token : tokens) {
-        std::cout << token << "\n";
-    }
-
-    std::cout << std::endl;
-
-    std::string prefix = "";
-    for(const auto& token : tokens) {
-        if (token.value == "}") {
-            prefix.erase(0, 1);
-        } else {
-
-        }
-
-        std::cout << token.value;
-        if (token.value == ";") {
-            std::cout << '\n';
-        } else if (token.value == "{") {
-            std::cout << "\n\t";
-            prefix += "\t";
-        }
-
-        if (token.type == Koi::Scripting::Token::SCRIPTING_TOKEN_TYPE_INVALID) {
-            std::cout << "!!!!!!!!INVALID!!!!!!!!!" << std::endl;
-        }
-    }
-
-    std::cout << std::endl;
+    std::cout << tokens << std::endl;
 
     return 0;
 }

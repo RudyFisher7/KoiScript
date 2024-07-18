@@ -2,7 +2,7 @@
 
 
 #
-meta functions for lhs: fun, var, id
+meta functions for lhs: fun, var
     var<var1>:float = 0.3;
     var<var2>:text = 'toasty bananas';
     var<var3>:float[2] = { 4.1, 9.0 };
@@ -78,20 +78,23 @@ id<func1> = ref<func2>(int:3);
 id<func1> = val<func2>(int:5);
 
 # this is different than the 3 above; more logic executes. note there are also local declarations in this one. #
-id<func1> = bool():{
-    dec<result>:bool = bool:false;
-    dec<x>:int = int:3;
-    dec<y>:int = int:5;
-    dec<routine>:()void = void():{ id<result> = bool:true; };
+exe<assign>(
+    ref<func1>,
+    {
+        dec<result>:bool = bool:false;
+        dec<x>:int = int:3;
+        dec<y>:int = int:5;
+        dec<routine>:()void = void():{ id<result> = bool:true; };
 
-    exe<if>(val<equals>(val<x>(), val<y>()),
-        ref<routine>()
-    );
+        exe<if>(val<equals>(val<x>(), val<y>()),
+            ref<routine>()
+        );
 
-    id<result> = false;
+        id<result> = false;
 
-    return:exe<result>();
-};
+        return:exe<result>();
+    }
+);
 
 dec<var2>:bool = true;
 dec<var3>:bool;

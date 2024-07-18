@@ -32,6 +32,10 @@ Lexer::Error Lexer::lex(const char* script, unsigned long size, std::vector<Toke
         }
     }
 
+    if (out_tokens.size() >= 9) {
+        int i = 0;
+    }
+
     return result;
 }
 
@@ -47,9 +51,6 @@ Lexer::Error Lexer::_lex(const char** start, const char* end, std::vector<Token>
     Token::Type type = Token::SCRIPTING_TOKEN_TYPE_INVALID;
 
     while (it != end && !_is_lexing_verbatim && result == SCRIPTING_LEXER_ERROR_OK) {
-        if (!out_tokens.empty() && out_tokens.back().value == ";") {
-            int j = 0;
-        }
         while (it != end && std::isspace(*it)) {
             ++it;
         }
@@ -96,13 +97,15 @@ Lexer::Error Lexer::_lex_verbatim(const char** start, const char* end, std::vect
     Error result = SCRIPTING_LEXER_ERROR_OK;
     const char* it = *start;
 
+    bool is_verbatim = _is_lexing_verbatim;
+
     char multi_char_token_backlog[MAX_TOKEN_SIZE];
     std::memset(multi_char_token_backlog, 0, MAX_TOKEN_SIZE);
     unsigned int i = 0u;
 
-    while (it != end && _is_lexing_verbatim) {
-        _is_lexing_verbatim = _lexicon.get_type(*it) != Token::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND;
-        if (_is_lexing_verbatim) {
+    while (it != end && is_verbatim) {
+        is_verbatim = _lexicon.get_type(*it) != Token::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND;
+        if (is_verbatim) {
             if (i < MAX_TOKEN_SIZE) {
                 multi_char_token_backlog[i++] = *it;
             } else {
@@ -127,9 +130,11 @@ Lexer::Error Lexer::_lex_verbatim(const char** start, const char* end, std::vect
 
     if (result == SCRIPTING_LEXER_ERROR_OK) {
         result = _add_single_char_token(*(it - 1u), out_tokens);
-        KOI_LOG("Failed to add single char token.");
+        KOI_LOG_IF_NOT(result == SCRIPTING_LEXER_ERROR_OK, "Failed to add single char token.");
         *start = it;
     }
+
+    _is_lexing_verbatim = false;
 
     return result;
 }
@@ -142,7 +147,7 @@ Lexer::Error Lexer::_add_single_char_token(const char& value, std::vector<Token>
 
     if (type != Token::SCRIPTING_TOKEN_TYPE_INVALID) {
         std::string value_string(1u, value);
-        out_tokens.emplace_back(_lexicon.get_type(value), value_string);
+        out_tokens.emplace_back(Token::from(type, value_string));
     } else {
         result = SCRIPTING_LEXER_ERROR_INVALID_TOKEN;
         KOI_LOG(std::string("Invalid token. type=") + std::to_string(type) + std::string(" ") + std::string(1u, value));
@@ -159,7 +164,7 @@ Lexer::Error Lexer::_add_multi_char_token(const char* start, unsigned int size, 
     Token::Type type = _lexicon.get_type(value_string, _is_lexing_verbatim);
 
     if (type != Token::SCRIPTING_TOKEN_TYPE_INVALID) {
-        out_tokens.emplace_back(_lexicon.get_type(value_string, _is_lexing_verbatim), value_string);
+        out_tokens.emplace_back(Token::from(type, value_string));
     } else {
         result = SCRIPTING_LEXER_ERROR_INVALID_TOKEN;
         KOI_LOG(std::string("Invalid token. type=") + std::to_string(type) + std::string(" ") + value_string);

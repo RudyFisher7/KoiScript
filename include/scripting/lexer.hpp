@@ -44,6 +44,8 @@ protected:
 
     Error _add_single_char_token(const char& value, std::vector<Token>& out_tokens) const;
     Error _add_multi_char_token(const char* start, unsigned int size, std::vector<Token>& out_tokens) const;
+
+
 };
 
 } // Scripting

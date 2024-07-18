@@ -24,9 +24,6 @@ Lexicon::Lexicon() {
             {'\'', Token::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND},
             {'#', Token::SCRIPTING_TOKEN_TYPE_COMMENT_BOOKEND},
 
-            // operators
-            {'=', Token::SCRIPTING_TOKEN_TYPE_ASSIGNER},
-
             // delimiters
             {':', Token::SCRIPTING_TOKEN_TYPE_COMBINER},
             {',', Token::SCRIPTING_TOKEN_TYPE_SEPARATOR},
@@ -41,15 +38,14 @@ Lexicon::Lexicon() {
             {"float", Token::SCRIPTING_TOKEN_TYPE_TYPE},
             {"text", Token::SCRIPTING_TOKEN_TYPE_TYPE},
 
-            // left metas
-            {"var", Token::SCRIPTING_TOKEN_TYPE_LEFT_META},
-            {"fun", Token::SCRIPTING_TOKEN_TYPE_LEFT_META},
-            {"id", Token::SCRIPTING_TOKEN_TYPE_LEFT_META},
+            // declaration metas
+            {"var", Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META},
+            {"fun", Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META},
 
-            // right metas
-            {"ref", Token::SCRIPTING_TOKEN_TYPE_RIGHT_META},
-            {"val", Token::SCRIPTING_TOKEN_TYPE_RIGHT_META},
-            {"exe", Token::SCRIPTING_TOKEN_TYPE_RIGHT_META},
+            // evaluation metas
+            {"ref", Token::SCRIPTING_TOKEN_TYPE_EVALUATION_META},
+            {"val", Token::SCRIPTING_TOKEN_TYPE_EVALUATION_META},
+            {"exe", Token::SCRIPTING_TOKEN_TYPE_EVALUATION_META},
 
             // resulters
             {"ret", Token::SCRIPTING_TOKEN_TYPE_RESULTER},
@@ -84,9 +80,13 @@ Token::Type Lexicon::get_type(const std::string& key, bool is_verbatim) const {
 
     if (it != _keywords.end()) {
         result = it->second;
-    } else if (is_valid_int(key) || is_valid_float(key) || is_verbatim) {
-        result = Token::SCRIPTING_TOKEN_TYPE_VALUE;
-    } else if (is_valid_id(key)) {
+    } else if (is_verbatim) {
+        result = Token::SCRIPTING_TOKEN_TYPE_TEXT;
+    } else {
+        result = get_non_bool_value_type(key);
+    }
+
+    if (result == Token::SCRIPTING_TOKEN_TYPE_INVALID && is_valid_id(key)) {
         result = Token::SCRIPTING_TOKEN_TYPE_ID;
     }
 
@@ -146,6 +146,7 @@ bool Lexicon::is_valid_float(const std::string& value) const {
     auto end = value.cend();
 
     bool is_negative = *it == '-';
+    bool has_a_num = false;
 
     if (is_negative) {
         ++it;
@@ -155,17 +156,66 @@ bool Lexicon::is_valid_float(const std::string& value) const {
     while (result && it != end) {
         result = std::isdigit(*it);
 
-        if (!result && !has_decimal) {
-            has_decimal = *it == '.';
-            if (has_decimal) {
-                result = true;
+        if (!has_a_num && result) {
+            has_a_num = true;
+        } else {
+            if (!has_decimal) {
+                has_decimal = *it == '.';
+                if (has_decimal) {
+                    result = true;
+                }
             }
         }
 
         ++it;
     }
 
-    return result && has_decimal;
+    return result && has_decimal && has_a_num;
+}
+
+
+Token::Type Lexicon::get_non_bool_value_type(const std::string& value) const {
+    Token::Type result = Token::SCRIPTING_TOKEN_TYPE_INVALID;
+
+    bool is_valid_num = true;
+
+    auto it = value.cbegin();
+    auto end = value.cend();
+
+    bool is_negative = *it == '-';
+
+    if (is_negative) {
+        ++it;
+    }
+
+    bool has_a_num = false;
+    bool has_decimal = false;
+    while (is_valid_num && it != end) {
+        is_valid_num = std::isdigit(*it);
+
+        if (!has_a_num && is_valid_num) {
+            has_a_num = true;
+        } else {
+            if (!has_decimal) {
+                has_decimal = *it == '.';
+                if (has_decimal) {
+                    is_valid_num = true;
+                }
+            }
+        }
+
+        ++it;
+    }
+
+    if (has_a_num) {
+        if (has_decimal) {
+            result = Token::SCRIPTING_TOKEN_TYPE_FLOAT;
+        } else if (is_valid_num) {
+            result = Token::SCRIPTING_TOKEN_TYPE_INT;
+        }
+    }
+
+    return result;
 }
 
 } // Scripting

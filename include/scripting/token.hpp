@@ -25,8 +25,8 @@ public:
         SCRIPTING_TOKEN_TYPE_TEXT,
         SCRIPTING_TOKEN_TYPE_ID,
         SCRIPTING_TOKEN_TYPE_TYPE,
-        SCRIPTING_TOKEN_TYPE_LEFT_META,
-        SCRIPTING_TOKEN_TYPE_RIGHT_META,
+        SCRIPTING_TOKEN_TYPE_DECLARATION_META,
+        SCRIPTING_TOKEN_TYPE_EVALUATION_META,
         SCRIPTING_TOKEN_TYPE_GROUPING_START,
         SCRIPTING_TOKEN_TYPE_GROUPING_END,
         SCRIPTING_TOKEN_TYPE_SCOPE_START,
@@ -46,28 +46,76 @@ public:
         SCRIPTING_TOKEN_TYPE_SIZE
     };
 
-    Type type = SCRIPTING_TOKEN_TYPE_INVALID;
-    std::string value;
+    enum InternalType: int {
+        SCRIPTING_TOKEN_INTERNAL_TYPE_INVALID = -1,
+        SCRIPTING_TOKEN_INTERNAL_TYPE_MIN = 0,
+        SCRIPTING_TOKEN_INTERNAL_TYPE_BOOL = SCRIPTING_TOKEN_INTERNAL_TYPE_MIN,
+        SCRIPTING_TOKEN_INTERNAL_TYPE_INT,
+        SCRIPTING_TOKEN_INTERNAL_TYPE_FLOAT,
+        SCRIPTING_TOKEN_INTERNAL_TYPE_STRING,
+        SCRIPTING_TOKEN_INTERNAL_TYPE_SIZE
+    };
+
+
+protected:
+    Type _type = SCRIPTING_TOKEN_TYPE_INVALID;
+    InternalType _internal_type = SCRIPTING_TOKEN_INTERNAL_TYPE_INVALID;
+
+    unsigned int _string_size = 0u; // includes \0 terminator
+    union {
+        bool _value_bool = false;
+        int _value_int;
+        float _value_float;
+        char* _value_string;
+    };
+
+
+public:
+    static Token from(Type in_type, const char* in_value_string);
+    static Token from(Type in_type, const std::string& in_value_string);
 
     Token() = default;
+    Token(Type in_type, bool in_value);
+    Token(Type in_type, int in_value);
+    Token(Type in_type, float in_value);
+
+    /**
+     * @brief Constructor using c-string.
+     * @remarks Defined to ensure compiler uses a string constructor when
+     * passing in string literals, otherwise it implicitly casts to bool.
+     * @param in_type
+     * @param in_value
+     */
+    Token(Type in_type, const char* in_value);
     Token(Type in_type, const std::string& in_value);
 
-    Token(const Token& rhs) = default;
-    Token(Token&& rhs) noexcept = default;
+    Token(const Token& rhs);
+    Token(Token&& rhs) noexcept;
 
-    virtual ~Token() = default;
+    virtual ~Token();
 
-    Token& operator=(const Token& rhs) = default;
-    Token& operator=(Token&& rhs) noexcept = default;
+    Token& operator=(const Token& rhs);
+    Token& operator=(Token&& rhs) noexcept;
 
     bool operator==(const Token& rhs) const;
     bool operator!=(const Token& rhs) const;
+
+    explicit operator std::string() const;
+
+    Type get_type() const;
+    InternalType get_internal_type() const;
+    bool get_value_bool() const;
+    int get_value_int() const;
+    float get_value_float() const;
+    std::string get_value_string() const;
 
     friend std::ostream& operator<<(std::ostream& lhs, const Token& rhs);
 
 
 protected:
     static std::string _get_name_of_type(Type in_type);
+
+    void _copy(const Token& rhs);
 };
 
 

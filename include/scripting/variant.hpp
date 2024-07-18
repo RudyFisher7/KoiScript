@@ -6,6 +6,9 @@
 #define KOI_SCRIPTING_VARIANT_HPP
 
 
+#include "scripting/closure.hpp"
+#include "scripting/type_defs.hpp"
+
 #include <functional>
 #include <ostream>
 #include <string>
@@ -34,7 +37,7 @@ private:
         int _value_int;
         float _value_float;
         char* _value_text;
-        int _value_ref;
+        Id _value_ref;
     };
 
 public:
@@ -47,15 +50,10 @@ public:
     static Variant from_float(float in_value);
 
 
-    static Variant from_double(double in_value);
-
-
     static Variant from_c_string(const char* in_value, size_t size);//todo::
+    static Variant from_c_string(const char* in_value);// must be null-terminated //todo::
 
     static Variant from_string(const std::string& in_value);
-
-
-    static Variant from_variant(const Variant& rhs);
 
 
     Variant();
@@ -69,11 +67,8 @@ public:
 
     Variant(float in_value);
 
-
-    Variant(double in_value);
-
-
     Variant(const char* in_value, size_t size);
+    Variant(const char* in_value); // must be null-terminated
 
     Variant(std::string in_value);
 
@@ -114,9 +109,6 @@ public:
     operator float() const;
 
 
-    operator double() const;
-
-
     operator char*() const;
 
 
@@ -153,9 +145,6 @@ public:
 
 
     void set_value(float value);
-
-
-    void set_value(double value);
 
 
     void set_value(const char* value, size_t size);

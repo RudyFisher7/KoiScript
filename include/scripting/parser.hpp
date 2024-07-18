@@ -7,11 +7,23 @@
 #define KOI_SCRIPTING_PARSER_HPP
 
 
+#include "scripting/token.hpp"
+
+#include <vector>
+
+
 namespace Koi { namespace Scripting {
 
 class Parser {
 public:
-    //
+    enum Error : int {
+        SCRIPTING_PARSER_ERROR_MIN = 0,
+        SCRIPTING_PARSER_ERROR_OK = SCRIPTING_PARSER_ERROR_MIN,
+        SCRIPTING_PARSER_ERROR_SIZE
+    };
+
+
+    Error parse(const std::vector<Token>& tokens);
 
 protected:
     //

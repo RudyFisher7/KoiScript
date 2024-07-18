@@ -1,5 +1,5 @@
 # declares a function with the id 'var1'.
-  var1 is assigned with the default value for int. #
+  var1 is assigned with the default _value_string for int. #
 dec<vardecl>:()int;
 
 # equivalent to above declaration, but with more
@@ -8,15 +8,15 @@ dec<vardecandassign>:()int = 0;
 
 # since everything is a function, this is how you can
   simulate a variable (i.e., a function that returns
-  8 as an integer value. #
+  8 as an integer _value_string. #
 id<var1> = int<8>();
 
 # declares var2 as a function that returns an integer
-  value and assigns it to return the same value as
-  var1 (the integer value 8). #
+  _value_string and assigns it to return the same _value_string as
+  var1 (the integer _value_string 8). #
 dec<var2>:()int = val<var1>();
 
-# assigns var1 to return the integer value of 4.
+# assigns var1 to return the integer _value_string of 4.
   var2 will not be affected by this assignment. #
 id<var1> = int<4>();
 
@@ -80,7 +80,7 @@ val<func2>(); # returns 8 #
 dec<myfuncid>:(dec<x>:()int, dec<y>:()text)bool = bool<{
     # if-else. if is a built-in function and takes any number of pairs of if-then_block's and optionally a final else-block as arguments #
     val<if>(val<equals>(val<x>(), int<6>()), void<{
-        val<print>(val<y>()); # print value of y if x == 6 #
+        val<print>(val<y>()); # print _value_string of y if x == 6 #
     }>, val<greater>(val<x>(), int<7>()), void<{
         val<print>(text<'x is greater than 7'>);
     }>, void<{
@@ -94,9 +94,9 @@ dec<myfuncid>:(dec<x>:()int, dec<y>:()text)bool = bool<{
     return:val<equals>(val<x>(), int<6>);
 }>();
 
-# WIP a type definition example
+# WIP a _type definition example
   stdec declares variables with persisting state (stdec = state + declaration)
-dec<object>:(stdec<publicmember1>:()text = text<'hello world object'>)type = type<{
+dec<object>:(stdec<publicmember1>:()text = text<'hello world object'>)_type = _type<{
     stdec<privatemember1>:()bool;
 }>;
 

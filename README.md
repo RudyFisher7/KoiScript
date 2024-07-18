@@ -2,6 +2,9 @@
 A simple scripting language designed for extending C++ applications at runtime.
 
 ## Built-In Functions
+### special
+- assign
+- print
 ### variable and function info
 - size
 ### logical

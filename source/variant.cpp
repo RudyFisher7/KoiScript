@@ -26,18 +26,8 @@ Variant Variant::from_float(float in_value) {
 }
 
 
-Variant Variant::from_double(double in_value) {
-    return Variant(in_value);
-}
-
-
 Variant Variant::from_string(const std::string& in_value) {
     return Variant(in_value);
-}
-
-
-Variant Variant::from_variant(const Variant& rhs) {
-    return Variant(rhs);
 }
 
 
@@ -217,11 +207,6 @@ Variant::operator float() const {
 }
 
 
-Variant::operator double() const {
-    return get_float();
-}
-
-
 Variant::operator std::string() const {
     return get_string();
 }
@@ -311,11 +296,6 @@ void Variant::set_value(float value) {
     _destroy_string_if_string();
     _value_float = value;
     _current_type = Type::SCRIPTING_VARIANT_TYPE_FLOAT;
-}
-
-
-void Variant::set_value(double value) {
-    _destroy_string_if_string();
 }
 
 

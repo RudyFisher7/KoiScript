@@ -5,14 +5,206 @@
 
 #include "../include/scripting/token.hpp"
 
+#include <cstring>
+
 
 #define NAMEOF(arg) #arg
 
 
 namespace Koi { namespace Scripting {
 
-Token::Token(Type in_type, const std::string&  in_value) : type(in_type), value(in_value) {
+Token Token::from(Type in_type, const char* in_value_string) {
+    switch (in_type) {
+        case SCRIPTING_TOKEN_TYPE_BOOL:
+            return Token(in_type, in_value_string == "true");
+        case SCRIPTING_TOKEN_TYPE_INT:
+            return Token(in_type, std::atoi(in_value_string));
+        case SCRIPTING_TOKEN_TYPE_FLOAT:
+            return Token(in_type, static_cast<float>(std::atof(in_value_string)));
+        default:
+            return Token(in_type, in_value_string);
+    }
+}
 
+
+Token Token::from(Type in_type, const std::string& in_value_string) {
+    return from(in_type, in_value_string.c_str());
+}
+
+
+Token::Token(Type in_type, bool in_value):
+        _type(in_type),
+        _internal_type(SCRIPTING_TOKEN_INTERNAL_TYPE_BOOL),
+        _value_bool(in_value) {
+
+}
+
+
+Token::Token(Type in_type, int in_value):
+        _type(in_type),
+        _internal_type(SCRIPTING_TOKEN_INTERNAL_TYPE_INT),
+        _value_int(in_value) {
+
+}
+
+
+Token::Token(Type in_type, float in_value):
+        _type(in_type),
+        _internal_type(SCRIPTING_TOKEN_INTERNAL_TYPE_FLOAT),
+        _value_float(in_value) {
+
+}
+
+
+Token::Token(Type in_type, const char* in_value):
+        _type(in_type),
+        _internal_type(SCRIPTING_TOKEN_INTERNAL_TYPE_STRING),
+        _string_size(std::strlen(in_value) + 1u){
+    _value_string = new char[_string_size];
+    std::strcpy(_value_string, in_value);
+    _value_string[_string_size - 1u] = '\0';
+}
+
+
+Token::Token(Type in_type, const std::string& in_value):
+        _type(in_type),
+        _internal_type(SCRIPTING_TOKEN_INTERNAL_TYPE_STRING),
+        _string_size(in_value.size() + 1u){
+    _value_string = new char[_string_size];
+    std::strcpy(_value_string, in_value.c_str());
+    _value_string[in_value.size()] = '\0';
+}
+
+
+Token::Token(const Token& rhs): _type(rhs._type), _internal_type(rhs._internal_type), _string_size(rhs._string_size) {
+    switch (_internal_type) {
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_BOOL:
+            _value_bool = rhs._value_bool;
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_INT:
+            _value_int = rhs._value_int;
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_FLOAT:
+            _value_float = rhs._value_float;
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_STRING:
+            _value_string = new char[_string_size];
+            std::strcpy(_value_string, rhs._value_string);
+            break;
+        default:
+            //todo:: should be impossible to be here
+            break;
+    }
+}
+
+
+Token::Token(Token&& rhs) noexcept {
+    _type = rhs._type;
+    _internal_type = rhs._internal_type;
+    _string_size = rhs._string_size;
+    switch (_internal_type) {
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_BOOL:
+            _value_bool = rhs._value_bool;
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_INT:
+            _value_int = rhs._value_int;
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_FLOAT:
+            _value_float = rhs._value_float;
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_STRING:
+            _value_string = new char[_string_size];
+            std::memmove(_value_string, rhs._value_string, _string_size);
+            break;
+        default:
+            //todo:: should be impossible to be here
+            break;
+    }
+}
+
+
+Token::~Token() {
+    if (_internal_type == SCRIPTING_TOKEN_INTERNAL_TYPE_STRING) {
+        std::free(_value_string);
+    }
+}
+
+
+Token& Token::operator=(const Token& rhs) {
+    _copy(rhs);
+    return *this;
+}
+
+
+Token& Token::operator=(Token&& rhs) noexcept {
+    _type = rhs._type;
+    _internal_type = rhs._internal_type;
+    _string_size = rhs._string_size;
+    switch (_internal_type) {
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_BOOL:
+            _value_bool = rhs._value_bool;
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_INT:
+            _value_int = rhs._value_int;
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_FLOAT:
+            _value_float = rhs._value_float;
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_STRING:
+            _value_string = new char[_string_size];
+            std::memmove(_value_string, rhs._value_string, _string_size);
+            break;
+        default:
+            //todo:: should be impossible to be here
+            break;
+    }
+
+    return *this;
+}
+
+
+Token::Type Token::get_type() const {
+    return _type;
+}
+
+
+Token::InternalType Token::get_internal_type() const {
+    return _internal_type;
+}
+
+
+bool Token::get_value_bool() const {
+    return _value_bool;
+}
+
+
+int Token::get_value_int() const {
+    return _value_int;
+}
+
+
+float Token::get_value_float() const {
+    return _value_float;
+}
+
+
+std::string Token::get_value_string() const {
+    switch (_internal_type) {
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_BOOL:
+            if (_value_bool) {
+                return "true";
+            } else {
+                return "false";
+            }
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_INT:
+            return std::to_string(_value_int);
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_FLOAT:
+            return std::to_string(_value_float);
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_STRING:
+            return _value_string;
+        default:
+            return "";
+    }
 }
 
 
@@ -29,11 +221,11 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
         case SCRIPTING_TOKEN_TYPE_TYPE:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_TYPE);
             break;
-        case SCRIPTING_TOKEN_TYPE_LEFT_META:
-            result = NAMEOF(SCRIPTING_TOKEN_TYPE_LEFT_META);
+        case SCRIPTING_TOKEN_TYPE_DECLARATION_META:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_DECLARATION_META);
             break;
-        case SCRIPTING_TOKEN_TYPE_RIGHT_META:
-            result = NAMEOF(SCRIPTING_TOKEN_TYPE_RIGHT_META);
+        case SCRIPTING_TOKEN_TYPE_EVALUATION_META:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_EVALUATION_META);
             break;
         case SCRIPTING_TOKEN_TYPE_GROUPING_START:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_GROUPING_START);
@@ -111,10 +303,25 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
 
 
 bool Token::operator==(const Token& rhs) const {
-    return (
-            type == rhs.type
-            && value == rhs.value
-    );
+    bool result = false;
+    result = _type == rhs._type;
+
+    switch (_type) {
+        case SCRIPTING_TOKEN_TYPE_BOOL:
+            result = result && get_value_bool() == get_value_bool();
+            break;
+        case SCRIPTING_TOKEN_TYPE_INT:
+            result = result && get_value_int() == get_value_int();
+            break;
+        case SCRIPTING_TOKEN_TYPE_FLOAT:
+            result = result && get_value_float() == get_value_float();
+            break;
+        default:
+            result = result && get_value_string() == get_value_string();
+            break;
+    }
+
+    return result;
 }
 
 
@@ -123,10 +330,46 @@ bool Token::operator!=(const Token& rhs) const {
 }
 
 
+Token::operator std::string() const {
+    return std::string(R"({"_value": ")" + get_value_string() + R"(", "_internal_type": ")" + std::to_string(_internal_type) +R"(", "_type": ")" + std::to_string(_type) + R"("})");
+}
+
+
 std::ostream& operator<<(std::ostream& lhs, const Token& rhs) {
-    lhs << "Token({value: " << rhs.value << ", type: " << Token::_get_name_of_type(rhs.type) << "})";
+    if (rhs.get_value_string() == "1") {
+        int i = 0;
+    }
+    lhs << R"({"_value": ")" << rhs.get_value_string() << R"(", "_internal_type": ")" << std::to_string(rhs._internal_type) << R"(", "_type": ")" << Token::_get_name_of_type(rhs._type) << R"("})";
 
     return lhs;
+}
+
+
+void Token::_copy(const Token& rhs) {
+    if (&rhs != this) {
+        _type = rhs._type;
+        _internal_type = rhs._internal_type;
+        _string_size = rhs._string_size;
+        switch (_internal_type) {
+            case SCRIPTING_TOKEN_INTERNAL_TYPE_BOOL:
+                _value_bool = rhs._value_bool;
+                break;
+            case SCRIPTING_TOKEN_INTERNAL_TYPE_INT:
+                _value_int = rhs._value_int;
+                break;
+            case SCRIPTING_TOKEN_INTERNAL_TYPE_FLOAT:
+                _value_float = rhs._value_float;
+                break;
+            case SCRIPTING_TOKEN_INTERNAL_TYPE_STRING:
+                std::free(_value_string);
+                _value_string = new char[_string_size];
+                std::strcpy(_value_string, rhs._value_string);
+                break;
+            default:
+                //todo:: should be impossible to be here
+                break;
+        }
+    }
 }
 
 }
