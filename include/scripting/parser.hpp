@@ -7,6 +7,7 @@
 #define KOI_SCRIPTING_PARSER_HPP
 
 
+#include "scripting/ast_node.hpp"
 #include "scripting/token.hpp"
 
 #include <vector>
@@ -23,7 +24,7 @@ public:
     };
 
 
-    Error parse(const std::vector<Token>& tokens);
+    Error parse(const std::vector<Token>& tokens, AstNode** out_ast);
 
 protected:
     //

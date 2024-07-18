@@ -32,6 +32,8 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/extensions/extensions.hpp
     source/ast_node.cpp
     include/scripting/ast_node.hpp
+    include/scripting/type.hpp
+    source/type.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

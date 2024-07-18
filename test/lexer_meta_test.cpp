@@ -169,13 +169,18 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
     }
 
     SECTION("Args 1 literal 6") {
-        source_code = "exe<easy_enough>({  });";
+        source_code = "exe<easy_enough>(void(bool):{  });";
         expected = {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EVALUATION_META, "exe"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "void"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SCOPE_START, "{"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SCOPE_END, "}"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
