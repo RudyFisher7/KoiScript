@@ -28,7 +28,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("Base case") {
         source_code = "var<easy_enough>:bool;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -43,7 +43,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("Whitespace") {
         source_code = "\r\n var < easy\r\n \t _enoug h \t> : bo ol ; ";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -58,7 +58,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type int") {
         source_code = "var<easy_enough>:int;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -73,7 +73,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type float") {
         source_code = "var<easy_enough>:float;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -88,7 +88,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type text") {
         source_code = "var<easy_enough>:text;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -103,7 +103,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type bool[]") {
         source_code = "var<easy_enough>:bool[];";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -120,7 +120,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type int[]") {
         source_code = "var<easy_enough>:int[];";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -137,7 +137,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type float[]") {
         source_code = "var<easy_enough>:float[];";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -154,7 +154,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type text[]") {
         source_code = "var<easy_enough>:text[];";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -171,7 +171,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type bool[1]") {
         source_code = "var<easy_enough>:bool[1];";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -189,7 +189,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type bool[2]") {
         source_code = "var<easy_enough>:bool[2];";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -207,7 +207,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type bool[9]") {
         source_code = "var<easy_enough>:bool[9];";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -225,7 +225,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type bool[10]") {
         source_code = "var<easy_enough>:bool[10];";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -243,7 +243,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
     SECTION("type bool[999]") {
         source_code = "var<easy_enough>:bool[999];";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -262,7 +262,7 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
         constexpr int max = std::numeric_limits<int>::max();
         source_code = "var<easy_enough>:bool[" + std::to_string(max) + "];";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "var"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VAR_META, "var"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -301,7 +301,7 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
     SECTION("Base case") {
         source_code = "fun<easy_enough>:()bool;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "fun"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_FUN_META, "fun"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -318,7 +318,7 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
     SECTION("Whitespace") {
         source_code = " f un< eas y_en\tou gh>: ( \t)bo ol; \n\r\n";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "fun"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_FUN_META, "fun"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -335,7 +335,7 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
     SECTION("Type ()int") {
         source_code = "fun<easy_enough>:()int;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "fun"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_FUN_META, "fun"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -352,7 +352,7 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
     SECTION("Type ()void") {
         source_code = "fun<easy_enough>:()void;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "fun"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_FUN_META, "fun"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -369,7 +369,7 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
     SECTION("Type (bool)void") {
         source_code = "fun<easy_enough>:(bool)void;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "fun"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_FUN_META, "fun"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -387,7 +387,7 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
     SECTION("Type (bool,int)float") {
         source_code = "fun<easy_enough>:(bool,int)float;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "fun"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_FUN_META, "fun"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -407,7 +407,7 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
     SECTION("Type (bool[],int)float") {
         source_code = "fun<easy_enough>:(bool[],int)float;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "fun"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_FUN_META, "fun"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -429,7 +429,7 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
     SECTION("Type (bool,int[])float") {
         source_code = "fun<easy_enough>:(bool,int[])float;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "fun"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_FUN_META, "fun"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
@@ -451,7 +451,7 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
     SECTION("Type (bool[],int[])float") {
         source_code = "fun<easy_enough>:(bool[],int[])float;";
         expected = {
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META, "fun"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_FUN_META, "fun"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_START, "<"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),

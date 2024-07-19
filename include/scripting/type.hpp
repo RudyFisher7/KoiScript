@@ -20,14 +20,14 @@ enum BasicType: int {
     SCRIPTING_BASIC_TYPE_INT,
     SCRIPTING_BASIC_TYPE_FLOAT,
     SCRIPTING_BASIC_TYPE_TEXT,
-    SCRIPTING_BASIC_TYPE_REFERENCE,
+    SCRIPTING_BASIC_TYPE_REF,
     SCRIPTING_BASIC_TYPE_SIZE,
 };
 
 
 class Type {
 public:
-    const BasicType return_type = SCRIPTING_BASIC_TYPE_INVALID;//fixme:: return closure
+    const BasicType return_type = SCRIPTING_BASIC_TYPE_INVALID;
 
     const std::vector<BasicType> parameter_types;
 

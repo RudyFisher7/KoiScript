@@ -39,13 +39,15 @@ Lexicon::Lexicon() {
             {"text", Token::SCRIPTING_TOKEN_TYPE_TYPE},
 
             // declaration metas
-            {"var", Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META},
-            {"fun", Token::SCRIPTING_TOKEN_TYPE_DECLARATION_META},
+            {"var", Token::SCRIPTING_TOKEN_TYPE_VAR_META},
+            {"fun", Token::SCRIPTING_TOKEN_TYPE_FUN_META},
 
             // evaluation metas
-            {"ref", Token::SCRIPTING_TOKEN_TYPE_EVALUATION_META},
-            {"val", Token::SCRIPTING_TOKEN_TYPE_EVALUATION_META},
-            {"exe", Token::SCRIPTING_TOKEN_TYPE_EVALUATION_META},
+            {"exe", Token::SCRIPTING_TOKEN_TYPE_EXE_META},
+            {"val", Token::SCRIPTING_TOKEN_TYPE_VAL_META},
+            {"ref", Token::SCRIPTING_TOKEN_TYPE_REF_META},
+            {"lib", Token::SCRIPTING_TOKEN_TYPE_LIB_META},
+            {"imp", Token::SCRIPTING_TOKEN_TYPE_IMP_META},
 
             // resulters
             {"ret", Token::SCRIPTING_TOKEN_TYPE_RESULTER},

@@ -25,8 +25,13 @@ public:
         SCRIPTING_TOKEN_TYPE_TEXT,
         SCRIPTING_TOKEN_TYPE_ID,
         SCRIPTING_TOKEN_TYPE_TYPE,
-        SCRIPTING_TOKEN_TYPE_DECLARATION_META,
-        SCRIPTING_TOKEN_TYPE_EVALUATION_META,
+        SCRIPTING_TOKEN_TYPE_VAR_META,
+        SCRIPTING_TOKEN_TYPE_FUN_META,
+        SCRIPTING_TOKEN_TYPE_EXE_META,
+        SCRIPTING_TOKEN_TYPE_VAL_META,
+        SCRIPTING_TOKEN_TYPE_REF_META,
+        SCRIPTING_TOKEN_TYPE_LIB_META,
+        SCRIPTING_TOKEN_TYPE_IMP_META,
         SCRIPTING_TOKEN_TYPE_GROUPING_START,
         SCRIPTING_TOKEN_TYPE_GROUPING_END,
         SCRIPTING_TOKEN_TYPE_SCOPE_START,
@@ -43,6 +48,7 @@ public:
         SCRIPTING_TOKEN_TYPE_DELIMITER,
         SCRIPTING_TOKEN_TYPE_RESULTER,
         SCRIPTING_TOKEN_TYPE_RESERVED_ID,
+        SCRIPTING_TOKEN_TYPE_RESERVED_EOF,
         SCRIPTING_TOKEN_TYPE_SIZE
     };
 
@@ -114,6 +120,7 @@ public:
 
 protected:
     static std::string _get_name_of_type(Type in_type);
+    static std::string _get_name_of_internal_type(InternalType in_internal_type);
 
     void _copy(const Token& rhs);
 };

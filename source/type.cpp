@@ -22,6 +22,11 @@ Type::Type(BasicType in_return_type):
 }
 
 
+Type::~Type() {
+
+}
+
+
 Type::Type(BasicType in_return_type, std::vector<BasicType>&& in_parameter_types):
         return_type(in_return_type),
         parameter_types(std::move(in_parameter_types)) {

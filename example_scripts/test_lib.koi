@@ -1,0 +1,4 @@
+lib<test>({
+    var<hello_world>:text;
+    exe<assign>(ref<hello_world>(), 'Hello, world!');
+});

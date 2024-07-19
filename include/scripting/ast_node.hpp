@@ -11,6 +11,7 @@
 #include "scripting/type.hpp"
 
 #include <string>
+#include <memory>
 #include <vector>
 
 
@@ -19,7 +20,7 @@ namespace Scripting {
 
 class AstNode {
 public:
-    Token token;
+    std::vector<Token> tokens;
     // scope
     // children
 };
@@ -27,8 +28,21 @@ public:
 
 class Literal: public AstNode {
 public:
-    TypeDecorator type;
     //std::vector<Variant> _args; //fixme:: variant with TypeDecorator
+};
+
+
+class VariableLiteral: public Literal {
+public:
+    BasicType type = SCRIPTING_BASIC_TYPE_INVALID;
+    std::string key;
+    std::string value;
+};
+
+
+class FunctionLiteral: public Literal {
+public:
+    //
 };
 
 
@@ -42,13 +56,15 @@ public:
 class Execute: public AstNode {
 public:
     TypeDecorator type;
-    Id id = 0u;
+    std::string executing_key;
+
+    std::vector<std::shared_ptr<AstNode>> args;
 
     Execute();
 
-    Execute(Id in_id);
+    explicit Execute(std::string in_executing_key);
 
-    Execute(Id in_id, TypeDecorator in_type);
+    Execute(std::string in_executing_key, TypeDecorator in_type);
 };
 
 
@@ -64,8 +80,6 @@ public:
     // id
     //todo:: for type, look up the type of id
 };
-
-
 
 } // Scripting
 } // Koi

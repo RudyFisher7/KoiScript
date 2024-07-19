@@ -3,24 +3,27 @@
 //
 
 
+#include "scripting/ast_node.hpp"
 #include "scripting/lexer.hpp"
+#include "scripting/parser.hpp"
 #include "scripting/extensions/extensions.hpp"
 
 #include <cstring>
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <memory>
 
 
 int main() {
     std::cout << "KoiScript debug project started" << std::endl;
-    std::string script_file_path(R"(C:\dev\koi_scripting\example_scripts\simple.koi)");
+    std::string script_file_path(R"(C:\dev\koi_scripting\example_scripts\hello_world.koi)");
 
     std::cout << "Loading " << script_file_path << std::endl;
 
     std::ifstream script_file(script_file_path);
 
-    std::cout << "done." << std::endl;
+    std::cout << "done.\n" << std::endl;
 
     std::string script;
     script_file.seekg(0, std::ifstream::end);
@@ -34,13 +37,17 @@ int main() {
 
     script_buffer[script_size] = '\0';
 
-    std::cout << "Script: " << script_buffer << std::endl;
+    std::cout << "Script:\n" << script_buffer << '\n' << std::endl;
 
     Koi::Scripting::Lexer lexer;
     std::vector<Koi::Scripting::Token> tokens;
     lexer.lex(script_buffer, script_size, tokens);
 
     std::cout << tokens << std::endl;
+
+    Koi::Scripting::Parser parser;
+    std::shared_ptr<Koi::Scripting::AstNode> ast_tree;
+    parser.parse(tokens, ast_tree);
 
     return 0;
 }

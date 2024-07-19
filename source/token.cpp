@@ -221,12 +221,6 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
         case SCRIPTING_TOKEN_TYPE_TYPE:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_TYPE);
             break;
-        case SCRIPTING_TOKEN_TYPE_DECLARATION_META:
-            result = NAMEOF(SCRIPTING_TOKEN_TYPE_DECLARATION_META);
-            break;
-        case SCRIPTING_TOKEN_TYPE_EVALUATION_META:
-            result = NAMEOF(SCRIPTING_TOKEN_TYPE_EVALUATION_META);
-            break;
         case SCRIPTING_TOKEN_TYPE_GROUPING_START:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_GROUPING_START);
             break;
@@ -293,6 +287,61 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
         case SCRIPTING_TOKEN_TYPE_SIZE:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_SIZE);
             break;
+        case SCRIPTING_TOKEN_TYPE_VAR_META:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_VAR_META);
+            break;
+        case SCRIPTING_TOKEN_TYPE_FUN_META:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_FUN_META);
+            break;
+        case SCRIPTING_TOKEN_TYPE_EXE_META:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_EXE_META);
+            break;
+        case SCRIPTING_TOKEN_TYPE_VAL_META:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_VAL_META);
+            break;
+        case SCRIPTING_TOKEN_TYPE_REF_META:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_REF_META);
+            break;
+        case SCRIPTING_TOKEN_TYPE_LIB_META:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_LIB_META);
+            break;
+        case SCRIPTING_TOKEN_TYPE_IMP_META:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_IMP_META);
+            break;
+        default:
+            result = "Unknown. How did you do this?";
+            break;
+    }
+
+    return result;
+}
+
+
+std::string Token::_get_name_of_internal_type(InternalType in_internal_type) {
+    std::string result;
+
+    switch (in_internal_type) {
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_INVALID:
+            result = NAMEOF(SCRIPTING_TOKEN_INTERNAL_TYPE_INVALID);
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_BOOL:
+            result = NAMEOF(SCRIPTING_TOKEN_INTERNAL_TYPE_BOOL);
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_INT:
+            result = NAMEOF(SCRIPTING_TOKEN_INTERNAL_TYPE_INT);
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_FLOAT:
+            result = NAMEOF(SCRIPTING_TOKEN_INTERNAL_TYPE_FLOAT);
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_STRING:
+            result = NAMEOF(SCRIPTING_TOKEN_INTERNAL_TYPE_STRING);
+            break;
+        case SCRIPTING_TOKEN_TYPE_RESERVED_EOF:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_RESERVED_EOF);
+            break;
+        case SCRIPTING_TOKEN_INTERNAL_TYPE_SIZE:
+            result = NAMEOF(SCRIPTING_TOKEN_INTERNAL_TYPE_SIZE);
+            break;
         default:
             result = "Unknown. How did you do this?";
             break;
@@ -331,7 +380,7 @@ bool Token::operator!=(const Token& rhs) const {
 
 
 Token::operator std::string() const {
-    return std::string(R"({"_value": ")" + get_value_string() + R"(", "_internal_type": ")" + std::to_string(_internal_type) +R"(", "_type": ")" + std::to_string(_type) + R"("})");
+    return std::string(R"({"_value": ")" + get_value_string() + R"(", "_internal_type": )" + std::to_string(_internal_type) +R"(, "_type": )" + std::to_string(_type) + R"(})");
 }
 
 
@@ -339,7 +388,7 @@ std::ostream& operator<<(std::ostream& lhs, const Token& rhs) {
     if (rhs.get_value_string() == "1") {
         int i = 0;
     }
-    lhs << R"({"_value": ")" << rhs.get_value_string() << R"(", "_internal_type": ")" << std::to_string(rhs._internal_type) << R"(", "_type": ")" << Token::_get_name_of_type(rhs._type) << R"("})";
+    lhs << R"({"_value": ")" << rhs.get_value_string() << R"(", "_internal_type": ")" << Token::_get_name_of_internal_type(rhs._internal_type) << R"(", "_type": ")" << Token::_get_name_of_type(rhs._type) << R"("})";
 
     return lhs;
 }
