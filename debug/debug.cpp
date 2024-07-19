@@ -17,7 +17,7 @@
 
 int main() {
     std::cout << "KoiScript debug project started" << std::endl;
-    std::string script_file_path(R"(C:\dev\koi_scripting\example_scripts\hello_world.koi)");
+    std::string script_file_path(R"(C:\dev\koilang\example_scripts\hello_world.koi)");
 
     std::cout << "Loading " << script_file_path << std::endl;
 
@@ -48,6 +48,8 @@ int main() {
     Koi::Scripting::Parser parser;
     std::shared_ptr<Koi::Scripting::AstNode> ast_tree;
     parser.parse(tokens, ast_tree);
+
+    ast_tree->print();
 
     return 0;
 }

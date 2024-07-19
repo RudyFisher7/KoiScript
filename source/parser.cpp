@@ -13,6 +13,7 @@
 namespace Koi {
 namespace Scripting {
 const unsigned int Parser::MIN_VALID_EVAL_META_SIZE = 6u;
+const std::string Parser::MAIN_ENTRY_POINT_KEY("main");
 
 Parser::Error Parser::parse(const std::vector<Token>& tokens, std::shared_ptr<AstNode>& out_ast) {
     Error result = SCRIPTING_PARSER_ERROR_OK;
@@ -35,7 +36,10 @@ Parser::Error Parser::parse(const std::vector<Token>& tokens, std::shared_ptr<As
 }
 
 
-bool Parser::_is_main_exe_valid(std::vector<Token>::const_iterator& it, std::vector<Token>::const_iterator& end) const {
+bool Parser::_is_main_exe_valid(
+        std::vector<Token>::const_iterator& it,
+        std::vector<Token>::const_iterator& end
+) const {
     bool result = false;
 
     result = (
@@ -43,7 +47,11 @@ bool Parser::_is_main_exe_valid(std::vector<Token>::const_iterator& it, std::vec
             && it->get_type() == Token::SCRIPTING_TOKEN_TYPE_EXE_META
     );
 
-    result = result && _are_enough_tokens_left(it, end, MIN_VALID_EVAL_META_SIZE);
+    result = (
+            result
+            && _are_enough_tokens_left(it, end, MIN_VALID_EVAL_META_SIZE)
+            && (it + 2u)->get_value_string() == MAIN_ENTRY_POINT_KEY
+    );
 
     return result;
 }
@@ -66,6 +74,7 @@ Parser::Error Parser::_parse_exe(
 
         is_valid = it->get_type() == Token::SCRIPTING_TOKEN_TYPE_ID;
         KOI_LOG_IF_NOT(is_valid, "No id token for exe meta.");
+
         if (is_valid) {
             exe->executing_key = it->get_value_string();
         }
@@ -73,10 +82,42 @@ Parser::Error Parser::_parse_exe(
         it += 3u;
 
         if (is_valid) {
-            //todo:: result = _parse_args
+            bool has_more_args = it->get_type() != Token::SCRIPTING_TOKEN_TYPE_GROUPING_END;
+            while(it != end && result == SCRIPTING_PARSER_ERROR_OK && has_more_args) {
+                std::shared_ptr<AstNode> arg;
+                result = _parse_arg(it, end, arg);
+
+                // iterate past any trailing separator token
+                if (it != end && it->get_type() == Token::SCRIPTING_TOKEN_TYPE_SEPARATOR) {
+                    ++it;
+                }
+
+                if (it != end) {
+                    has_more_args = it->get_type() != Token::SCRIPTING_TOKEN_TYPE_GROUPING_END;
+                }
+            }
+
+            is_valid = result == SCRIPTING_PARSER_ERROR_OK && !has_more_args;
+            KOI_LOG_IF_NOT(
+                    is_valid,
+                    std::string("Error while parsing exe args. result=")
+                    + std::to_string(result)
+                    + std::string(", has more args=")
+                    + std::to_string(has_more_args)
+            );
+
+            ++it;
         }
 
-        if (is_valid && result == SCRIPTING_PARSER_ERROR_OK) {
+        is_valid = is_valid && it != end;
+        KOI_LOG_IF_NOT(is_valid, "EOF reached before finding a delimiter for exe meta.");
+
+        if (is_valid) {
+            is_valid = it->get_type() == Token::SCRIPTING_TOKEN_TYPE_DELIMITER;
+            KOI_LOG_IF_NOT(is_valid, "No delimiter found for exe meta.");
+        }
+
+        if (is_valid) {
             out_current_ast = exe;
         }
     }
@@ -94,7 +135,11 @@ Parser::Error Parser::_parse_arg(
         std::vector<Token>::const_iterator& end,
         std::shared_ptr<AstNode>& out_current_ast
 ) const {
-    return Parser::SCRIPTING_PARSER_ERROR_MIN;
+    Error result = SCRIPTING_PARSER_ERROR_OK;
+
+    it += 2u;
+
+    return result;
 }
 
 

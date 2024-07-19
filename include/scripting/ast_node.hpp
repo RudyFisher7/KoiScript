@@ -10,6 +10,7 @@
 #include "scripting/type_defs.hpp"
 #include "scripting/type.hpp"
 
+#include <iostream>
 #include <string>
 #include <memory>
 #include <vector>
@@ -23,6 +24,7 @@ public:
     std::vector<Token> tokens;
     // scope
     // children
+    virtual void print() const = 0;
 };
 
 
@@ -65,6 +67,8 @@ public:
     explicit Execute(std::string in_executing_key);
 
     Execute(std::string in_executing_key, TypeDecorator in_type);
+
+    void print() const override;
 };
 
 

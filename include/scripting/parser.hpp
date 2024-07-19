@@ -28,17 +28,29 @@ public:
 
 protected:
     static const unsigned int MIN_VALID_EVAL_META_SIZE;
+    static const std::string MAIN_ENTRY_POINT_KEY;
 
 public:
     Error parse(const std::vector<Token>& tokens, std::shared_ptr<AstNode>& out_ast);
 
 
 protected:
-    bool _is_main_exe_valid(std::vector<Token>::const_iterator& it, std::vector<Token>::const_iterator& end) const;
-    Error _parse_exe(std::vector<Token>::const_iterator& it, std::vector<Token>::const_iterator& end, std::shared_ptr<AstNode>& out_current_ast) const;
+    bool _is_main_exe_valid(
+            std::vector<Token>::const_iterator& it,
+            std::vector<Token>::const_iterator& end
+    ) const;
+    Error _parse_exe(
+            std::vector<Token>::const_iterator& it,
+            std::vector<Token>::const_iterator& end,
+            std::shared_ptr<AstNode>& out_current_ast
+    ) const;
 
     //todo:: implement
-    Error _parse_arg(std::vector<Token>::const_iterator& it, std::vector<Token>::const_iterator& end, std::shared_ptr<AstNode>& out_current_ast) const;
+    Error _parse_arg(
+            std::vector<Token>::const_iterator& it,
+            std::vector<Token>::const_iterator& end,
+            std::shared_ptr<AstNode>& out_current_ast
+    ) const;
 
     bool _are_enough_tokens_left(
             std::vector<Token>::const_iterator it,
