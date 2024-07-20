@@ -3,9 +3,11 @@
 //
 
 
+#include "scripting/assembler.hpp"
 #include "scripting/ast_node.hpp"
 #include "scripting/lexer.hpp"
 #include "scripting/parser.hpp"
+#include "scripting/type_defs.hpp"
 #include "scripting/extensions/extensions.hpp"
 
 #include <cstring>
@@ -13,6 +15,7 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include <map>
 
 
 int main() {
@@ -50,6 +53,13 @@ int main() {
     parser.parse(tokens, ast_tree);
 
     std::cout << *ast_tree << std::endl;
+
+    std::map<std::string, Koi::Scripting::Id> memory_map {};
+    std::vector<std::shared_ptr<Koi::Scripting::AstNode>> memory {};
+
+    Koi::Scripting::Assembler assembler;
+
+    assembler.assemble(ast_tree, memory_map, memory);
 
     return 0;
 }

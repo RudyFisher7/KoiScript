@@ -1,0 +1,40 @@
+//
+// Created by rfish on 7/20/2024.
+//
+
+
+#ifndef KOI_SCRIPTING_ASSEMBLER_HPP
+#define KOI_SCRIPTING_ASSEMBLER_HPP
+
+
+#include "scripting/ast_node.hpp"
+#include "scripting/type_defs.hpp"
+
+#include <map>
+#include <memory>
+#include <vector>
+
+
+namespace Koi {
+namespace Scripting {
+
+class Assembler {
+public:
+    enum Error : int {
+        SCRIPTING_ASSEMBLER_ERROR_MIN = 0,
+        SCRIPTING_ASSEMBLER_ERROR_OK = SCRIPTING_ASSEMBLER_ERROR_MIN,
+        SCRIPTING_ASSEMBLER_ERROR_SIZE
+    };
+
+    Error assemble(
+            const std::shared_ptr<AstNode> ast_tree,
+            std::map<std::string, Koi::Scripting::Id>& out_memory_map,
+            std::vector<std::shared_ptr<Koi::Scripting::AstNode>>& out_memory
+    ) const;
+};
+
+} // Scripting
+} // Koi
+
+
+#endif //KOI_SCRIPTING_ASSEMBLER_HPP
