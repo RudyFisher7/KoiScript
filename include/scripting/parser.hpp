@@ -7,7 +7,7 @@
 #define KOI_SCRIPTING_PARSER_HPP
 
 
-#include "scripting/ast_node.hpp"
+#include "scripting/abstract_syntax_tree/node.hpp"
 #include "scripting/token.hpp"
 
 #include <memory>

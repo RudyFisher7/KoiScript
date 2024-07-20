@@ -4,7 +4,7 @@
 
 
 #include "scripting/assembler.hpp"
-#include "scripting/ast_node.hpp"
+#include "scripting/abstract_syntax_tree/node.hpp"
 #include "scripting/lexer.hpp"
 #include "scripting/parser.hpp"
 #include "scripting/type_defs.hpp"

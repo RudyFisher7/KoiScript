@@ -112,7 +112,7 @@ Parser::Error Parser::_parse_exe(
     KOI_LOG_IF_NOT(is_valid, "Too few tokens for exe meta.");
 
     if (is_valid) {
-        std::shared_ptr<Execute> exe = std::make_shared<Execute>();
+        std::shared_ptr<ExecuteMeta> exe = std::make_shared<ExecuteMeta>();
         it += 2u;
 
         is_valid = it->get_type() == Token::SCRIPTING_TOKEN_TYPE_ID;

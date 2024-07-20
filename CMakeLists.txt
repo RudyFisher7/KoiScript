@@ -28,12 +28,16 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/log/log.hpp
     source/extensions/extensions.cpp
     include/scripting/extensions/extensions.hpp
-    source/ast_node.cpp
-    include/scripting/ast_node.hpp
+    source/abstract_syntax_tree/node.cpp
+    include/scripting/abstract_syntax_tree/node.hpp
     source/type.cpp
     include/scripting/type.hpp
     source/assembler.cpp
     include/scripting/assembler.hpp
+    source/abstract_syntax_tree/literal.cpp
+    include/scripting/abstract_syntax_tree/literal.hpp
+    source/abstract_syntax_tree/meta.cpp
+    include/scripting/abstract_syntax_tree/meta.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

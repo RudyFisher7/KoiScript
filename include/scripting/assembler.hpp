@@ -7,7 +7,7 @@
 #define KOI_SCRIPTING_ASSEMBLER_HPP
 
 
-#include "scripting/ast_node.hpp"
+#include "scripting/abstract_syntax_tree/node.hpp"
 #include "scripting/type_defs.hpp"
 
 #include <map>
