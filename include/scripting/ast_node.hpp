@@ -52,7 +52,12 @@ public:
 
 class FunctionLiteral: public Literal {
 public:
-    //
+    Type type;
+    std::shared_ptr<AstNode> return_statement;
+    std::vector<std::shared_ptr<AstNode>> statements;
+
+    explicit FunctionLiteral(const Type& in_type);//fixme:: rule of 5 stuff
+    void print(std::ostream& lhs) const override;
 };
 
 

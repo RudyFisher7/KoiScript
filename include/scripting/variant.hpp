@@ -157,6 +157,9 @@ public:
     void morph(Type in_type);
 
 
+    friend std::ostream& operator<<(std::ostream& lhs, const Variant& rhs);
+
+
 private:
     void _copy(const Variant& rhs);
 
@@ -179,9 +182,6 @@ private:
     template<typename type>
     void combine_hash(const type& in, size_t& out) const noexcept;
 };
-
-
-std::ostream& operator<<(std::ostream& lhs, const Variant& rhs);
 
 
 std::string operator+(const Variant& lhs, const std::string& rhs);

@@ -266,13 +266,22 @@ float Variant::get_float() const {
 std::string Variant::get_string() const {
     std::string result;
     switch (_current_type) {
+        case SCRIPTING_VARIANT_TYPE_VOID:
+            result = "\"<void>\"";
+            break;
+        case SCRIPTING_VARIANT_TYPE_BOOL:
+            result = _value_bool ? "true" : "false";
+            break;
         case SCRIPTING_VARIANT_TYPE_INT:
             result = std::to_string(_value_int);
             break;
         case SCRIPTING_VARIANT_TYPE_FLOAT:
             result = std::to_string(_value_float);
             break;
-        case SCRIPTING_VARIANT_TYPE_SIZE:
+        case SCRIPTING_VARIANT_TYPE_TEXT:
+            result = _value_text;
+            break;
+        case SCRIPTING_VARIANT_TYPE_REF:
             break;
     }
 
@@ -320,6 +329,21 @@ void Variant::morph(Variant::Type in_type) {
 }
 
 
+std::ostream& operator<<(std::ostream& lhs, const Variant& rhs) {
+    lhs << "{\"_class:\": \"Variant\", \"_current_type\": " << std::to_string(rhs._current_type) << ", \"_value\":";
+
+    if (rhs._current_type == Variant::SCRIPTING_VARIANT_TYPE_TEXT) {
+        lhs << "\"" << rhs.get_string() << "\"";
+    } else {
+        lhs << rhs.get_string();
+    }
+
+    lhs << "}";
+
+    return lhs;
+}
+
+
 bool Variant::_set_string_value(const std::string& in_value) {
     bool result = false;
 
@@ -361,22 +385,6 @@ template<typename type>
 void VariantHash::combine_hash(const type& in, size_t& out) const noexcept {
     std::hash<type> hash;
     out ^= hash(in) + 0x9e3779b9 + (out << 6) + (out >> 2);
-}
-
-
-std::ostream& operator<<(std::ostream& lhs, const Variant& rhs) {
-    switch (rhs.get_type()) {
-        case Variant::SCRIPTING_VARIANT_TYPE_INT:
-            lhs << rhs.get_int();
-            break;
-        case Variant::SCRIPTING_VARIANT_TYPE_FLOAT:
-            lhs << rhs.get_float();
-            break;
-        case Variant::SCRIPTING_VARIANT_TYPE_SIZE:
-            break;
-    }
-
-    return lhs;
 }
 
 

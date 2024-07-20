@@ -36,6 +36,70 @@ Parser::Error Parser::parse(const std::vector<Token>& tokens, std::shared_ptr<As
 }
 
 
+Parser::Error Parser::_parse_ret_statement(
+        std::vector<Token>::const_iterator& it,
+        const std::vector<Token>::const_iterator& end,
+        std::shared_ptr<FunctionLiteral>& out_current_ast
+) const {
+    Error result = SCRIPTING_PARSER_ERROR_OK;
+
+
+    if (
+            it->get_type() == Token::SCRIPTING_TOKEN_TYPE_RESULTER
+            && (it + 1u)->get_type() == Token::SCRIPTING_TOKEN_TYPE_COMBINER
+    ) {
+        it += 2u;
+        if (_is_variable_literal(it->get_type())) {
+            std::shared_ptr<VariableLiteral> variable_literal;
+            result = _parse_variable_literal(it, end, variable_literal);
+            out_current_ast->return_statement = variable_literal;
+            if (it->get_type() == Token::SCRIPTING_TOKEN_TYPE_DELIMITER) {
+                ++it;
+            } else {
+                //todo:: error handling
+            }
+        } else {
+            std::shared_ptr<AstNode> statement;
+            result = _parse_statement(it, end, statement);
+            out_current_ast->return_statement = statement;
+        }
+    }
+
+    return result;
+}
+
+
+Parser::Error Parser::_parse_statement(
+        std::vector<Token>::const_iterator& it,
+        const std::vector<Token>::const_iterator& end,
+        std::shared_ptr<AstNode>& out_current_ast
+) const {
+    Error result = SCRIPTING_PARSER_ERROR_OK;
+
+    switch (it->get_type()) {
+        case Token::SCRIPTING_TOKEN_TYPE_VAR_META:
+            break;
+        case Token::SCRIPTING_TOKEN_TYPE_FUN_META:
+            break;
+        case Token::SCRIPTING_TOKEN_TYPE_EXE_META:
+            result = _parse_exe(it, end, out_current_ast);
+            break;
+        case Token::SCRIPTING_TOKEN_TYPE_VAL_META:
+            break;
+        case Token::SCRIPTING_TOKEN_TYPE_REF_META:
+            break;
+        case Token::SCRIPTING_TOKEN_TYPE_LIB_META:
+            break;
+        case Token::SCRIPTING_TOKEN_TYPE_IMP_META:
+            break;
+        default:
+            break;
+    }
+
+    return result;
+}
+
+
 Parser::Error Parser::_parse_exe(
         std::vector<Token>::const_iterator& it,
         const std::vector<Token>::const_iterator& end,
@@ -97,6 +161,7 @@ Parser::Error Parser::_parse_exe(
 
         if (is_valid) {
             is_valid = it->get_type() == Token::SCRIPTING_TOKEN_TYPE_DELIMITER;
+            ++it;
             KOI_LOG_IF_NOT(is_valid, "No delimiter found for exe meta.");
         }
 
@@ -129,8 +194,11 @@ Parser::Error Parser::_parse_arg(
             out_current_ast = variable_literal;
         }
             break;
-        case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID:
-            result = _parse_function_literal(it, end, out_current_ast);
+        case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID: {
+            std::shared_ptr<FunctionLiteral> function_literal;
+            result = _parse_function_literal(it, end, function_literal);
+            out_current_ast = function_literal;
+        }
             break;
         case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL:
         case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT:
@@ -172,8 +240,9 @@ Parser::Error Parser::_parse_typed_literal(
             bool types_match = _do_basic_types_match((it - 2u)->get_type(), variable_literal->value.get_type());
 
         } else { // type is complex; literal is either a function or an array
-            ++it;
+            Type type(_get_basic_type_from(it->get_type()));
 
+            ++it;
             unsigned int i = 1u;
             while (
                     i < distance
@@ -182,37 +251,49 @@ Parser::Error Parser::_parse_typed_literal(
             ) {
                 if (it->get_type() == Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START) {
                     if ((it + 1u)->get_type() == Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END) {
-                        //todo:: accumulate array dimensions
+                        ++type.array_dimensions;
                         it += 2u;
                         i += 2u;
                     }
                 }
             }
 
+            std::shared_ptr<FunctionLiteral> function_literal = std::make_shared<FunctionLiteral>(type);
+
             if (it->get_type() == Token::SCRIPTING_TOKEN_TYPE_GROUPING_START) {
+                ++it;
                 while (i < distance && result == SCRIPTING_PARSER_ERROR_OK) {
-                    ++it;
                     switch (it->get_type()) {
                         case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL:
                         case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT:
                         case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT:
                         case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT:
-                            //todo:: accumulate param types
-                            //todo:: iterate past separator if exists
+                            type.parameter_types.emplace_back(_get_basic_type_from(it->get_type()));
                             ++it;
                             ++i;
                             break;
-                        case Token::SCRIPTING_TOKEN_TYPE_GROUPING_END:
-                            //
+                        case Token::SCRIPTING_TOKEN_TYPE_GROUPING_END: //fixme:: support nested function types
+                            ++i;
+                            ++it;
+                            if (i != distance - 1u) {
+                                result = SCRIPTING_PARSER_ERROR_INVALID_TYPE_SPECIFIER;
+                                KOI_LOG("Invalid type specifier.");
+                            }
                             break;
                         default:
                             result = SCRIPTING_PARSER_ERROR_INVALID_TYPE_SPECIFIER;
+                            KOI_LOG("Invalid type specifier.");
                             break;
                     }
+
+                    ++it;
+                    ++i;
                 }
 
-                ++it;
-                ++i;
+                if (result == SCRIPTING_PARSER_ERROR_OK) {
+                    result = _parse_function_literal(it, end, function_literal);
+                    out_current_ast = function_literal;
+                }
             } else {
                 //todo:: this is an array type
             }
@@ -229,9 +310,32 @@ Parser::Error Parser::_parse_typed_literal(
 Parser::Error Parser::_parse_function_literal(
         std::vector<Token>::const_iterator& it,
         const std::vector<Token>::const_iterator& end,
-        std::shared_ptr<AstNode>& out_current_ast
+        std::shared_ptr<FunctionLiteral>& out_current_ast
 ) const {
     Error result = SCRIPTING_PARSER_ERROR_OK;
+
+    if (it->get_type() == Token::SCRIPTING_TOKEN_TYPE_SCOPE_START) {
+        ++it;
+
+        while (
+                result == SCRIPTING_PARSER_ERROR_OK
+                && it->get_type() != Token::SCRIPTING_TOKEN_TYPE_RESULTER
+                && it->get_type() != Token::SCRIPTING_TOKEN_TYPE_SCOPE_END
+        ) {
+            std::shared_ptr<AstNode> statement;
+            result = _parse_statement(it, end, statement);
+            out_current_ast->statements.emplace_back(statement);
+        }
+
+        if (out_current_ast->type.return_type != SCRIPTING_BASIC_TYPE_VOID) {
+            result = _parse_ret_statement(it, end, out_current_ast);
+        }
+
+        if (it->get_type() == Token::SCRIPTING_TOKEN_TYPE_SCOPE_END) {
+            ++it;
+        }
+    }
+
     return result;
 }
 
@@ -288,7 +392,7 @@ Parser::Error Parser::_parse_variable_literal(
                 result = SCRIPTING_PARSER_ERROR_UNEXPECTED_END_OF_TOKENS;
                 break;
             default:
-                result = SCRIPTING_PARSER_ERROR_INVALID_VARIABLE_LITERAL;
+                // pass through, still valid
                 break;
         }
     }
@@ -355,19 +459,42 @@ bool Parser::_find_next_token_of_type(
         while (!result && it < end) {
             result = it->get_type() == token_type;
 
-            ++it;
-            ++i;
+            if (!result) {
+                ++it;
+                ++i;
+            }
         }
     } else {
         while (!result && i < out_distance && it < end) {
             result = it->get_type() == token_type;
 
-            ++it;
-            ++i;
+            if (!result) {
+                ++it;
+                ++i;
+            }
         }
     }
 
     out_distance = i;
+
+    return result;
+}
+
+
+bool Parser::_is_variable_literal(Token::Type type) const {
+    bool result = false;
+
+    switch (type) {
+        case Token::SCRIPTING_TOKEN_TYPE_BOOL:
+        case Token::SCRIPTING_TOKEN_TYPE_INT:
+        case Token::SCRIPTING_TOKEN_TYPE_FLOAT:
+        case Token::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND:
+            result = true;
+            break;
+        default:
+            // just pass through with false
+            break;
+    }
 
     return result;
 }
@@ -395,6 +522,66 @@ bool Parser::_do_basic_types_match(Token::Type token_type, Variant::Type variant
         case Variant::SCRIPTING_VARIANT_TYPE_REF:
             //fixme:: implement
             KOI_LOG("Reference types aren't implemented yet.");
+            break;
+        default:
+            // just pass through with false
+            break;
+    }
+
+    return result;
+}
+
+
+bool Parser::_do_basic_types_match(Token::Type token_type, BasicType basic_type) const {
+    bool result = false;
+
+    switch (basic_type) {
+        case SCRIPTING_BASIC_TYPE_VOID:
+            result = token_type == Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID;
+            break;
+        case SCRIPTING_BASIC_TYPE_BOOL:
+            result = token_type == Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL;
+            break;
+        case SCRIPTING_BASIC_TYPE_INT:
+            result = token_type == Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT;
+            break;
+        case SCRIPTING_BASIC_TYPE_FLOAT:
+            result = token_type == Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT;
+            break;
+        case SCRIPTING_BASIC_TYPE_TEXT:
+            result = token_type == Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT;
+            break;
+        case SCRIPTING_BASIC_TYPE_REF:
+            //fixme:: implement
+            KOI_LOG("Reference types aren't implemented yet.");
+            break;
+        default:
+            // just pass through with false
+            break;
+    }
+
+    return result;
+}
+
+
+BasicType Parser::_get_basic_type_from(Token::Type token_type) const {
+    BasicType result = SCRIPTING_BASIC_TYPE_INVALID;
+
+    switch (token_type) {
+        case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID:
+            result = SCRIPTING_BASIC_TYPE_VOID;
+            break;
+        case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL:
+            result = SCRIPTING_BASIC_TYPE_BOOL;
+            break;
+        case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT:
+            result = SCRIPTING_BASIC_TYPE_INT;
+            break;
+        case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT:
+            result = SCRIPTING_BASIC_TYPE_FLOAT;
+            break;
+        case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT:
+            result = SCRIPTING_BASIC_TYPE_TEXT;
             break;
         default:
             // just pass through with false

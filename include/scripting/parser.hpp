@@ -39,6 +39,19 @@ public:
 
 
 protected:
+    Error _parse_ret_statement(
+            std::vector<Token>::const_iterator& it,
+            const std::vector<Token>::const_iterator& end,
+            std::shared_ptr<FunctionLiteral>& out_current_ast
+    ) const;
+
+
+    Error _parse_statement(
+            std::vector<Token>::const_iterator& it,
+            const std::vector<Token>::const_iterator& end,
+            std::shared_ptr<AstNode>& out_current_ast
+    ) const;
+
     Error _parse_exe(
             std::vector<Token>::const_iterator& it,
             const std::vector<Token>::const_iterator& end,
@@ -63,7 +76,7 @@ protected:
     Error _parse_function_literal(
             std::vector<Token>::const_iterator& it,
             const std::vector<Token>::const_iterator& end,
-            std::shared_ptr<AstNode>& out_current_ast
+            std::shared_ptr<FunctionLiteral>& out_current_ast
     ) const;
 
 
@@ -101,9 +114,13 @@ protected:
             unsigned int& out_distance
     ) const;
 
+    bool _is_variable_literal(Token::Type type) const;
+
 
     //fixme:: implement ref types
     bool _do_basic_types_match(Token::Type token_type, Variant::Type variant_type) const;
+    bool _do_basic_types_match(Token::Type token_type, BasicType basic_type) const;
+    BasicType _get_basic_type_from(Token::Type token_type) const;
 
 };
 

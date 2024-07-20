@@ -6,6 +6,7 @@
 #define KOI_SCRIPTING_TYPE_HPP
 
 
+#include <iostream>
 #include <vector>
 
 
@@ -27,17 +28,24 @@ enum BasicType: int {
 
 class Type {
 public:
-    const BasicType return_type = SCRIPTING_BASIC_TYPE_INVALID;
+    BasicType return_type = SCRIPTING_BASIC_TYPE_INVALID;
+    unsigned int array_dimensions = 0u;
+    std::vector<BasicType> parameter_types;
 
-    const std::vector<BasicType> parameter_types;
 
     Type();
 
     explicit Type(BasicType in_return_type);
 
-    Type(BasicType in_return_type, std::vector<BasicType>&& in_parameter_types);
+    Type(
+            BasicType in_return_type,
+            unsigned int in_array_dimensions,
+            std::vector<BasicType>&& in_parameter_types
+    );
 
     virtual ~Type();//fixme:: implement this and other rule of 5 stuff
+
+    friend std::ostream& operator<<(std::ostream& lhs, const Type& rhs);
 };
 
 
