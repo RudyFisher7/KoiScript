@@ -32,8 +32,8 @@ Lexer::Error Lexer::lex(const char* script, unsigned long size, std::vector<Toke
         }
     }
 
-    if (out_tokens.size() >= 9) {
-        int i = 0;
+    if (it == end) {
+        out_tokens.emplace_back(Token::SCRIPTING_TOKEN_TYPE_EOF, false);
     }
 
     return result;

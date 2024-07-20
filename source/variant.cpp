@@ -187,7 +187,7 @@ bool Variant::operator!=(const Variant& rhs) const {
 }
 
 
-int Variant::get_type() const {
+Variant::Type Variant::get_type() const {
     return _current_type;
 }
 

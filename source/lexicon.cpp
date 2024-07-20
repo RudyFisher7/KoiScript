@@ -32,11 +32,11 @@ Lexicon::Lexicon() {
 
     _keywords = {
             // var types
-            {"void", Token::SCRIPTING_TOKEN_TYPE_TYPE},
-            {"bool", Token::SCRIPTING_TOKEN_TYPE_TYPE},
-            {"int", Token::SCRIPTING_TOKEN_TYPE_TYPE},
-            {"float", Token::SCRIPTING_TOKEN_TYPE_TYPE},
-            {"text", Token::SCRIPTING_TOKEN_TYPE_TYPE},
+            {"void", Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID},
+            {"bool", Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL},
+            {"int", Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT},
+            {"float", Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT},
+            {"text", Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT},
 
             // declaration metas
             {"var", Token::SCRIPTING_TOKEN_TYPE_VAR_META},

@@ -11,13 +11,22 @@
 namespace Koi {
 namespace Scripting {
 
-Execute::Execute(): type(), executing_key(), args({}) {
+
+std::ostream& operator<<(std::ostream& lhs, const AstNode& rhs) {
+    rhs.print(lhs);
+
+    return lhs;
+}
+
+
+
+
+Execute::Execute(): executing_key(), args({}) {
 
 }
 
 
 Execute::Execute(std::string in_executing_key):
-        type(),
         executing_key(std::move(in_executing_key)),
         args({}) {
 
@@ -25,15 +34,44 @@ Execute::Execute(std::string in_executing_key):
 
 
 Execute::Execute(std::string in_executing_key, TypeDecorator in_type):
-        type(std::move(in_type)),
         executing_key(std::move(in_executing_key)),
         args({}) {
 
 }
 
 
-void Execute::print() const {
-    std::cout << "executing_key: " << executing_key << ", args: todo::" << std::endl;
+void Execute::print(std::ostream& lhs) const {
+    lhs << "executing_key: " << executing_key << ", args: [";
+
+    for (const auto& arg : args) {
+        arg->print(lhs);
+    }
+
+    lhs << "]";
+}
+
+
+
+
+VariableLiteral::VariableLiteral(Variant in_value): value(std::move(in_value)) {
+
+}
+
+
+void VariableLiteral::print(std::ostream& lhs) const {
+    lhs << "value: " << value << " todo::";
+}
+
+
+
+
+Value::Value(Variant in_value): value(std::move(in_value)) {
+
+}
+
+
+void Value::print(std::ostream& lhs) const {
+    lhs << "value: " << value << " todo::";
 }
 
 } // Scripting

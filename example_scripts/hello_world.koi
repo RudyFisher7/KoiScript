@@ -1,3 +1,5 @@
-exe<main>({
+exe<main>(int(){
     exe<print>('hello world!');
+
+    ret:0;
 });

@@ -34,6 +34,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -49,6 +50,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -64,6 +66,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -81,6 +84,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_INT, "1"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -97,6 +101,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_INT, "-1"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -113,6 +118,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_BOOL, "true"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -129,6 +135,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_BOOL, "false"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -145,6 +152,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_FLOAT, "1.2"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -163,6 +171,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND, "'"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -176,15 +185,16 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "void"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID, "void"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SCOPE_START, "{"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SCOPE_END, "}"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -209,6 +219,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SCOPE_END, "}"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -233,6 +244,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND, "'"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -269,6 +281,7 @@ TEST_CASE("Evaluation metas", "[META][EVALUATION][VALID_INPUT]") {
 
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);

@@ -9,6 +9,7 @@
 #include "scripting/token.hpp"
 #include "scripting/type_defs.hpp"
 #include "scripting/type.hpp"
+#include "scripting/variant.hpp"
 
 #include <iostream>
 #include <string>
@@ -24,7 +25,12 @@ public:
     std::vector<Token> tokens;
     // scope
     // children
-    virtual void print() const = 0;
+    friend std::ostream& operator<<(std::ostream& lhs, const AstNode& rhs);
+
+
+    virtual void print(std::ostream& lhs) const { }
+
+
 };
 
 
@@ -36,9 +42,11 @@ public:
 
 class VariableLiteral: public Literal {
 public:
-    BasicType type = SCRIPTING_BASIC_TYPE_INVALID;
-    std::string key;
-    std::string value;
+    Variant value;
+
+    explicit VariableLiteral(Variant in_value);
+
+    void print(std::ostream& lhs) const override;
 };
 
 
@@ -57,7 +65,6 @@ public:
 
 class Execute: public AstNode {
 public:
-    TypeDecorator type;
     std::string executing_key;
 
     std::vector<std::shared_ptr<AstNode>> args;
@@ -67,15 +74,17 @@ public:
     explicit Execute(std::string in_executing_key);
 
     Execute(std::string in_executing_key, TypeDecorator in_type);
-
-    void print() const override;
+    void print(std::ostream& lhs) const override;
 };
 
 
 class Value: public AstNode {
 public:
-    Id id = 0u;
-    //todo:: for type, look up the type of id
+    Variant value;
+
+    explicit Value(Variant in_value);
+
+    void print(std::ostream& lhs) const override;
 };
 
 

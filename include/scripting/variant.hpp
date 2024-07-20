@@ -94,7 +94,7 @@ public:
     bool operator!=(const Variant& rhs) const;
 
 
-    int get_type() const;
+    Type get_type() const;
 
 
     operator bool() const;

@@ -215,11 +215,20 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
         case SCRIPTING_TOKEN_TYPE_INVALID:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_INVALID);
             break;
-        case SCRIPTING_TOKEN_TYPE_VALUE:
-            result = NAMEOF(SCRIPTING_TOKEN_TYPE_VALUE);
+        case SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID);
             break;
-        case SCRIPTING_TOKEN_TYPE_TYPE:
-            result = NAMEOF(SCRIPTING_TOKEN_TYPE_TYPE);
+        case SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL);
+            break;
+        case SCRIPTING_TOKEN_TYPE_SPECIFIER_INT:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_SPECIFIER_INT);
+            break;
+        case SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT);
+            break;
+        case SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT);
             break;
         case SCRIPTING_TOKEN_TYPE_GROUPING_START:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_GROUPING_START);
@@ -247,9 +256,6 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
             break;
         case SCRIPTING_TOKEN_TYPE_COMBINER:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_COMBINER);
-            break;
-        case SCRIPTING_TOKEN_TYPE_ASSIGNER:
-            result = NAMEOF(SCRIPTING_TOKEN_TYPE_ASSIGNER);
             break;
         case SCRIPTING_TOKEN_TYPE_DELIMITER:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_DELIMITER);
@@ -308,6 +314,9 @@ std::string Token::_get_name_of_type(Token::Type in_type) {
         case SCRIPTING_TOKEN_TYPE_IMP_META:
             result = NAMEOF(SCRIPTING_TOKEN_TYPE_IMP_META);
             break;
+        case SCRIPTING_TOKEN_TYPE_EOF:
+            result = NAMEOF(SCRIPTING_TOKEN_TYPE_EOF);
+            break;
         default:
             result = "Unknown. How did you do this?";
             break;
@@ -335,9 +344,6 @@ std::string Token::_get_name_of_internal_type(InternalType in_internal_type) {
             break;
         case SCRIPTING_TOKEN_INTERNAL_TYPE_STRING:
             result = NAMEOF(SCRIPTING_TOKEN_INTERNAL_TYPE_STRING);
-            break;
-        case SCRIPTING_TOKEN_TYPE_RESERVED_EOF:
-            result = NAMEOF(SCRIPTING_TOKEN_TYPE_RESERVED_EOF);
             break;
         case SCRIPTING_TOKEN_INTERNAL_TYPE_SIZE:
             result = NAMEOF(SCRIPTING_TOKEN_INTERNAL_TYPE_SIZE);
@@ -380,7 +386,27 @@ bool Token::operator!=(const Token& rhs) const {
 
 
 Token::operator std::string() const {
-    return std::string(R"({"_value": ")" + get_value_string() + R"(", "_internal_type": )" + std::to_string(_internal_type) +R"(, "_type": )" + std::to_string(_type) + R"(})");
+    if (_internal_type == SCRIPTING_TOKEN_INTERNAL_TYPE_STRING) {
+        return std::string(
+                R"({"_value": ")"
+                + get_value_string()
+                + R"(", "_internal_type": )"
+                + std::to_string(_internal_type)
+                + R"(, "_type": )"
+                + std::to_string(_type)
+                + R"(})"
+        );
+    } else {
+        return std::string(
+                R"({"_value": )"
+                + get_value_string()
+                + R"(, "_internal_type": )"
+                + std::to_string(_internal_type)
+                + R"(, "_type": )"
+                + std::to_string(_type)
+                + R"(})"
+        );
+    }
 }
 
 
@@ -388,7 +414,14 @@ std::ostream& operator<<(std::ostream& lhs, const Token& rhs) {
     if (rhs.get_value_string() == "1") {
         int i = 0;
     }
-    lhs << R"({"_value": ")" << rhs.get_value_string() << R"(", "_internal_type": ")" << Token::_get_name_of_internal_type(rhs._internal_type) << R"(", "_type": ")" << Token::_get_name_of_type(rhs._type) << R"("})";
+
+    lhs << R"({"_value": ")"
+    << rhs.get_value_string()
+    << R"(", "_internal_type": ")"
+    << Token::_get_name_of_internal_type(rhs._internal_type)
+    << R"(", "_type": ")"
+    << Token::_get_name_of_type(rhs._type)
+    << R"("})";
 
     return lhs;
 }

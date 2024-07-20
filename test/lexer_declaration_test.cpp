@@ -33,8 +33,9 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -48,8 +49,9 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -63,8 +65,9 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "int"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT, "int"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -78,8 +81,9 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "float"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT, "float"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -93,8 +97,9 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "text"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT, "text"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -108,10 +113,11 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -125,10 +131,11 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "int"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT, "int"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -142,10 +149,11 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "float"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT, "float"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -159,10 +167,11 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "text"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT, "text"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -176,11 +185,12 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_INT, "1"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -194,11 +204,12 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_INT, "2"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -212,11 +223,12 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_INT, "9"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -230,11 +242,12 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_INT, "10"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -248,11 +261,12 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_INT, "999"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -267,11 +281,12 @@ TEST_CASE("Declare var", "[META][DECLARATION][VAR][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID, "easy_enough"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_INT, std::to_string(max)),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -308,8 +323,9 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -325,8 +341,9 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -342,8 +359,9 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "int"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT, "int"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -359,8 +377,9 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "void"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID, "void"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -375,10 +394,11 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "void"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID, "void"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -393,12 +413,13 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SEPARATOR, ","),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "int"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT, "int"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "float"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT, "float"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -413,14 +434,15 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SEPARATOR, ","),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "int"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT, "int"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "float"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT, "float"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -435,14 +457,15 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SEPARATOR, ","),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "int"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT, "int"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "float"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT, "float"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);
@@ -457,16 +480,17 @@ TEST_CASE("Declare fun", "[META][DECLARATION][FUN][VALID_INPUT]") {
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ID_END, ">"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_COMBINER, ":"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_START, "("),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "bool"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL, "bool"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SEPARATOR, ","),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "int"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT, "int"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START, "["),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END, "]"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_GROUPING_END, ")"),
-                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_TYPE, "float"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT, "float"),
                 KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_DELIMITER, ";"),
+                KoiScript::Token(KoiScript::Token::SCRIPTING_TOKEN_TYPE_EOF, false),
         };
 
         error = lexer.lex(source_code.c_str(), source_code.size(), tokens);

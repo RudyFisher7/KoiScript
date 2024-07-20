@@ -22,6 +22,10 @@ public:
         SCRIPTING_PARSER_ERROR_MIN = 0,
         SCRIPTING_PARSER_ERROR_OK = SCRIPTING_PARSER_ERROR_MIN,
         SCRIPTING_PARSER_ERROR_INVALID_EVALUATION_META,
+        SCRIPTING_PARSER_ERROR_INVALID_TOKEN_IN_META_ARG,
+        SCRIPTING_PARSER_ERROR_INVALID_TYPE_SPECIFIER,
+        SCRIPTING_PARSER_ERROR_INVALID_VARIABLE_LITERAL,
+        SCRIPTING_PARSER_ERROR_UNEXPECTED_END_OF_TOKENS,
         SCRIPTING_PARSER_ERROR_SIZE
     };
 
@@ -35,28 +39,71 @@ public:
 
 
 protected:
-    bool _is_main_exe_valid(
-            std::vector<Token>::const_iterator& it,
-            std::vector<Token>::const_iterator& end
-    ) const;
     Error _parse_exe(
             std::vector<Token>::const_iterator& it,
-            std::vector<Token>::const_iterator& end,
+            const std::vector<Token>::const_iterator& end,
             std::shared_ptr<AstNode>& out_current_ast
     ) const;
 
     //todo:: implement
     Error _parse_arg(
             std::vector<Token>::const_iterator& it,
-            std::vector<Token>::const_iterator& end,
+            const std::vector<Token>::const_iterator& end,
             std::shared_ptr<AstNode>& out_current_ast
     ) const;
+
+
+    Error _parse_typed_literal(
+            std::vector<Token>::const_iterator& it,
+            const std::vector<Token>::const_iterator& end,
+            std::shared_ptr<AstNode>& out_current_ast
+    ) const;
+
+
+    Error _parse_function_literal(
+            std::vector<Token>::const_iterator& it,
+            const std::vector<Token>::const_iterator& end,
+            std::shared_ptr<AstNode>& out_current_ast
+    ) const;
+
+
+    Error _parse_array_literal(
+            std::vector<Token>::const_iterator& it,
+            const std::vector<Token>::const_iterator& end,
+            std::shared_ptr<AstNode>& out_current_ast
+    ) const;
+
+
+    Error _parse_variable_literal(
+            std::vector<Token>::const_iterator& it,
+            const std::vector<Token>::const_iterator& end,
+            std::shared_ptr<VariableLiteral>& out_current_ast
+    ) const;
+
+
+    bool _is_main_exe_valid(
+            std::vector<Token>::const_iterator& it,
+            const std::vector<Token>::const_iterator& end
+    ) const;
+
 
     bool _are_enough_tokens_left(
             std::vector<Token>::const_iterator it,
             std::vector<Token>::const_iterator end,
             unsigned int size
     ) const;
+
+
+    bool _find_next_token_of_type(
+            std::vector<Token>::const_iterator it,
+            std::vector<Token>::const_iterator end,
+            Token::Type token_type,
+            unsigned int& out_distance
+    ) const;
+
+
+    //fixme:: implement ref types
+    bool _do_basic_types_match(Token::Type token_type, Variant::Type variant_type) const;
 
 };
 
