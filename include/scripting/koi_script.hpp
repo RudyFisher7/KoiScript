@@ -6,7 +6,7 @@
 #define KOI_SCRIPTING_KOI_SCRIPT_HPP
 
 
-#include "scripting/type_defs.hpp"
+#include "scripting/runtime/type_defs.hpp"
 #include "scripting/variant.hpp"
 
 #include <string>

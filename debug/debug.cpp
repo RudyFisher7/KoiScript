@@ -7,8 +7,9 @@
 #include "scripting/abstract_syntax_tree/node.hpp"
 #include "scripting/lexer.hpp"
 #include "scripting/parser.hpp"
-#include "scripting/type_defs.hpp"
+#include "scripting/runtime/type_defs.hpp"
 #include "scripting/extensions/extensions.hpp"
+#include "scripting/variant.hpp"
 
 #include <cstring>
 #include <fstream>
@@ -49,13 +50,18 @@ int main() {
     std::cout << tokens << std::endl;
 
     Koi::Scripting::Parser parser;
-    std::shared_ptr<Koi::Scripting::AstNode> ast_tree;
+    std::shared_ptr<Koi::Scripting::Ast::Node> ast_tree;
     parser.parse(tokens, ast_tree);
 
     std::cout << *ast_tree << std::endl;
 
-    std::map<std::string, Koi::Scripting::Id> memory_map {};
-    std::vector<std::shared_ptr<Koi::Scripting::AstNode>> memory {};
+    std::map<std::string, Koi::Scripting::Runtime::Id> memory_map {};
+    std::vector<std::shared_ptr<Koi::Scripting::Ast::Node>> memory {};
+
+    Koi::Scripting::Variant runtime_result;
+    ast_tree->evaluate(runtime_result);
+
+    std::cout << "Runtime result: " << runtime_result << std::endl;
 
     Koi::Scripting::Assembler assembler;
 

@@ -6,8 +6,8 @@
 #define KOI_SCRIPTING_VARIANT_HPP
 
 
-#include "scripting/closure.hpp"
-#include "scripting/type_defs.hpp"
+#include "scripting/runtime/type_defs.hpp"
+#include "scripting/type.hpp"
 
 #include <functional>
 #include <ostream>
@@ -18,26 +18,14 @@ namespace Koi {
 namespace Scripting {
 
 class Variant final {
-public:
-    enum Type : int {
-        SCRIPTING_VARIANT_TYPE_MIN = 0,
-        SCRIPTING_VARIANT_TYPE_VOID = SCRIPTING_VARIANT_TYPE_MIN,
-        SCRIPTING_VARIANT_TYPE_BOOL,
-        SCRIPTING_VARIANT_TYPE_INT,
-        SCRIPTING_VARIANT_TYPE_FLOAT,
-        SCRIPTING_VARIANT_TYPE_TEXT,
-        SCRIPTING_VARIANT_TYPE_REF,
-        SCRIPTING_VARIANT_TYPE_SIZE
-    };
-
 private:
-    Type _current_type = SCRIPTING_VARIANT_TYPE_VOID;
+    BasicType _current_type = SCRIPTING_BASIC_TYPE_VOID;
     union {
         bool _value_bool = false;
         int _value_int;
         float _value_float;
         char* _value_text;
-        Id _value_ref;
+        Runtime::Id _value_ref;
     };
 
 public:
@@ -94,7 +82,7 @@ public:
     bool operator!=(const Variant& rhs) const;
 
 
-    Type get_type() const;
+    BasicType get_type() const;
 
 
     operator bool() const;
@@ -154,7 +142,7 @@ public:
     void set_value(const std::string& value);
 
 
-    void morph(Type in_type);
+    void morph(BasicType in_type);
 
 
     friend std::ostream& operator<<(std::ostream& lhs, const Variant& rhs);

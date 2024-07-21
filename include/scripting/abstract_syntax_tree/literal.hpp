@@ -9,7 +9,7 @@
 #include "scripting/abstract_syntax_tree/node.hpp"
 
 #include "scripting/token.hpp"
-#include "scripting/type_defs.hpp"
+#include "scripting/runtime/type_defs.hpp"
 #include "scripting/type.hpp"
 #include "scripting/variant.hpp"
 
@@ -23,7 +23,7 @@ namespace Koi {
 namespace Scripting {
 namespace Ast {
 
-class Literal : public Statement {
+class Literal : public Expression {
 
 };
 
@@ -35,6 +35,8 @@ public:
 
     explicit VariableLiteral(Variant in_value);
 
+    Runtime::Error evaluate(Variant& out_result) override;
+
 
     void print(std::ostream& lhs) const override;
 };
@@ -43,11 +45,12 @@ public:
 class FunctionLiteral : public Literal {
 public:
     Type type;
-    std::shared_ptr<AstNode> return_statement;
-    std::vector<std::shared_ptr<AstNode>> statements;
+    std::shared_ptr<Statement> return_statement;
+    std::vector<std::shared_ptr<Statement>> statements;
 
 
     explicit FunctionLiteral(const Type& in_type);//fixme:: rule of 5 stuff
+    Runtime::Error evaluate(Variant& out_result) override;
     void print(std::ostream& lhs) const override;
 };
 

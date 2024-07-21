@@ -8,7 +8,7 @@
 
 
 #include "scripting/abstract_syntax_tree/node.hpp"
-#include "scripting/type_defs.hpp"
+#include "scripting/runtime/type_defs.hpp"
 
 #include <map>
 #include <memory>
@@ -27,9 +27,9 @@ public:
     };
 
     Error assemble(
-            const std::shared_ptr<AstNode> ast_tree,
-            std::map<std::string, Koi::Scripting::Id>& out_memory_map,
-            std::vector<std::shared_ptr<Koi::Scripting::AstNode>>& out_memory
+            const std::shared_ptr<Ast::Node> ast_tree,
+            std::map<std::string, Runtime::Id>& out_memory_map,
+            std::vector<std::shared_ptr<Ast::Node>>& out_memory
     ) const;
 };
 

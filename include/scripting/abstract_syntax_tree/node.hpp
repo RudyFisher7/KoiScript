@@ -6,8 +6,9 @@
 #define KOI_SCRIPTING_AST_NODE_HPP
 
 
+#include "scripting/runtime/error.hpp"
 #include "scripting/token.hpp"
-#include "scripting/type_defs.hpp"
+#include "scripting/runtime/type_defs.hpp"
 #include "scripting/type.hpp"
 #include "scripting/variant.hpp"
 
@@ -21,24 +22,17 @@ namespace Koi {
 namespace Scripting {
 namespace Ast {
 
-class AstNode {
+class Node {
 public:
-    std::vector<Token> tokens;
+    virtual Runtime::Error evaluate(Variant& out_result) = 0;//fixme:: the result could also be an Ast::Literal
+    virtual void print(std::ostream& lhs) const = 0;
 
 
-    // scope
-    // children
-    friend std::ostream& operator<<(std::ostream& lhs, const AstNode& rhs);
-
-
-    virtual void print(std::ostream& lhs) const {
-    }
-
-
+    friend std::ostream& operator<<(std::ostream& lhs, const Node& rhs);//fixme:: doesn't work with child runtime types
 };
 
 
-class Statement : public AstNode {
+class Statement : public Node {
 public:
     //
 };
@@ -50,62 +44,9 @@ public:
 };
 
 
-class VariableMeta : public Declaration {
-public:
-    std::string key;
-    VariableLiteral value;
-};
-
-
-class FunctionMeta : public Declaration {
-public:
-    std::string key;
-    FunctionLiteral value;
-};
-
-
 class Expression : public Statement {
 public:
     //
-};
-
-
-class ExecuteMeta : public Expression {
-public:
-    std::string executing_key;
-
-    std::vector<std::shared_ptr<AstNode>> args;
-
-
-    ExecuteMeta();
-
-
-    explicit ExecuteMeta(std::string in_executing_key);
-
-
-    ExecuteMeta(std::string in_executing_key, TypeDecorator in_type);
-
-
-    void print(std::ostream& lhs) const override;
-};
-
-
-class ValueMeta : public Expression {
-public:
-    Variant value;
-
-
-    explicit ValueMeta(Variant in_value);
-
-
-    void print(std::ostream& lhs) const override;
-};
-
-
-class ReferenceMeta : public Expression {
-public:
-    // id
-    //todo:: for type, look up the type of id
 };
 
 } // Ast

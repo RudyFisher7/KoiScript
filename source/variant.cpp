@@ -31,22 +31,22 @@ Variant Variant::from_string(const std::string& in_value) {
 }
 
 
-Variant::Variant() : _current_type(Type::SCRIPTING_VARIANT_TYPE_VOID), _value_bool(false) {
+Variant::Variant() : _current_type(SCRIPTING_BASIC_TYPE_VOID), _value_bool(false) {
 
 }
 
 
-Variant::Variant(char in_value) : _current_type(Type::SCRIPTING_VARIANT_TYPE_TEXT) {
+Variant::Variant(char in_value) : _current_type(SCRIPTING_BASIC_TYPE_TEXT) {
     set_value(&in_value, 1u);
 }
 
 
-Variant::Variant(int in_value) : _current_type(Type::SCRIPTING_VARIANT_TYPE_INT), _value_int(in_value) {
+Variant::Variant(int in_value) : _current_type(SCRIPTING_BASIC_TYPE_INT), _value_int(in_value) {
 
 }
 
 
-Variant::Variant(float in_value) : _current_type(Type::SCRIPTING_VARIANT_TYPE_FLOAT), _value_float(in_value) {
+Variant::Variant(float in_value) : _current_type(SCRIPTING_BASIC_TYPE_FLOAT), _value_float(in_value) {
 
 }
 
@@ -56,29 +56,29 @@ Variant::Variant(const char* in_value, size_t size) {
 }
 
 
-Variant::Variant(std::string in_value) : _current_type(Type::SCRIPTING_VARIANT_TYPE_TEXT), _value_text(nullptr) {
+Variant::Variant(std::string in_value) : _current_type(SCRIPTING_BASIC_TYPE_TEXT), _value_text(nullptr) {
     set_value(in_value);
 }
 
 
 Variant::Variant(const Variant& rhs) {
     switch (rhs._current_type) {
-        case SCRIPTING_VARIANT_TYPE_VOID:
+        case SCRIPTING_BASIC_TYPE_VOID:
             break;
-        case SCRIPTING_VARIANT_TYPE_BOOL:
+        case SCRIPTING_BASIC_TYPE_BOOL:
             break;
-        case SCRIPTING_VARIANT_TYPE_INT:
+        case SCRIPTING_BASIC_TYPE_INT:
             set_value(rhs._value_int);
             break;
-        case SCRIPTING_VARIANT_TYPE_FLOAT:
+        case SCRIPTING_BASIC_TYPE_FLOAT:
             set_value(rhs._value_float);
             break;
-        case SCRIPTING_VARIANT_TYPE_TEXT:
+        case SCRIPTING_BASIC_TYPE_TEXT:
             set_value(rhs.get_string());
             break;
-        case SCRIPTING_VARIANT_TYPE_REF:
+        case SCRIPTING_BASIC_TYPE_REF:
             break;
-        case SCRIPTING_VARIANT_TYPE_SIZE:
+        case SCRIPTING_BASIC_TYPE_SIZE:
             break;
     }
 }
@@ -86,22 +86,22 @@ Variant::Variant(const Variant& rhs) {
 
 Variant::Variant(Variant&& rhs) {
     switch (rhs._current_type) {
-        case SCRIPTING_VARIANT_TYPE_VOID:
+        case SCRIPTING_BASIC_TYPE_VOID:
             break;
-        case SCRIPTING_VARIANT_TYPE_BOOL:
+        case SCRIPTING_BASIC_TYPE_BOOL:
             break;
-        case SCRIPTING_VARIANT_TYPE_INT:
+        case SCRIPTING_BASIC_TYPE_INT:
             set_value(rhs._value_int);
             break;
-        case SCRIPTING_VARIANT_TYPE_FLOAT:
+        case SCRIPTING_BASIC_TYPE_FLOAT:
             set_value(rhs._value_float);
             break;
-        case SCRIPTING_VARIANT_TYPE_TEXT:
+        case SCRIPTING_BASIC_TYPE_TEXT:
             set_value(rhs.get_string());
             break;
-        case SCRIPTING_VARIANT_TYPE_REF:
+        case SCRIPTING_BASIC_TYPE_REF:
             break;
-        case SCRIPTING_VARIANT_TYPE_SIZE:
+        case SCRIPTING_BASIC_TYPE_SIZE:
             break;
     }
 }
@@ -110,22 +110,22 @@ Variant::Variant(Variant&& rhs) {
 Variant& Variant::operator=(const Variant& rhs) {
     if (this != &rhs) {
         switch (rhs._current_type) {
-            case SCRIPTING_VARIANT_TYPE_VOID:
+            case SCRIPTING_BASIC_TYPE_VOID:
                 break;
-            case SCRIPTING_VARIANT_TYPE_BOOL:
+            case SCRIPTING_BASIC_TYPE_BOOL:
                 break;
-            case SCRIPTING_VARIANT_TYPE_INT:
+            case SCRIPTING_BASIC_TYPE_INT:
                 set_value(rhs._value_int);
                 break;
-            case SCRIPTING_VARIANT_TYPE_FLOAT:
+            case SCRIPTING_BASIC_TYPE_FLOAT:
                 set_value(rhs._value_float);
                 break;
-            case SCRIPTING_VARIANT_TYPE_TEXT:
+            case SCRIPTING_BASIC_TYPE_TEXT:
                 set_value(rhs.get_string());
                 break;
-            case SCRIPTING_VARIANT_TYPE_REF:
+            case SCRIPTING_BASIC_TYPE_REF:
                 break;
-            case SCRIPTING_VARIANT_TYPE_SIZE:
+            case SCRIPTING_BASIC_TYPE_SIZE:
                 break;
         }
     }
@@ -137,22 +137,22 @@ Variant& Variant::operator=(const Variant& rhs) {
 Variant& Variant::operator=(Variant&& rhs) {
     if (this != &rhs) {
         switch (rhs._current_type) {
-            case SCRIPTING_VARIANT_TYPE_VOID:
+            case SCRIPTING_BASIC_TYPE_VOID:
                 break;
-            case SCRIPTING_VARIANT_TYPE_BOOL:
+            case SCRIPTING_BASIC_TYPE_BOOL:
                 break;
-            case SCRIPTING_VARIANT_TYPE_INT:
+            case SCRIPTING_BASIC_TYPE_INT:
                 set_value(rhs._value_int);
                 break;
-            case SCRIPTING_VARIANT_TYPE_FLOAT:
+            case SCRIPTING_BASIC_TYPE_FLOAT:
                 set_value(rhs._value_float);
                 break;
-            case SCRIPTING_VARIANT_TYPE_TEXT:
+            case SCRIPTING_BASIC_TYPE_TEXT:
                 set_value(rhs.get_string());
                 break;
-            case SCRIPTING_VARIANT_TYPE_REF:
+            case SCRIPTING_BASIC_TYPE_REF:
                 break;
-            case SCRIPTING_VARIANT_TYPE_SIZE:
+            case SCRIPTING_BASIC_TYPE_SIZE:
                 break;
         }
     }
@@ -187,7 +187,7 @@ bool Variant::operator!=(const Variant& rhs) const {
 }
 
 
-Variant::Type Variant::get_type() const {
+BasicType Variant::get_type() const {
     return _current_type;
 }
 
@@ -215,13 +215,13 @@ Variant::operator std::string() const {
 char Variant::get_char() const {
     char result = '\0';
     switch (_current_type) {
-        case SCRIPTING_VARIANT_TYPE_INT:
+        case SCRIPTING_BASIC_TYPE_INT:
             result = char(_value_int);
             break;
-        case SCRIPTING_VARIANT_TYPE_FLOAT:
+        case SCRIPTING_BASIC_TYPE_FLOAT:
             result = char(_value_float);
             break;
-        case SCRIPTING_VARIANT_TYPE_SIZE:
+        case SCRIPTING_BASIC_TYPE_SIZE:
             break;
     }
 
@@ -232,13 +232,13 @@ char Variant::get_char() const {
 int Variant::get_int() const {
     int result = 0;
     switch (_current_type) {
-        case SCRIPTING_VARIANT_TYPE_INT:
+        case SCRIPTING_BASIC_TYPE_INT:
             result = _value_int;
             break;
-        case SCRIPTING_VARIANT_TYPE_FLOAT:
+        case SCRIPTING_BASIC_TYPE_FLOAT:
             result = int(_value_float);
             break;
-        case SCRIPTING_VARIANT_TYPE_SIZE:
+        case SCRIPTING_BASIC_TYPE_SIZE:
             break;
     }
 
@@ -249,13 +249,13 @@ int Variant::get_int() const {
 float Variant::get_float() const {
     float result = 0.0f;
     switch (_current_type) {
-        case SCRIPTING_VARIANT_TYPE_INT:
+        case SCRIPTING_BASIC_TYPE_INT:
             result = float(_value_int);
             break;
-        case SCRIPTING_VARIANT_TYPE_FLOAT:
+        case SCRIPTING_BASIC_TYPE_FLOAT:
             result = _value_float;
             break;
-        case SCRIPTING_VARIANT_TYPE_SIZE:
+        case SCRIPTING_BASIC_TYPE_SIZE:
             break;
     }
 
@@ -266,22 +266,22 @@ float Variant::get_float() const {
 std::string Variant::get_string() const {
     std::string result;
     switch (_current_type) {
-        case SCRIPTING_VARIANT_TYPE_VOID:
+        case SCRIPTING_BASIC_TYPE_VOID:
             result = "\"<void>\"";
             break;
-        case SCRIPTING_VARIANT_TYPE_BOOL:
+        case SCRIPTING_BASIC_TYPE_BOOL:
             result = _value_bool ? "true" : "false";
             break;
-        case SCRIPTING_VARIANT_TYPE_INT:
+        case SCRIPTING_BASIC_TYPE_INT:
             result = std::to_string(_value_int);
             break;
-        case SCRIPTING_VARIANT_TYPE_FLOAT:
+        case SCRIPTING_BASIC_TYPE_FLOAT:
             result = std::to_string(_value_float);
             break;
-        case SCRIPTING_VARIANT_TYPE_TEXT:
+        case SCRIPTING_BASIC_TYPE_TEXT:
             result = _value_text;
             break;
-        case SCRIPTING_VARIANT_TYPE_REF:
+        case SCRIPTING_BASIC_TYPE_REF:
             break;
     }
 
@@ -297,14 +297,14 @@ void Variant::set_value(char value) {
 void Variant::set_value(int value) {
     _destroy_string_if_string();
     _value_int = value;
-    _current_type = Type::SCRIPTING_VARIANT_TYPE_INT;
+    _current_type = SCRIPTING_BASIC_TYPE_INT;
 }
 
 
 void Variant::set_value(float value) {
     _destroy_string_if_string();
     _value_float = value;
-    _current_type = Type::SCRIPTING_VARIANT_TYPE_FLOAT;
+    _current_type = SCRIPTING_BASIC_TYPE_FLOAT;
 }
 
 
@@ -313,18 +313,18 @@ void Variant::set_value(const char* value, size_t size) {
     _value_text = new char[size + 1u];
     std::memcpy(_value_text, value, size);
     _value_text[size] = '\0';
-    _current_type = Type::SCRIPTING_VARIANT_TYPE_TEXT;
+    _current_type = SCRIPTING_BASIC_TYPE_TEXT;
 }
 
 
 void Variant::set_value(const std::string& value) {
     _set_string_value(value);
-    _current_type = Type::SCRIPTING_VARIANT_TYPE_TEXT;
+    _current_type = SCRIPTING_BASIC_TYPE_TEXT;
 
 }
 
 
-void Variant::morph(Variant::Type in_type) {
+void Variant::morph(BasicType in_type) {
     //todo::
 }
 
@@ -332,7 +332,7 @@ void Variant::morph(Variant::Type in_type) {
 std::ostream& operator<<(std::ostream& lhs, const Variant& rhs) {
     lhs << "{\"_class:\": \"Variant\", \"_current_type\": " << std::to_string(rhs._current_type) << ", \"_value\":";
 
-    if (rhs._current_type == Variant::SCRIPTING_VARIANT_TYPE_TEXT) {
+    if (rhs._current_type == SCRIPTING_BASIC_TYPE_TEXT) {
         lhs << "\"" << rhs.get_string() << "\"";
     } else {
         lhs << rhs.get_string();
@@ -367,7 +367,7 @@ bool Variant::_set_string_value(const std::string& in_value) {
 
 
 void Variant::_destroy_string_if_string() {
-    if (_current_type == Type::SCRIPTING_VARIANT_TYPE_TEXT && _value_text != nullptr) {
+    if (_current_type == SCRIPTING_BASIC_TYPE_TEXT && _value_text != nullptr) {
         free(_value_text);
     }
 }

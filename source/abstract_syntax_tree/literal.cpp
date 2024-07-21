@@ -18,7 +18,12 @@ VariableLiteral::VariableLiteral(Variant in_value) : value(std::move(in_value)) 
 
 
 void VariableLiteral::print(std::ostream& lhs) const {
-    lhs << "{\"_class:\": \"VariableLiteral\", \"value\": " << value << "}";
+    lhs << "{\"_class\": \"VariableLiteral\", \"value\": " << value << "}";
+}
+
+
+Runtime::Error VariableLiteral::evaluate(Variant& out_result) {
+    return Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 }
 
 
@@ -28,7 +33,7 @@ FunctionLiteral::FunctionLiteral(const Type& in_type) : type(in_type), statement
 
 
 void FunctionLiteral::print(std::ostream& lhs) const {
-    lhs << "{\"_class:\": \"FunctionLiteral\", \"type\": " << type << ", \"return_statement\": ";
+    lhs << "{\"_class\": \"FunctionLiteral\", \"type\": " << type << ", \"return_statement\": ";
     if (return_statement) {
         lhs << *return_statement;
     } else {
@@ -50,6 +55,11 @@ void FunctionLiteral::print(std::ostream& lhs) const {
     }
 
     lhs << "]}";
+}
+
+
+Runtime::Error FunctionLiteral::evaluate(Variant& out_result) {
+    return Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 }
 
 } // Ast

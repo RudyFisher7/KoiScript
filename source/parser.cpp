@@ -15,7 +15,7 @@ namespace Scripting {
 const unsigned int Parser::MIN_VALID_EVAL_META_SIZE = 6u;
 const std::string Parser::MAIN_ENTRY_POINT_KEY("main");
 
-Parser::Error Parser::parse(const std::vector<Token>& tokens, std::shared_ptr<AstNode>& out_ast) {
+Parser::Error Parser::parse(const std::vector<Token>& tokens, std::shared_ptr<Ast::Node>& out_ast) {
     Error result = SCRIPTING_PARSER_ERROR_OK;
 
     //todo::
@@ -29,7 +29,9 @@ Parser::Error Parser::parse(const std::vector<Token>& tokens, std::shared_ptr<As
 
 
     if (_is_main_exe_valid(it, end)) {
-        result = _parse_exe(it, end, out_ast);
+        std::shared_ptr<Ast::ExecuteMeta> exe;
+        result = _parse_exe(it, end, exe);
+        out_ast = exe;
     }
 
     return result;
@@ -39,7 +41,7 @@ Parser::Error Parser::parse(const std::vector<Token>& tokens, std::shared_ptr<As
 Parser::Error Parser::_parse_ret_statement(
         std::vector<Token>::const_iterator& it,
         const std::vector<Token>::const_iterator& end,
-        std::shared_ptr<FunctionLiteral>& out_current_ast
+        std::shared_ptr<Ast::FunctionLiteral>& out_current_ast
 ) const {
     Error result = SCRIPTING_PARSER_ERROR_OK;
 
@@ -50,17 +52,23 @@ Parser::Error Parser::_parse_ret_statement(
     ) {
         it += 2u;
         if (_is_variable_literal(it->get_type())) {
-            std::shared_ptr<VariableLiteral> variable_literal;
+            std::shared_ptr<Ast::VariableLiteral> variable_literal;
             result = _parse_variable_literal(it, end, variable_literal);
-            out_current_ast->return_statement = variable_literal;
+            if (variable_literal->value.get_type() == out_current_ast->type.return_type) {//fixme:: make sure function literal's return type isn't complex
+                out_current_ast->return_statement = variable_literal;
+            } else {
+                //todo:: type mismatch, return type error
+            }
+
             if (it->get_type() == Token::SCRIPTING_TOKEN_TYPE_DELIMITER) {
                 ++it;
             } else {
                 //todo:: error handling
             }
         } else {
-            std::shared_ptr<AstNode> statement;
+            std::shared_ptr<Ast::Statement> statement;
             result = _parse_statement(it, end, statement);
+            //fixme:: check for type mismatch of return types; Ast::Statement will need a Type
             out_current_ast->return_statement = statement;
         }
     }
@@ -72,7 +80,7 @@ Parser::Error Parser::_parse_ret_statement(
 Parser::Error Parser::_parse_statement(
         std::vector<Token>::const_iterator& it,
         const std::vector<Token>::const_iterator& end,
-        std::shared_ptr<AstNode>& out_current_ast
+        std::shared_ptr<Ast::Statement>& out_current_ast
 ) const {
     Error result = SCRIPTING_PARSER_ERROR_OK;
 
@@ -81,8 +89,11 @@ Parser::Error Parser::_parse_statement(
             break;
         case Token::SCRIPTING_TOKEN_TYPE_FUN_META:
             break;
-        case Token::SCRIPTING_TOKEN_TYPE_EXE_META:
-            result = _parse_exe(it, end, out_current_ast);
+        case Token::SCRIPTING_TOKEN_TYPE_EXE_META: {
+            std::shared_ptr<Ast::ExecuteMeta> exe;
+            result = _parse_exe(it, end, exe);
+            out_current_ast = exe;
+        }
             break;
         case Token::SCRIPTING_TOKEN_TYPE_VAL_META:
             break;
@@ -103,7 +114,7 @@ Parser::Error Parser::_parse_statement(
 Parser::Error Parser::_parse_exe(
         std::vector<Token>::const_iterator& it,
         const std::vector<Token>::const_iterator& end,
-        std::shared_ptr<AstNode>& out_current_ast
+        std::shared_ptr<Ast::ExecuteMeta>& out_current_ast
 ) const {
     Error result = SCRIPTING_PARSER_ERROR_OK;
     bool is_valid = false;
@@ -112,14 +123,14 @@ Parser::Error Parser::_parse_exe(
     KOI_LOG_IF_NOT(is_valid, "Too few tokens for exe meta.");
 
     if (is_valid) {
-        std::shared_ptr<ExecuteMeta> exe = std::make_shared<ExecuteMeta>();
         it += 2u;
 
         is_valid = it->get_type() == Token::SCRIPTING_TOKEN_TYPE_ID;
         KOI_LOG_IF_NOT(is_valid, "No id token for exe meta.");
 
         if (is_valid) {
-            exe->executing_key = it->get_value_string();
+            out_current_ast = std::make_shared<Ast::ExecuteMeta>();
+            out_current_ast->executing_key = it->get_value_string();
         }
 
         it += 3u;
@@ -127,11 +138,11 @@ Parser::Error Parser::_parse_exe(
         if (is_valid) {
             bool has_more_args = it->get_type() != Token::SCRIPTING_TOKEN_TYPE_GROUPING_END;
             while(it != end && result == SCRIPTING_PARSER_ERROR_OK && has_more_args) {
-                std::shared_ptr<AstNode> arg;
+                std::shared_ptr<Ast::Expression> arg;
                 result = _parse_arg(it, end, arg);
 
                 if (arg) {
-                    exe->args.emplace_back(arg);
+                    out_current_ast->args.emplace_back(arg);
                 }
 
                 // iterate past any trailing separator token
@@ -164,8 +175,6 @@ Parser::Error Parser::_parse_exe(
             ++it;
             KOI_LOG_IF_NOT(is_valid, "No delimiter found for exe meta.");
         }
-
-        out_current_ast = exe;
     }
 
     if (!is_valid) {
@@ -179,7 +188,7 @@ Parser::Error Parser::_parse_exe(
 Parser::Error Parser::_parse_arg(
         std::vector<Token>::const_iterator& it,
         const std::vector<Token>::const_iterator& end,
-        std::shared_ptr<AstNode>& out_current_ast
+        std::shared_ptr<Ast::Expression>& out_current_ast
 ) const {
     Error result = SCRIPTING_PARSER_ERROR_OK;
 
@@ -189,13 +198,13 @@ Parser::Error Parser::_parse_arg(
         case Token::SCRIPTING_TOKEN_TYPE_FLOAT:
 //        case Token::SCRIPTING_TOKEN_TYPE_TEXT://note: text starts with verbatim bookend
         case Token::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND: { // handles text literal
-            std::shared_ptr<VariableLiteral> variable_literal;
+            std::shared_ptr<Ast::VariableLiteral> variable_literal;
             result = _parse_variable_literal(it, end, variable_literal);
             out_current_ast = variable_literal;
         }
             break;
         case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID: {
-            std::shared_ptr<FunctionLiteral> function_literal;
+            std::shared_ptr<Ast::FunctionLiteral> function_literal;
             result = _parse_function_literal(it, end, function_literal);
             out_current_ast = function_literal;
         }
@@ -203,11 +212,17 @@ Parser::Error Parser::_parse_arg(
         case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL:
         case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT:
         case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT:
-        case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT:
-            result = _parse_typed_literal(it, end, out_current_ast);
+        case Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT: {
+            std::shared_ptr<Ast::Literal> literal;
+            result = _parse_typed_literal(it, end, literal);
+            out_current_ast = literal;
+        }
             break;
-        case Token::SCRIPTING_TOKEN_TYPE_EXE_META:
-            result = _parse_exe(it, end, out_current_ast);
+        case Token::SCRIPTING_TOKEN_TYPE_EXE_META: {
+            std::shared_ptr<Ast::ExecuteMeta> exe;
+            result = _parse_exe(it, end, exe);
+            out_current_ast = exe;
+        }
             break;
         case Token::SCRIPTING_TOKEN_TYPE_VAL_META:
             break;
@@ -226,7 +241,7 @@ Parser::Error Parser::_parse_arg(
 Parser::Error Parser::_parse_typed_literal(
         std::vector<Token>::const_iterator& it,
         const std::vector<Token>::const_iterator& end,
-        std::shared_ptr<AstNode>& out_current_ast
+        std::shared_ptr<Ast::Literal>& out_current_ast
 ) const {
     Error result = SCRIPTING_PARSER_ERROR_OK;
     unsigned int distance = 0u;
@@ -235,7 +250,7 @@ Parser::Error Parser::_parse_typed_literal(
         // type is basic; literal is a variable
         if (distance == 1u) {
             it += 2u;
-            std::shared_ptr<VariableLiteral> variable_literal;
+            std::shared_ptr<Ast::VariableLiteral> variable_literal;
             result = _parse_variable_literal(it, end, variable_literal);
             bool types_match = _do_basic_types_match((it - 2u)->get_type(), variable_literal->value.get_type());
 
@@ -258,7 +273,7 @@ Parser::Error Parser::_parse_typed_literal(
                 }
             }
 
-            std::shared_ptr<FunctionLiteral> function_literal = std::make_shared<FunctionLiteral>(type);
+            std::shared_ptr<Ast::FunctionLiteral> function_literal = std::make_shared<Ast::FunctionLiteral>(type);
 
             if (it->get_type() == Token::SCRIPTING_TOKEN_TYPE_GROUPING_START) {
                 ++it;
@@ -310,7 +325,7 @@ Parser::Error Parser::_parse_typed_literal(
 Parser::Error Parser::_parse_function_literal(
         std::vector<Token>::const_iterator& it,
         const std::vector<Token>::const_iterator& end,
-        std::shared_ptr<FunctionLiteral>& out_current_ast
+        std::shared_ptr<Ast::FunctionLiteral>& out_current_ast
 ) const {
     Error result = SCRIPTING_PARSER_ERROR_OK;
 
@@ -322,7 +337,7 @@ Parser::Error Parser::_parse_function_literal(
                 && it->get_type() != Token::SCRIPTING_TOKEN_TYPE_RESULTER
                 && it->get_type() != Token::SCRIPTING_TOKEN_TYPE_SCOPE_END
         ) {
-            std::shared_ptr<AstNode> statement;
+            std::shared_ptr<Ast::Statement> statement;
             result = _parse_statement(it, end, statement);
             out_current_ast->statements.emplace_back(statement);
         }
@@ -343,7 +358,7 @@ Parser::Error Parser::_parse_function_literal(
 Parser::Error Parser::_parse_array_literal(
         std::vector<Token>::const_iterator& it,
         const std::vector<Token>::const_iterator& end,
-        std::shared_ptr<AstNode>& out_current_ast
+        std::shared_ptr<Ast::Node>& out_current_ast
 ) const {
     Error result = SCRIPTING_PARSER_ERROR_OK;
     return result;
@@ -353,7 +368,7 @@ Parser::Error Parser::_parse_array_literal(
 Parser::Error Parser::_parse_variable_literal(
         std::vector<Token>::const_iterator& it,
         const std::vector<Token>::const_iterator& end,
-        std::shared_ptr<VariableLiteral>& out_current_ast
+        std::shared_ptr<Ast::VariableLiteral>& out_current_ast
 ) const {
     Error result = SCRIPTING_PARSER_ERROR_OK;
 
@@ -365,16 +380,16 @@ Parser::Error Parser::_parse_variable_literal(
 
     switch (var_lit_token->get_type()) {
         case Token::SCRIPTING_TOKEN_TYPE_BOOL:
-            out_current_ast = std::make_shared<VariableLiteral>(var_lit_token->get_value_bool());
+            out_current_ast = std::make_shared<Ast::VariableLiteral>(var_lit_token->get_value_bool());
             break;
         case Token::SCRIPTING_TOKEN_TYPE_INT:
-            out_current_ast = std::make_shared<VariableLiteral>(var_lit_token->get_value_int());
+            out_current_ast = std::make_shared<Ast::VariableLiteral>(var_lit_token->get_value_int());
             break;
         case Token::SCRIPTING_TOKEN_TYPE_FLOAT:
-            out_current_ast = std::make_shared<VariableLiteral>(var_lit_token->get_value_float());
+            out_current_ast = std::make_shared<Ast::VariableLiteral>(var_lit_token->get_value_float());
             break;
         case Token::SCRIPTING_TOKEN_TYPE_TEXT:
-            out_current_ast = std::make_shared<VariableLiteral>(var_lit_token->get_value_string());
+            out_current_ast = std::make_shared<Ast::VariableLiteral>(var_lit_token->get_value_string());
             break;
         default:
             result = SCRIPTING_PARSER_ERROR_INVALID_VARIABLE_LITERAL;
@@ -500,42 +515,10 @@ bool Parser::_is_variable_literal(Token::Type type) const {
 }
 
 
-bool Parser::_do_basic_types_match(Token::Type token_type, Variant::Type variant_type) const {
+bool Parser::_do_basic_types_match(Token::Type token_type, BasicType variant_type) const {
     bool result = false;
 
     switch (variant_type) {
-        case Variant::SCRIPTING_VARIANT_TYPE_VOID:
-            result = token_type == Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID;
-            break;
-        case Variant::SCRIPTING_VARIANT_TYPE_BOOL:
-            result = token_type == Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL;
-            break;
-        case Variant::SCRIPTING_VARIANT_TYPE_INT:
-            result = token_type == Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT;
-            break;
-        case Variant::SCRIPTING_VARIANT_TYPE_FLOAT:
-            result = token_type == Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT;
-            break;
-        case Variant::SCRIPTING_VARIANT_TYPE_TEXT:
-            result = token_type == Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT;
-            break;
-        case Variant::SCRIPTING_VARIANT_TYPE_REF:
-            //fixme:: implement
-            KOI_LOG("Reference types aren't implemented yet.");
-            break;
-        default:
-            // just pass through with false
-            break;
-    }
-
-    return result;
-}
-
-
-bool Parser::_do_basic_types_match(Token::Type token_type, BasicType basic_type) const {
-    bool result = false;
-
-    switch (basic_type) {
         case SCRIPTING_BASIC_TYPE_VOID:
             result = token_type == Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID;
             break;
