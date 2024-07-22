@@ -1,6 +1,6 @@
 # KoiScript
 A simple scripting language designed for extending C++ applications at runtime, specifically with video game scripting
-in mind.
+in mind. Not to be mistaken for the stunning koilang (tsevhu): https://www.reddit.com/r/tsevhu/.
 
 ## Built-In Functions
 ### special
