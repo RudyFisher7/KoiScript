@@ -23,8 +23,8 @@
  */
 
 
-#ifndef KOI_SCRIPTING_VARIANT_HPP
-#define KOI_SCRIPTING_VARIANT_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_VARIABLE_HPP
+#define KOI_SCRIPTING_RUNTIME_VARIABLE_HPP
 
 
 #include "scripting/runtime/type_defs.hpp"
@@ -37,8 +37,9 @@
 
 namespace Koi {
 namespace Scripting {
+namespace Runtime {
 
-class Variant final {
+class Variable final {
 private:
     BasicType _current_type = SCRIPTING_BASIC_TYPE_VOID;
     union {
@@ -46,61 +47,63 @@ private:
         int _value_int;
         float _value_float;
         char* _value_text;
-        Runtime::Id _value_ref;
     };
 
 public:
-    static Variant from_char(char in_value);
+    static Variable from_char(char in_value);
 
 
-    static Variant from_int(int in_value);
+    static Variable from_int(int in_value);
 
 
-    static Variant from_float(float in_value);
+    static Variable from_float(float in_value);
 
 
-    static Variant from_c_string(const char* in_value, size_t size);//todo::
-    static Variant from_c_string(const char* in_value);// must be null-terminated //todo::
+    static Variable from_c_string(const char* in_value, size_t size);//todo::
+    static Variable from_c_string(const char* in_value);// must be null-terminated //todo::
 
-    static Variant from_string(const std::string& in_value);
-
-
-    Variant();
+    static Variable from_string(const std::string& in_value);
 
 
-    Variant(char in_value);
+    Variable();
 
 
-    Variant(int in_value);
+    Variable(char in_value);
 
 
-    Variant(float in_value);
-
-    Variant(const char* in_value, size_t size);
-    Variant(const char* in_value); // must be null-terminated
-
-    Variant(std::string in_value);
+    Variable(int in_value);
 
 
-    Variant(const Variant& rhs);
+    Variable(float in_value);
 
 
-    Variant(Variant&& rhs);
+    Variable(const char* in_value, size_t size);
 
 
-    Variant& operator=(const Variant& rhs);
+    Variable(const char* in_value); // must be null-terminated
+
+    Variable(std::string in_value);
 
 
-    Variant& operator=(Variant&& rhs);
+    Variable(const Variable& rhs);
 
 
-    ~Variant();
+    Variable(Variable&& rhs);
 
 
-    bool operator==(const Variant& rhs) const;
+    Variable& operator=(const Variable& rhs);
 
 
-    bool operator!=(const Variant& rhs) const;
+    Variable& operator=(Variable&& rhs);
+
+
+    ~Variable();
+
+
+    bool operator==(const Variable& rhs) const;
+
+
+    bool operator!=(const Variable& rhs) const;
 
 
     BasicType get_type() const;
@@ -125,6 +128,7 @@ public:
 
 
     bool get_bool() const;
+
 
     /**
      * @brief Function that can be used to explicitly get the char
@@ -157,6 +161,8 @@ public:
 
 
     void set_value(const char* value, size_t size);
+
+
     void set_value(const char* value);//must be null terminated
 
 
@@ -166,11 +172,12 @@ public:
     void morph(BasicType in_type);
 
 
-    friend std::ostream& operator<<(std::ostream& lhs, const Variant& rhs);
+    friend std::ostream& operator<<(std::ostream& lhs, const Variable& rhs);
 
 
 private:
-    void _copy(const Variant& rhs);
+    void _copy(const Variable& rhs);
+
 
     bool _set_string_value(const std::string& in_value);
 
@@ -184,7 +191,7 @@ private:
 // which supposedly uses the golden ratio
 struct VariantHash {
 public:
-    size_t operator()(const Variant& in) const noexcept;
+    size_t operator()(const Variable& in) const noexcept;
 
 
 private:
@@ -193,12 +200,13 @@ private:
 };
 
 
-std::string operator+(const Variant& lhs, const std::string& rhs);
+std::string operator+(const Variable& lhs, const std::string& rhs);
 
 
-std::string operator+(const std::string& lhs, const Variant& rhs);
+std::string operator+(const std::string& lhs, const Variable& rhs);
 
 }
 }
+}
 
-#endif //KOI_SCRIPTING_VARIANT_HPP
+#endif //KOI_SCRIPTING_RUNTIME_VARIABLE_HPP

@@ -29,7 +29,8 @@
 #include "scripting/parser.hpp"
 #include "scripting/runtime/type_defs.hpp"
 #include "scripting/extensions/extensions.hpp"
-#include "scripting/variant.hpp"
+#include "scripting/runtime/variable.hpp"
+#include "scripting/runtime/global_environment.hpp"
 
 #include <cstring>
 #include <fstream>
@@ -63,29 +64,34 @@ int main() {
 
     std::cout << "Script:\n" << script_buffer << '\n' << std::endl;
 
+    // 1. lex
     Koi::Scripting::Lexer lexer;
     std::vector<Koi::Scripting::Token> tokens;
     lexer.lex(script_buffer, script_size, tokens);
 
     std::cout << tokens << std::endl;
 
+    // 2. parse
     Koi::Scripting::Parser parser;
     std::shared_ptr<Koi::Scripting::Ast::Node> ast_tree;
     parser.parse(tokens, ast_tree);
 
     std::cout << *ast_tree << std::endl;
 
+    //todo:: 3. assemble
+    Koi::Scripting::Runtime::GlobalEnvironment global_environment;
     std::map<std::string, Koi::Scripting::Runtime::Id> memory_map {};
     std::vector<std::shared_ptr<Koi::Scripting::Ast::Node>> memory {};
+    Koi::Scripting::Assembler assembler;
 
-    Koi::Scripting::Variant runtime_result;
+    assembler.assemble(ast_tree, memory_map, memory);
+
+    // 4. run
+    Koi::Scripting::Runtime::Variable runtime_result;
     ast_tree->evaluate(runtime_result);
 
     std::cout << "Runtime result: " << runtime_result << std::endl;
 
-    Koi::Scripting::Assembler assembler;
-
-    assembler.assemble(ast_tree, memory_map, memory);
 
     return 0;
 }

@@ -30,6 +30,7 @@
 #include "scripting/abstract_syntax_tree/node.hpp"
 #include "scripting/abstract_syntax_tree/literal.hpp"
 #include "scripting/runtime/error.hpp"
+#include "scripting/runtime/type_defs.hpp"
 
 #include <string>
 
@@ -68,7 +69,7 @@ public:
     ExecuteMeta(std::string in_executing_key, TypeDecorator in_type);
 
 
-    Runtime::Error evaluate(Variant& out_result) override;
+    Runtime::Error evaluate(Runtime::Variable& out_result, Runtime::Environment& environment) override;
 
 
     void print(std::ostream& lhs) const override;
@@ -77,12 +78,13 @@ public:
 
 class ValueMeta : public Expression {
 public:
-    Variant value;
+    //fixme:: this needs an id
+    Runtime::Id value;
 
 
-    explicit ValueMeta(Variant in_value);
+    explicit ValueMeta(Runtime::Id in_value);
 
-    Runtime::Error evaluate(Variant& out_result) override;
+    Runtime::Error evaluate(Runtime::Variable& out_result, Runtime::Environment& environment) override;
 
 
     void print(std::ostream& lhs) const override;

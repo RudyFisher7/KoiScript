@@ -27,11 +27,15 @@
 #define KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
 
 
-#include "type_defs.hpp"
+#include "scripting/runtime/error.hpp"
+#include "scripting/runtime/type_defs.hpp"
+
+#include "scripting/abstract_syntax_tree/node.hpp"
 
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 
 namespace Koi {
@@ -39,10 +43,13 @@ namespace Scripting {
 namespace Runtime {
 
 class Environment {
-public:
+protected:
     std::shared_ptr<Environment> parent_environment;
     std::map<std::string, Id> declarations;
     std::map<Id, Id> locals;//fixme::
+
+public:
+    virtual Error exe(const std::string& key, const std::vector<std::shared_ptr<Ast::Expression>>& args) const = 0;
 };
 
 } // Runtime

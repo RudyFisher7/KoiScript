@@ -28,10 +28,11 @@
 
 
 #include "scripting/runtime/error.hpp"
-#include "scripting/token.hpp"
 #include "scripting/runtime/type_defs.hpp"
+#include "scripting/runtime/variable.hpp"
+#include "scripting/runtime/environment.hpp"
+#include "scripting/token.hpp"
 #include "scripting/type.hpp"
-#include "scripting/variant.hpp"
 
 #include <ostream>
 #include <string>
@@ -45,7 +46,7 @@ namespace Ast {
 
 class Node {
 public:
-    virtual Runtime::Error evaluate(Variant& out_result) = 0;//fixme:: the result could also be an Ast::Literal
+    virtual Runtime::Error evaluate(Runtime::Variable& out_result, Runtime::Environment& environment) = 0;//fixme:: the result could also be an Ast::Literal
     virtual void print(std::ostream& lhs) const = 0;
 
 

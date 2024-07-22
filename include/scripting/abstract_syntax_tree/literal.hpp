@@ -32,7 +32,7 @@
 #include "scripting/token.hpp"
 #include "scripting/runtime/type_defs.hpp"
 #include "scripting/type.hpp"
-#include "scripting/variant.hpp"
+#include "scripting/runtime/variable.hpp"
 
 #include <ostream>
 #include <string>
@@ -51,12 +51,12 @@ class Literal : public Expression {
 
 class VariableLiteral : public Literal {
 public:
-    Variant value;
+    Runtime::Variable value;
 
 
-    explicit VariableLiteral(Variant in_value);
+    explicit VariableLiteral(Runtime::Variable in_value);
 
-    Runtime::Error evaluate(Variant& out_result) override;
+    Runtime::Error evaluate(Runtime::Variable& out_result, Runtime::Environment& environment) override;
 
 
     void print(std::ostream& lhs) const override;
@@ -65,13 +65,16 @@ public:
 
 class FunctionLiteral : public Literal {
 public:
+
+    //fixme:: use a Runtime::Function
     Type type;
     std::shared_ptr<Statement> return_statement;
     std::vector<std::shared_ptr<Statement>> statements;
+    std::vector<std::shared_ptr<Expression>> arguments;
 
 
     explicit FunctionLiteral(const Type& in_type);//fixme:: rule of 5 stuff
-    Runtime::Error evaluate(Variant& out_result) override;
+    Runtime::Error evaluate(Runtime::Variable& out_result, Runtime::Environment& environment) override;
     void print(std::ostream& lhs) const override;
 };
 

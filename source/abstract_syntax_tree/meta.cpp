@@ -68,7 +68,7 @@ void ExecuteMeta::print(std::ostream& lhs) const {
 }
 
 
-Runtime::Error ExecuteMeta::evaluate(Variant& out_result) {
+Runtime::Error ExecuteMeta::evaluate(Runtime::Variable& out_result, Runtime::Environment& environment) {
     Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 
     //todo:: get function associated with executing key
@@ -77,7 +77,7 @@ Runtime::Error ExecuteMeta::evaluate(Variant& out_result) {
 }
 
 
-ValueMeta::ValueMeta(Variant in_value) : value(std::move(in_value)) {
+ValueMeta::ValueMeta(Runtime::Id in_value) : value(in_value) {
 
 }
 
@@ -87,8 +87,10 @@ void ValueMeta::print(std::ostream& lhs) const {
 }
 
 
-Runtime::Error ValueMeta::evaluate(Variant& out_result) {
-    return Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+Runtime::Error ValueMeta::evaluate(Runtime::Variable& out_result, Runtime::Environment& environment) {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    return result;
 }
 
 } // Ast

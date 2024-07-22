@@ -33,7 +33,7 @@ namespace Scripting {
 namespace Ast {
 
 
-VariableLiteral::VariableLiteral(Variant in_value) : value(std::move(in_value)) {
+VariableLiteral::VariableLiteral(Runtime::Variable in_value) : value(std::move(in_value)) {
 
 }
 
@@ -43,7 +43,7 @@ void VariableLiteral::print(std::ostream& lhs) const {
 }
 
 
-Runtime::Error VariableLiteral::evaluate(Variant& out_result) {
+Runtime::Error VariableLiteral::evaluate(Runtime::Variable& out_result, Runtime::Environment& environment) {
     return Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 }
 
@@ -79,8 +79,31 @@ void FunctionLiteral::print(std::ostream& lhs) const {
 }
 
 
-Runtime::Error FunctionLiteral::evaluate(Variant& out_result) {
-    return Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+Runtime::Error FunctionLiteral::evaluate(Runtime::Variable& out_result, Runtime::Environment& environment) {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    unsigned int i = 0u;
+    std::vector<Runtime::Variable> argument_values(arguments.size());
+    while (result == Runtime::SCRIPTING_RUNTIME_ERROR_OK && i < arguments.size()) {
+        result = arguments.at(i)->evaluate(argument_values.at(i), environment);
+
+        ++i;
+    }
+
+    i = 0u;
+    while (result == Runtime::SCRIPTING_RUNTIME_ERROR_OK && i < statements.size()) {
+        Runtime::Variable statement_result;
+
+        result = statements.at(i)->evaluate(statement_result, environment);//fixme::
+
+        ++i;
+    }
+
+    if (result == Runtime::SCRIPTING_RUNTIME_ERROR_OK) {
+        result = return_statement->evaluate(out_result, environment);
+    }
+
+    return result;
 }
 
 } // Ast

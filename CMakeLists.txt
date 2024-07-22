@@ -10,8 +10,6 @@ add_library(${PROJECT_NAME} STATIC
 
     source/type.cpp
     include/scripting/type.hpp
-    source/variant.cpp
-    include/scripting/variant.hpp
     source/token.cpp
     include/scripting/token.hpp
 
@@ -34,10 +32,22 @@ add_library(${PROJECT_NAME} STATIC
     source/extensions/extensions.cpp
     include/scripting/extensions/extensions.hpp
 
+    include/scripting/runtime/type_defs.hpp
     include/scripting/runtime/error.hpp
+
     source/runtime/environment.cpp
     include/scripting/runtime/environment.hpp
-    include/scripting/runtime/type_defs.hpp
+    source/runtime/global_environment.cpp
+    include/scripting/runtime/global_environment.hpp
+
+    source/runtime/array.cpp
+    include/scripting/runtime/array.hpp
+    source/runtime/function.cpp
+    include/scripting/runtime/function.hpp
+    source/runtime/variable.cpp
+    include/scripting/runtime/variable.hpp
+    source/runtime/variant.cpp
+    include/scripting/runtime/variant.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

@@ -23,7 +23,7 @@
  */
 
 
-#include "../include/scripting/variant.hpp"
+#include "scripting/runtime/variable.hpp"
 
 #include <iostream>
 #include <cstring>
@@ -31,58 +31,59 @@
 
 namespace Koi {
 namespace Scripting {
+namespace Runtime {
 
-Variant Variant::from_char(char in_value) {
-    return Variant(in_value);
+Variable Variable::from_char(char in_value) {
+    return Variable(in_value);
 }
 
 
-Variant Variant::from_int(int in_value) {
-    return Variant(in_value);
+Variable Variable::from_int(int in_value) {
+    return Variable(in_value);
 }
 
 
-Variant Variant::from_float(float in_value) {
-    return Variant(in_value);
+Variable Variable::from_float(float in_value) {
+    return Variable(in_value);
 }
 
 
-Variant Variant::from_string(const std::string& in_value) {
-    return Variant(in_value);
+Variable Variable::from_string(const std::string& in_value) {
+    return Variable(in_value);
 }
 
 
-Variant::Variant() : _current_type(SCRIPTING_BASIC_TYPE_VOID), _value_bool(false) {
+Variable::Variable() : _current_type(SCRIPTING_BASIC_TYPE_VOID), _value_bool(false) {
 
 }
 
 
-Variant::Variant(char in_value) : _current_type(SCRIPTING_BASIC_TYPE_TEXT) {
+Variable::Variable(char in_value) : _current_type(SCRIPTING_BASIC_TYPE_TEXT) {
     set_value(&in_value, 1u);
 }
 
 
-Variant::Variant(int in_value) : _current_type(SCRIPTING_BASIC_TYPE_INT), _value_int(in_value) {
+Variable::Variable(int in_value) : _current_type(SCRIPTING_BASIC_TYPE_INT), _value_int(in_value) {
 
 }
 
 
-Variant::Variant(float in_value) : _current_type(SCRIPTING_BASIC_TYPE_FLOAT), _value_float(in_value) {
+Variable::Variable(float in_value) : _current_type(SCRIPTING_BASIC_TYPE_FLOAT), _value_float(in_value) {
 
 }
 
 
-Variant::Variant(const char* in_value, size_t size) {
+Variable::Variable(const char* in_value, size_t size) {
     set_value(in_value, size);
 }
 
 
-Variant::Variant(std::string in_value) : _current_type(SCRIPTING_BASIC_TYPE_TEXT), _value_text(nullptr) {
+Variable::Variable(std::string in_value) : _current_type(SCRIPTING_BASIC_TYPE_TEXT), _value_text(nullptr) {
     set_value(in_value);
 }
 
 
-Variant::Variant(const Variant& rhs) {
+Variable::Variable(const Variable& rhs) {
     switch (rhs._current_type) {
         case SCRIPTING_BASIC_TYPE_VOID:
             break;
@@ -105,7 +106,7 @@ Variant::Variant(const Variant& rhs) {
 }
 
 
-Variant::Variant(Variant&& rhs) {
+Variable::Variable(Variable&& rhs) {
     switch (rhs._current_type) {
         case SCRIPTING_BASIC_TYPE_VOID:
             break;
@@ -128,7 +129,7 @@ Variant::Variant(Variant&& rhs) {
 }
 
 
-Variant& Variant::operator=(const Variant& rhs) {
+Variable& Variable::operator=(const Variable& rhs) {
     if (this != &rhs) {
         switch (rhs._current_type) {
             case SCRIPTING_BASIC_TYPE_VOID:
@@ -155,7 +156,7 @@ Variant& Variant::operator=(const Variant& rhs) {
 }
 
 
-Variant& Variant::operator=(Variant&& rhs) {
+Variable& Variable::operator=(Variable&& rhs) {
     if (this != &rhs) {
         switch (rhs._current_type) {
             case SCRIPTING_BASIC_TYPE_VOID:
@@ -182,12 +183,12 @@ Variant& Variant::operator=(Variant&& rhs) {
 }
 
 
-Variant::~Variant() {
+Variable::~Variable() {
     _destroy_string_if_string();
 }
 
 
-bool Variant::operator==(const Variant& rhs) const {
+bool Variable::operator==(const Variable& rhs) const {
     bool result = false;
     result = (
 //            _current_type == rhs._current_type
@@ -199,7 +200,7 @@ bool Variant::operator==(const Variant& rhs) const {
 }
 
 
-bool Variant::operator!=(const Variant& rhs) const {
+bool Variable::operator!=(const Variable& rhs) const {
     bool result = false;
 
     result = !(*this == rhs);
@@ -208,32 +209,32 @@ bool Variant::operator!=(const Variant& rhs) const {
 }
 
 
-BasicType Variant::get_type() const {
+BasicType Variable::get_type() const {
     return _current_type;
 }
 
 
-Variant::operator char() const {
+Variable::operator char() const {
     return get_char();
 }
 
 
-Variant::operator int() const {
+Variable::operator int() const {
     return get_int();
 }
 
 
-Variant::operator float() const {
+Variable::operator float() const {
     return get_float();
 }
 
 
-Variant::operator std::string() const {
+Variable::operator std::string() const {
     return get_string();
 }
 
 
-char Variant::get_char() const {
+char Variable::get_char() const {
     char result = '\0';
     switch (_current_type) {
         case SCRIPTING_BASIC_TYPE_INT:
@@ -250,7 +251,7 @@ char Variant::get_char() const {
 }
 
 
-int Variant::get_int() const {
+int Variable::get_int() const {
     int result = 0;
     switch (_current_type) {
         case SCRIPTING_BASIC_TYPE_INT:
@@ -267,7 +268,7 @@ int Variant::get_int() const {
 }
 
 
-float Variant::get_float() const {
+float Variable::get_float() const {
     float result = 0.0f;
     switch (_current_type) {
         case SCRIPTING_BASIC_TYPE_INT:
@@ -284,7 +285,7 @@ float Variant::get_float() const {
 }
 
 
-std::string Variant::get_string() const {
+std::string Variable::get_string() const {
     std::string result;
     switch (_current_type) {
         case SCRIPTING_BASIC_TYPE_VOID:
@@ -310,26 +311,26 @@ std::string Variant::get_string() const {
 }
 
 
-void Variant::set_value(char value) {
+void Variable::set_value(char value) {
     _destroy_string_if_string();
 }
 
 
-void Variant::set_value(int value) {
+void Variable::set_value(int value) {
     _destroy_string_if_string();
     _value_int = value;
     _current_type = SCRIPTING_BASIC_TYPE_INT;
 }
 
 
-void Variant::set_value(float value) {
+void Variable::set_value(float value) {
     _destroy_string_if_string();
     _value_float = value;
     _current_type = SCRIPTING_BASIC_TYPE_FLOAT;
 }
 
 
-void Variant::set_value(const char* value, size_t size) {
+void Variable::set_value(const char* value, size_t size) {
     _destroy_string_if_string();
     _value_text = new char[size + 1u];
     std::memcpy(_value_text, value, size);
@@ -338,19 +339,19 @@ void Variant::set_value(const char* value, size_t size) {
 }
 
 
-void Variant::set_value(const std::string& value) {
+void Variable::set_value(const std::string& value) {
     _set_string_value(value);
     _current_type = SCRIPTING_BASIC_TYPE_TEXT;
 
 }
 
 
-void Variant::morph(BasicType in_type) {
+void Variable::morph(BasicType in_type) {
     //todo::
 }
 
 
-std::ostream& operator<<(std::ostream& lhs, const Variant& rhs) {
+std::ostream& operator<<(std::ostream& lhs, const Variable& rhs) {
     lhs << "{\"_class:\": \"Variant\", \"_current_type\": " << std::to_string(rhs._current_type) << ", \"_value\":";
 
     if (rhs._current_type == SCRIPTING_BASIC_TYPE_TEXT) {
@@ -365,7 +366,7 @@ std::ostream& operator<<(std::ostream& lhs, const Variant& rhs) {
 }
 
 
-bool Variant::_set_string_value(const std::string& in_value) {
+bool Variable::_set_string_value(const std::string& in_value) {
     bool result = false;
 
     _destroy_string_if_string();
@@ -387,14 +388,14 @@ bool Variant::_set_string_value(const std::string& in_value) {
 }
 
 
-void Variant::_destroy_string_if_string() {
+void Variable::_destroy_string_if_string() {
     if (_current_type == SCRIPTING_BASIC_TYPE_TEXT && _value_text != nullptr) {
         free(_value_text);
     }
 }
 
 
-size_t VariantHash::operator()(const Variant& in) const noexcept {
+size_t VariantHash::operator()(const Variable& in) const noexcept {
     size_t result = 0u;
 //    combine_hash<int>(in.get_type(), result);
     combine_hash<std::string>(in.get_string(), result);
@@ -409,14 +410,15 @@ void VariantHash::combine_hash(const type& in, size_t& out) const noexcept {
 }
 
 
-std::string operator+(const Variant& lhs, const std::string& rhs) {
+std::string operator+(const Variable& lhs, const std::string& rhs) {
     return lhs.get_string() + rhs;
 }
 
 
-std::string operator+(const std::string& lhs, const Variant& rhs) {
+std::string operator+(const std::string& lhs, const Variable& rhs) {
     return lhs + rhs.get_string();
 }
 
+}
 }
 }

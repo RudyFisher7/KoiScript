@@ -23,42 +23,55 @@
  */
 
 
-#ifndef KOI_SCRIPTING_KOI_SCRIPT_HPP
-#define KOI_SCRIPTING_KOI_SCRIPT_HPP
+#include "scripting/runtime/global_environment.hpp"
 
+#include "scripting/log/log.hpp"
 
-#include "scripting/runtime/type_defs.hpp"
-#include "scripting/runtime/variable.hpp"
-
+#include <ostream>
 #include <string>
-#include <vector>
 
 
 namespace Koi {
 namespace Scripting {
+namespace Runtime {
 
-class KoiScript {
-public:
-    enum Error: int {
-        SCRIPTING_KOI_SCRIPT_ERROR_UNKNOWN = -1,
-        SCRIPTING_KOI_SCRIPT_ERROR_MIN = 0,
-        SCRIPTING_KOI_SCRIPT_ERROR_OK = SCRIPTING_KOI_SCRIPT_ERROR_MIN,
-        SCRIPTING_KOI_SCRIPT_ERROR_SIZE
-    };
+Error GlobalEnvironment::exe(const std::string& key, const std::vector<std::shared_ptr<Ast::Expression>>& args) const {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    static Error function(Id id, std::vector<Variant>& args, Variant& out_result);
-    static Error identifier(const std::string& identifier_text, std::vector<Variant>& args, Id& out_result);
-    static Error variable(Id id, std::vector<Variant>& args, Variant& out_result);
+    if (key == "print") {
+        Runtime::Variable arg;
+        args.at(0)->evaluate(arg);
+        result = print(args.at(0)->evaluate(arg));
+    }
 
-    static Error assign(Id id, const Variant& source);
+    return result;
+}
 
-    static Error execute(Id id, std::vector<Variant>& args, Variant& out_result);
-    static Error reference(Id id, std::vector<Variant>& args, Id& out_result);
-    static Error value(Id id, std::vector<Variant>& args, Variant& out_result);
-};
 
+Error GlobalEnvironment::print(const Runtime::Variable& value) const {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    if (
+            value.get_type() == BasicType::SCRIPTING_BASIC_TYPE_VOID
+            || value.get_type() == BasicType::SCRIPTING_BASIC_TYPE_INVALID
+    ) {
+        result = SCRIPTING_RUNTIME_ERROR_TYPE_MISMATCH;
+    }
+
+    if (result == SCRIPTING_RUNTIME_ERROR_OK) {
+        std::cout << value << std::endl;
+    }
+
+    KOI_LOG_IF_NOT(
+            result == SCRIPTING_RUNTIME_ERROR_OK,
+            std::string("Variant of type: ")
+            + std::to_string(value.get_type())
+            + std::string(" is invalid for native print() function.")
+    );
+
+    return result;
+}
+
+} // Runtime
 } // Scripting
 } // Koi
-
-
-#endif //KOI_SCRIPTING_KOI_SCRIPT_HPP
