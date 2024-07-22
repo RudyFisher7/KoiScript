@@ -2,6 +2,9 @@
 A simple scripting language designed for extending C++ applications at runtime, specifically with video game scripting
 in mind. Not to be mistaken for the stunning koilang (tsevhu): https://www.reddit.com/r/tsevhu/.
 
+[![CodeScene general](https://codescene.io/images/analyzed-by-codescene-badge.svg)](https://codescene.io/projects/56597)
+[![CodeScene Code Health](https://codescene.io/projects/56597/status-badges/code-health)](https://codescene.io/projects/56597)
+
 ## Built-In Functions
 ### special
 - assign
