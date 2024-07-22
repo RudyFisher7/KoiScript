@@ -1,5 +1,6 @@
 # KoiScript
-A simple scripting language designed for extending C++ applications at runtime.
+A simple scripting language designed for extending C++ applications at runtime, specifically with video game scripting
+in mind.
 
 ## Built-In Functions
 ### special
