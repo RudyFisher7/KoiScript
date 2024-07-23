@@ -23,40 +23,26 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
-#define KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+#include "scripting/runtime/array.hpp"
 
+#include <catch2/catch_session.hpp>
+#include <catch2/catch_test_macros.hpp>
 
-#include "scripting/runtime/error.hpp"
-#include "scripting/runtime/variant.hpp"
-
-#include "scripting/abstract_syntax_tree/node.hpp"
-
-#include <map>
-#include <memory>
 #include <string>
+#include <iostream>
+#include <limits>
 #include <vector>
 
 
-namespace Koi {
-namespace Scripting {
-namespace Runtime {
-
-class Environment {
-protected:
-    std::map<std::string, int> _declarations;
-    std::vector<int> _declaration_environments;//fixme::
-    std::vector<std::shared_ptr<Variant>> _data;
-
-public:
-
-    int register_declaration(const std::string& key, unsigned int environment);
-    int register_assignment(int id, unsigned int environment, const Variant& data);
-};
-
-} // Runtime
-} // Scripting
-} // Koi
+namespace KoiScript = Koi::Scripting::Runtime;
 
 
-#endif //KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+int main( int argc, char* argv[] ) {
+    // your setup ...
+
+    int result = Catch::Session().run( argc, argv );
+
+    // your clean-up...
+
+    return result;
+}

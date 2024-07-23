@@ -26,11 +26,10 @@
 #include "scripting/assembler.hpp"
 #include "scripting/abstract_syntax_tree/node.hpp"
 #include "scripting/lexer.hpp"
-#include "scripting/parser.hpp"
-#include "scripting/runtime/type_defs.hpp"
+//#include "scripting/parser.hpp"
 #include "scripting/extensions/extensions.hpp"
+#include "scripting/runtime/environment.hpp"
 #include "scripting/runtime/variable.hpp"
-#include "scripting/runtime/global_environment.hpp"
 
 #include <cstring>
 #include <fstream>
@@ -72,23 +71,20 @@ int main() {
     std::cout << tokens << std::endl;
 
     // 2. parse
-    Koi::Scripting::Parser parser;
-    std::shared_ptr<Koi::Scripting::Ast::Node> ast_tree;
-    parser.parse(tokens, ast_tree);
-
-    std::cout << *ast_tree << std::endl;
+//    Koi::Scripting::Parser parser;
+//    std::shared_ptr<Koi::Scripting::Ast::Node> ast_tree;
+//    parser.parse(tokens, ast_tree);
+//
+//    std::cout << *ast_tree << std::endl;
 
     //todo:: 3. assemble
-    Koi::Scripting::Runtime::GlobalEnvironment global_environment;
-    std::map<std::string, Koi::Scripting::Runtime::Id> memory_map {};
-    std::vector<std::shared_ptr<Koi::Scripting::Ast::Node>> memory {};
+    Koi::Scripting::Runtime::Environment environment;
     Koi::Scripting::Assembler assembler;
 
-    assembler.assemble(ast_tree, memory_map, memory);
+    assembler.assemble(environment);
 
-    // 4. run
+    //todo:: 4. run
     Koi::Scripting::Runtime::Variable runtime_result;
-    ast_tree->evaluate(runtime_result);
 
     std::cout << "Runtime result: " << runtime_result << std::endl;
 

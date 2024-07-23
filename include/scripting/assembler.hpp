@@ -28,7 +28,7 @@
 
 
 #include "scripting/abstract_syntax_tree/node.hpp"
-#include "scripting/runtime/type_defs.hpp"
+#include "scripting/runtime/environment.hpp"
 
 #include <map>
 #include <memory>
@@ -46,11 +46,7 @@ public:
         SCRIPTING_ASSEMBLER_ERROR_SIZE
     };
 
-    Error assemble(
-            const std::shared_ptr<Ast::Node> ast_tree,
-            std::map<std::string, Runtime::Id>& out_memory_map,
-            std::vector<std::shared_ptr<Ast::Node>>& out_memory
-    ) const;
+    Error assemble(Runtime::Environment& environment) const;
 };
 
 } // Scripting

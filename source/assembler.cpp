@@ -29,11 +29,7 @@
 namespace Koi {
 namespace Scripting {
 
-Assembler::Error Assembler::assemble(
-        const std::shared_ptr<Ast::Node> ast_tree,
-        std::map<std::string, Runtime::Id>& out_memory_map,
-        std::vector<std::shared_ptr<Ast::Node>>& out_memory
-) const {
+Assembler::Error Assembler::assemble(Runtime::Environment& environment) const {
     Error result = SCRIPTING_ASSEMBLER_ERROR_OK;
 
 

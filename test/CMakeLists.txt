@@ -37,3 +37,39 @@ target_link_libraries(${LEVER_META_TEST} PRIVATE
     KoiScript
     Catch2::Catch2
 )
+
+
+set(RUNTIME_VARIABLE_TEST RuntimeVariableTest)
+
+add_executable(${RUNTIME_VARIABLE_TEST}
+    runtime_variable_test.cpp
+)
+
+target_link_libraries(${RUNTIME_VARIABLE_TEST} PRIVATE
+    KoiScript
+    Catch2::Catch2
+)
+
+
+set(RUNTIME_ARRAY_TEST RuntimeArrayTest)
+
+add_executable(${RUNTIME_ARRAY_TEST}
+    runtime_array_test.cpp
+)
+
+target_link_libraries(${RUNTIME_ARRAY_TEST} PRIVATE
+    KoiScript
+    Catch2::Catch2
+)
+
+
+set(RUNTIME_FUNCTION_TEST RuntimeFunctionTest)
+
+add_executable(${RUNTIME_FUNCTION_TEST}
+    runtime_function_test.cpp
+)
+
+target_link_libraries(${RUNTIME_FUNCTION_TEST} PRIVATE
+    KoiScript
+    Catch2::Catch2
+)

@@ -28,8 +28,6 @@
 
 
 #include "scripting/abstract_syntax_tree/node.hpp"
-#include "scripting/abstract_syntax_tree/meta.hpp"
-#include "scripting/abstract_syntax_tree/literal.hpp"
 #include "scripting/token.hpp"
 
 #include <memory>
@@ -64,41 +62,41 @@ protected:
     Error _parse_ret_statement(
             std::vector<Token>::const_iterator& it,
             const std::vector<Token>::const_iterator& end,
-            std::shared_ptr<Ast::FunctionLiteral>& out_current_ast
+            std::shared_ptr<Ast::Node>& out_current_ast
     ) const;
 
 
     Error _parse_statement(
             std::vector<Token>::const_iterator& it,
             const std::vector<Token>::const_iterator& end,
-            std::shared_ptr<Ast::Statement>& out_current_ast
+            std::shared_ptr<Ast::Node>& out_current_ast
     ) const;
 
     Error _parse_exe(
             std::vector<Token>::const_iterator& it,
             const std::vector<Token>::const_iterator& end,
-            std::shared_ptr<Ast::ExecuteMeta>& out_current_ast
+            std::shared_ptr<Ast::Node>& out_current_ast
     ) const;
 
     //todo:: implement
     Error _parse_arg(
             std::vector<Token>::const_iterator& it,
             const std::vector<Token>::const_iterator& end,
-            std::shared_ptr<Ast::Expression>& out_current_ast
+            std::shared_ptr<Ast::Node>& out_current_ast
     ) const;
 
 
     Error _parse_typed_literal(
             std::vector<Token>::const_iterator& it,
             const std::vector<Token>::const_iterator& end,
-            std::shared_ptr<Ast::Literal>& out_current_ast
+            std::shared_ptr<Ast::Node>& out_current_ast
     ) const;
 
 
     Error _parse_function_literal(
             std::vector<Token>::const_iterator& it,
             const std::vector<Token>::const_iterator& end,
-            std::shared_ptr<Ast::FunctionLiteral>& out_current_ast
+            std::shared_ptr<Ast::Node>& out_current_ast
     ) const;
 
 
@@ -112,7 +110,7 @@ protected:
     Error _parse_variable_literal(
             std::vector<Token>::const_iterator& it,
             const std::vector<Token>::const_iterator& end,
-            std::shared_ptr<Ast::VariableLiteral>& out_current_ast
+            std::shared_ptr<Ast::Node>& out_current_ast
     ) const;
 
 

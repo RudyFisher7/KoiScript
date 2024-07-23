@@ -27,7 +27,6 @@
 #define KOI_SCRIPTING_RUNTIME_VARIANT_HPP
 
 
-#include "scripting/runtime/type_defs.hpp"
 #include "scripting/runtime/array.hpp"
 #include "scripting/runtime/function.hpp"
 #include "scripting/runtime/variable.hpp"
@@ -40,6 +39,7 @@ namespace Runtime {
 class Variant final {
 public:
     enum Type: int {
+        SCRIPTING_RUNTIME_VARIANT_TYPE_INVALID = -1,
         SCRIPTING_RUNTIME_VARIANT_TYPE_MIN = 0,
         SCRIPTING_RUNTIME_VARIANT_TYPE_VAR = SCRIPTING_RUNTIME_VARIANT_TYPE_MIN,
         SCRIPTING_RUNTIME_VARIANT_TYPE_REF,
@@ -49,14 +49,28 @@ public:
     };
 
 private:
+    Type _type = SCRIPTING_RUNTIME_VARIANT_TYPE_INVALID;
+    int _ref_value;
+    Variable _variable_value;
     Array _array_value;
     Function _function_value;
-    Id _ref_value;
-    Variable _variable_value;
 
 public:
-    //
+    Type get_type() const;
 
+    int get_reference() const;
+
+    Variable get_variable() const;
+    void get_variable_by_move(Variable& out_result);
+    Variable& get_variable_by_reference();
+
+    Array get_array() const;
+    void get_array_by_move(Array& out_result);
+    Array& get_array_by_reference();
+
+    Function get_function() const;
+    void get_function_by_move(Function& out_result);
+    Function& get_function_by_reference();
 };
 
 } // Runtime

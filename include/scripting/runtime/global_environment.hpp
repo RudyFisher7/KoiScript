@@ -40,7 +40,7 @@ namespace Runtime {
 
 class GlobalEnvironment: public Environment {
 public:
-    Error exe(const std::string& key, const std::vector<std::shared_ptr<Ast::Expression>>& args) const override;
+    Error exe(const std::string& key, const std::vector<std::shared_ptr<Ast::Node>>& args) const;
 
 protected:
     Error print(const Runtime::Variable& value) const;

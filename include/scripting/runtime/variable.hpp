@@ -27,7 +27,6 @@
 #define KOI_SCRIPTING_RUNTIME_VARIABLE_HPP
 
 
-#include "scripting/runtime/type_defs.hpp"
 #include "scripting/type.hpp"
 
 #include <functional>

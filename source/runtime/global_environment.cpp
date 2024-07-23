@@ -35,13 +35,11 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-Error GlobalEnvironment::exe(const std::string& key, const std::vector<std::shared_ptr<Ast::Expression>>& args) const {
+Error GlobalEnvironment::exe(const std::string& key, const std::vector<std::shared_ptr<Ast::Node>>& args) const {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
     if (key == "print") {
         Runtime::Variable arg;
-        args.at(0)->evaluate(arg);
-        result = print(args.at(0)->evaluate(arg));
     }
 
     return result;

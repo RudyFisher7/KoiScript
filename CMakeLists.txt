@@ -17,22 +17,17 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/lexicon.hpp
     source/lexer.cpp
     include/scripting/lexer.hpp
-    source/parser.cpp
-    include/scripting/parser.hpp
+#    source/parser.cpp
+#    include/scripting/parser.hpp
     source/assembler.cpp
     include/scripting/assembler.hpp
 
     source/abstract_syntax_tree/node.cpp
     include/scripting/abstract_syntax_tree/node.hpp
-    source/abstract_syntax_tree/meta.cpp
-    include/scripting/abstract_syntax_tree/meta.hpp
-    source/abstract_syntax_tree/literal.cpp
-    include/scripting/abstract_syntax_tree/literal.hpp
 
     source/extensions/extensions.cpp
     include/scripting/extensions/extensions.hpp
 
-    include/scripting/runtime/type_defs.hpp
     include/scripting/runtime/error.hpp
 
     source/runtime/environment.cpp

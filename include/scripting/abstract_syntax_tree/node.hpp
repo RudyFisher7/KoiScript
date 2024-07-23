@@ -28,9 +28,8 @@
 
 
 #include "scripting/runtime/error.hpp"
-#include "scripting/runtime/type_defs.hpp"
-#include "scripting/runtime/variable.hpp"
 #include "scripting/runtime/environment.hpp"
+#include "scripting/runtime/variant.hpp"
 #include "scripting/token.hpp"
 #include "scripting/type.hpp"
 
@@ -46,29 +45,36 @@ namespace Ast {
 
 class Node {
 public:
-    virtual Runtime::Error evaluate(Runtime::Variable& out_result, Runtime::Environment& environment) = 0;//fixme:: the result could also be an Ast::Literal
+    enum Type: int {
+        SCRIPTING_AST_NODE_TYPE_INVALID = -1,
+        SCRIPTING_AST_NODE_TYPE_MIN = 0,
+        SCRIPTING_AST_NODE_DECLARATION = SCRIPTING_AST_NODE_TYPE_MIN,
+        SCRIPTING_AST_NODE_EXPRESSION,
+        SCRIPTING_AST_NODE_LITERAL,
+        SCRIPTING_AST_NODE_TYPE_SIZE
+    };
+
+    enum MetaType: int {
+        SCRIPTING_AST_NODE_META_TYPE_INVALID = -1,
+        SCRIPTING_AST_NODE_META_TYPE_MIN = 0,
+        SCRIPTING_AST_NODE_META_VAR = SCRIPTING_AST_NODE_META_TYPE_MIN,
+        SCRIPTING_AST_NODE_META_EXE,
+        SCRIPTING_AST_NODE_META_TYPE_SIZE
+    };
+
+
+    Type type = SCRIPTING_AST_NODE_TYPE_INVALID;
+    MetaType meta_type = SCRIPTING_AST_NODE_META_TYPE_INVALID;
+
+    std::string key;
+
+    Runtime::Variant variant;
+
+
+public:
     virtual void print(std::ostream& lhs) const = 0;
 
-
     friend std::ostream& operator<<(std::ostream& lhs, const Node& rhs);//fixme:: doesn't work with child runtime types
-};
-
-
-class Statement : public Node {
-public:
-    //
-};
-
-
-class Declaration : public Statement {
-public:
-    //
-};
-
-
-class Expression : public Statement {
-public:
-    //
 };
 
 } // Ast

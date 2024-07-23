@@ -23,19 +23,26 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_TYPE_DEFS_HPP
-#define KOI_SCRIPTING_RUNTIME_TYPE_DEFS_HPP
+#include "scripting/runtime/function.hpp"
+
+#include <catch2/catch_session.hpp>
+#include <catch2/catch_test_macros.hpp>
+
+#include <string>
+#include <iostream>
+#include <limits>
+#include <vector>
 
 
-namespace Koi {
-namespace Scripting {
-namespace Runtime {
+namespace KoiScript = Koi::Scripting::Runtime;
 
-typedef unsigned int Id;
 
+int main( int argc, char* argv[] ) {
+    // your setup ...
+
+    int result = Catch::Session().run( argc, argv );
+
+    // your clean-up...
+
+    return result;
 }
-}
-}
-
-
-#endif //KOI_SCRIPTING_RUNTIME_TYPE_DEFS_HPP
