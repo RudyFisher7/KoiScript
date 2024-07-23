@@ -6,6 +6,11 @@ A simple scripting language designed for extending C++ applications at runtime, 
 in mind. Not to be mistaken for the stunning koilang (tsevhu): https://www.reddit.com/r/tsevhu/.
 
 
+## Very WIP
+# TODO::
+- ...
+
+
 ## Built-In Functions
 ### special
 - assign
