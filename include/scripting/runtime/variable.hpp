@@ -29,7 +29,6 @@
 
 #include "scripting/type.hpp"
 
-#include <functional>
 #include <ostream>
 #include <string>
 
@@ -39,8 +38,13 @@ namespace Scripting {
 namespace Runtime {
 
 class Variable final {
+public:
+    static const unsigned int MAX_SIZE;
+    static const std::string VOID_STRING;
+
 private:
-    BasicType _current_type = SCRIPTING_BASIC_TYPE_VOID;
+    unsigned int _size = 0u;
+    BasicType _type = SCRIPTING_BASIC_TYPE_VOID;
     union {
         bool _value_bool = false;
         int _value_int;
@@ -49,45 +53,31 @@ private:
     };
 
 public:
-    static Variable from_char(char in_value);
-
-
-    static Variable from_int(int in_value);
-
-
-    static Variable from_float(float in_value);
-
-
-    static Variable from_c_string(const char* in_value, size_t size);//todo::
-    static Variable from_c_string(const char* in_value);// must be null-terminated //todo::
-
-    static Variable from_string(const std::string& in_value);
-
-
     Variable();
 
 
-    Variable(char in_value);
+    explicit Variable(char in_value);
 
 
-    Variable(int in_value);
+    explicit Variable(int in_value);
 
 
-    Variable(float in_value);
+    explicit Variable(float in_value);
 
 
-    Variable(const char* in_value, size_t size);
+    explicit Variable(const char* in_value); // must be null-terminated
 
 
-    Variable(const char* in_value); // must be null-terminated
+    Variable(const char* in_value, unsigned int size);
 
-    Variable(std::string in_value);
+
+    explicit Variable(const std::string& in_value);
 
 
     Variable(const Variable& rhs);
 
 
-    Variable(Variable&& rhs);
+    Variable(Variable&& rhs) noexcept;
 
 
     Variable& operator=(const Variable& rhs);
@@ -105,9 +95,6 @@ public:
     bool operator!=(const Variable& rhs) const;
 
 
-    BasicType get_type() const;
-
-
     operator bool() const;
 
 
@@ -120,10 +107,16 @@ public:
     operator float() const;
 
 
-    operator char*() const;
+    operator const char*() const;
 
 
     operator std::string() const;
+
+
+    unsigned int get_size() const;
+
+
+    BasicType get_type() const;
 
 
     bool get_bool() const;
@@ -147,6 +140,12 @@ public:
     std::string get_string() const;
 
 
+    const char* get_c_string() const;
+
+
+    void set_value_void();
+
+
     void set_value(bool value);
 
 
@@ -159,16 +158,16 @@ public:
     void set_value(float value);
 
 
-    void set_value(const char* value, size_t size);
+    void set_value(const char* value, unsigned int size);
 
 
-    void set_value(const char* value);//must be null terminated
+    void set_value(const char* value);
+
+
+    void move_value(char** value);
 
 
     void set_value(const std::string& value);
-
-
-    void morph(BasicType in_type);
 
 
     friend std::ostream& operator<<(std::ostream& lhs, const Variable& rhs);
@@ -178,31 +177,8 @@ private:
     void _copy(const Variable& rhs);
 
 
-    bool _set_string_value(const std::string& in_value);
-
-
     void _destroy_string_if_string();
 };
-
-
-//todo:: verify this hash is correct
-// taken from https://stackoverflow.com/questions/19195183/how-to-properly-hash-the-custom-struct
-// which supposedly uses the golden ratio
-struct VariantHash {
-public:
-    size_t operator()(const Variable& in) const noexcept;
-
-
-private:
-    template<typename type>
-    void combine_hash(const type& in, size_t& out) const noexcept;
-};
-
-
-std::string operator+(const Variable& lhs, const std::string& rhs);
-
-
-std::string operator+(const std::string& lhs, const Variable& rhs);
 
 }
 }

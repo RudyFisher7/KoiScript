@@ -25,105 +25,97 @@
 
 #include "scripting/runtime/variable.hpp"
 
-#include <iostream>
+#include "scripting/log/log.hpp"
+
+#include <cmath>
 #include <cstring>
+#include <limits>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-Variable Variable::from_char(char in_value) {
-    return Variable(in_value);
-}
+const unsigned int Variable::MAX_SIZE = 64u;//fixme:: build configuration or similar since this depends on token size
+const std::string Variable::VOID_STRING("\"<void>\"");
 
 
-Variable Variable::from_int(int in_value) {
-    return Variable(in_value);
-}
-
-
-Variable Variable::from_float(float in_value) {
-    return Variable(in_value);
-}
-
-
-Variable Variable::from_string(const std::string& in_value) {
-    return Variable(in_value);
-}
-
-
-Variable::Variable() : _current_type(SCRIPTING_BASIC_TYPE_VOID), _value_bool(false) {
+Variable::Variable():
+        _size(0u),
+        _type(SCRIPTING_BASIC_TYPE_VOID),
+        _value_bool(false) {
 
 }
 
 
-Variable::Variable(char in_value) : _current_type(SCRIPTING_BASIC_TYPE_TEXT) {
+Variable::Variable(char in_value):
+        _size(sizeof(char)),
+        _type(SCRIPTING_BASIC_TYPE_TEXT) {
     set_value(&in_value, 1u);
 }
 
 
-Variable::Variable(int in_value) : _current_type(SCRIPTING_BASIC_TYPE_INT), _value_int(in_value) {
+Variable::Variable(int in_value):
+        _size(sizeof(int)),
+        _type(SCRIPTING_BASIC_TYPE_INT),
+        _value_int(in_value) {
 
 }
 
 
-Variable::Variable(float in_value) : _current_type(SCRIPTING_BASIC_TYPE_FLOAT), _value_float(in_value) {
+Variable::Variable(float in_value):
+        _size(sizeof(float)),
+        _type(SCRIPTING_BASIC_TYPE_FLOAT),
+        _value_float(in_value) {
 
 }
 
 
-Variable::Variable(const char* in_value, size_t size) {
+Variable::Variable(const char* in_value):
+        _type(SCRIPTING_BASIC_TYPE_TEXT),
+        _value_text(nullptr) {
+    set_value(in_value);
+}
+
+
+Variable::Variable(const char* in_value, unsigned int size):
+        _type(SCRIPTING_BASIC_TYPE_TEXT),
+        _value_text(nullptr) {
     set_value(in_value, size);
 }
 
 
-Variable::Variable(std::string in_value) : _current_type(SCRIPTING_BASIC_TYPE_TEXT), _value_text(nullptr) {
+Variable::Variable(const std::string& in_value):
+        _type(SCRIPTING_BASIC_TYPE_TEXT),
+        _value_text(nullptr) {
     set_value(in_value);
 }
 
 
 Variable::Variable(const Variable& rhs) {
-    switch (rhs._current_type) {
-        case SCRIPTING_BASIC_TYPE_VOID:
-            break;
-        case SCRIPTING_BASIC_TYPE_BOOL:
-            break;
-        case SCRIPTING_BASIC_TYPE_INT:
-            set_value(rhs._value_int);
-            break;
-        case SCRIPTING_BASIC_TYPE_FLOAT:
-            set_value(rhs._value_float);
-            break;
-        case SCRIPTING_BASIC_TYPE_TEXT:
-            set_value(rhs.get_string());
-            break;
-        case SCRIPTING_BASIC_TYPE_REF:
-            break;
-        case SCRIPTING_BASIC_TYPE_SIZE:
-            break;
-    }
+    _copy(rhs);
 }
 
 
-Variable::Variable(Variable&& rhs) {
-    switch (rhs._current_type) {
+Variable::Variable(Variable&& rhs) noexcept {
+    switch (rhs.get_type()) {
         case SCRIPTING_BASIC_TYPE_VOID:
+            set_value_void();
             break;
         case SCRIPTING_BASIC_TYPE_BOOL:
+            set_value(rhs.get_bool());
             break;
         case SCRIPTING_BASIC_TYPE_INT:
-            set_value(rhs._value_int);
+            set_value(rhs.get_int());
             break;
         case SCRIPTING_BASIC_TYPE_FLOAT:
-            set_value(rhs._value_float);
+            set_value(rhs.get_float());
             break;
         case SCRIPTING_BASIC_TYPE_TEXT:
-            set_value(rhs.get_string());
+            move_value(&rhs._value_text);
             break;
-        case SCRIPTING_BASIC_TYPE_REF:
-            break;
-        case SCRIPTING_BASIC_TYPE_SIZE:
+        default:
+            KOI_LOG("Variable isn't of recognized type.");
             break;
     }
 }
@@ -131,25 +123,7 @@ Variable::Variable(Variable&& rhs) {
 
 Variable& Variable::operator=(const Variable& rhs) {
     if (this != &rhs) {
-        switch (rhs._current_type) {
-            case SCRIPTING_BASIC_TYPE_VOID:
-                break;
-            case SCRIPTING_BASIC_TYPE_BOOL:
-                break;
-            case SCRIPTING_BASIC_TYPE_INT:
-                set_value(rhs._value_int);
-                break;
-            case SCRIPTING_BASIC_TYPE_FLOAT:
-                set_value(rhs._value_float);
-                break;
-            case SCRIPTING_BASIC_TYPE_TEXT:
-                set_value(rhs.get_string());
-                break;
-            case SCRIPTING_BASIC_TYPE_REF:
-                break;
-            case SCRIPTING_BASIC_TYPE_SIZE:
-                break;
-        }
+        _copy(rhs);
     }
 
     return *this;
@@ -158,23 +132,24 @@ Variable& Variable::operator=(const Variable& rhs) {
 
 Variable& Variable::operator=(Variable&& rhs) {
     if (this != &rhs) {
-        switch (rhs._current_type) {
+        switch (rhs.get_type()) {
             case SCRIPTING_BASIC_TYPE_VOID:
+                set_value_void();
                 break;
             case SCRIPTING_BASIC_TYPE_BOOL:
+                set_value(rhs.get_bool());
                 break;
             case SCRIPTING_BASIC_TYPE_INT:
-                set_value(rhs._value_int);
+                set_value(rhs.get_int());
                 break;
             case SCRIPTING_BASIC_TYPE_FLOAT:
-                set_value(rhs._value_float);
+                set_value(rhs.get_float());
                 break;
             case SCRIPTING_BASIC_TYPE_TEXT:
-                set_value(rhs.get_string());
+                move_value(&rhs._value_text);
                 break;
-            case SCRIPTING_BASIC_TYPE_REF:
-                break;
-            case SCRIPTING_BASIC_TYPE_SIZE:
+            default:
+                KOI_LOG("Variable isn't of recognized type.");
                 break;
         }
     }
@@ -190,11 +165,31 @@ Variable::~Variable() {
 
 bool Variable::operator==(const Variable& rhs) const {
     bool result = false;
-    result = (
-//            _current_type == rhs._current_type
-//          && get_string() == rhs.get_string()
-            get_string() == rhs.get_string()//fixme:: optimize
-    );
+
+    result = get_type() == rhs.get_type();
+
+    if (result) {
+        switch (rhs.get_type()) {
+            case SCRIPTING_BASIC_TYPE_VOID:
+                // handled above, since there is no value
+                break;
+            case SCRIPTING_BASIC_TYPE_BOOL:
+                result = get_bool() == rhs.get_bool();
+                break;
+            case SCRIPTING_BASIC_TYPE_INT:
+                result = get_int() == rhs.get_int();
+                break;
+            case SCRIPTING_BASIC_TYPE_FLOAT:
+                result = std::fabs(get_float() - rhs.get_float()) < std::numeric_limits<float>::epsilon();
+                break;
+            case SCRIPTING_BASIC_TYPE_TEXT:
+                result = _value_text == rhs._value_text;
+                break;
+            default:
+                KOI_LOG("Variable isn't of recognized type.");
+                break;
+        }
+    }
 
     return result;
 }
@@ -209,8 +204,8 @@ bool Variable::operator!=(const Variable& rhs) const {
 }
 
 
-BasicType Variable::get_type() const {
-    return _current_type;
+Variable::operator bool() const {
+    return get_bool();
 }
 
 
@@ -229,21 +224,77 @@ Variable::operator float() const {
 }
 
 
+Variable::operator const char*() const {
+    return get_c_string();
+}
+
+
 Variable::operator std::string() const {
     return get_string();
 }
 
 
-char Variable::get_char() const {
-    char result = '\0';
-    switch (_current_type) {
+unsigned int Variable::get_size() const {
+    return _size;
+}
+
+
+BasicType Variable::get_type() const {
+    return _type;
+}
+
+
+bool Variable::get_bool() const {
+    bool result = false;
+
+    switch (_type) {
+        case SCRIPTING_BASIC_TYPE_VOID:
+            // handled above
+            break;
+        case SCRIPTING_BASIC_TYPE_BOOL:
+            result = _value_bool;
+            break;
         case SCRIPTING_BASIC_TYPE_INT:
-            result = char(_value_int);
+            result = static_cast<bool>(_value_int);
             break;
         case SCRIPTING_BASIC_TYPE_FLOAT:
-            result = char(_value_float);
+            result = static_cast<bool>(_value_float);
             break;
-        case SCRIPTING_BASIC_TYPE_SIZE:
+        case SCRIPTING_BASIC_TYPE_TEXT:
+            result = _size > 0u;
+            break;
+        default:
+            KOI_LOG("Variable isn't of recognized type.");
+            break;
+    }
+
+    return result;
+}
+
+
+char Variable::get_char() const {
+    char result = '\0';
+
+    switch (_type) {
+        case SCRIPTING_BASIC_TYPE_VOID:
+            // handled above
+            break;
+        case SCRIPTING_BASIC_TYPE_BOOL:
+            result = static_cast<char>(_value_bool);
+            break;
+        case SCRIPTING_BASIC_TYPE_INT:
+            result = static_cast<char>(_value_int);
+            break;
+        case SCRIPTING_BASIC_TYPE_FLOAT:
+            result = static_cast<char>(_value_float);
+            break;
+        case SCRIPTING_BASIC_TYPE_TEXT:
+            if (_size > 0u) {
+                result = _value_text[0u];
+            }
+            break;
+        default:
+            KOI_LOG("Variable isn't of recognized type.");
             break;
     }
 
@@ -253,14 +304,27 @@ char Variable::get_char() const {
 
 int Variable::get_int() const {
     int result = 0;
-    switch (_current_type) {
+
+    switch (_type) {
+        case SCRIPTING_BASIC_TYPE_VOID:
+            // handled above
+            break;
+        case SCRIPTING_BASIC_TYPE_BOOL:
+            result = static_cast<int>(_value_bool);
+            break;
         case SCRIPTING_BASIC_TYPE_INT:
             result = _value_int;
             break;
         case SCRIPTING_BASIC_TYPE_FLOAT:
-            result = int(_value_float);
+            result = static_cast<int>(_value_float);
             break;
-        case SCRIPTING_BASIC_TYPE_SIZE:
+        case SCRIPTING_BASIC_TYPE_TEXT:
+            if (_size > 0u) {
+                result = static_cast<int>(static_cast<unsigned char>(_value_text[0u]));
+            }
+            break;
+        default:
+            KOI_LOG("Variable isn't of recognized type.");
             break;
     }
 
@@ -270,14 +334,27 @@ int Variable::get_int() const {
 
 float Variable::get_float() const {
     float result = 0.0f;
-    switch (_current_type) {
+
+    switch (_type) {
+        case SCRIPTING_BASIC_TYPE_VOID:
+            // handled above
+            break;
+        case SCRIPTING_BASIC_TYPE_BOOL:
+            result = static_cast<float>(_value_bool);
+            break;
         case SCRIPTING_BASIC_TYPE_INT:
-            result = float(_value_int);
+            result = static_cast<float>(_value_int);
             break;
         case SCRIPTING_BASIC_TYPE_FLOAT:
             result = _value_float;
             break;
-        case SCRIPTING_BASIC_TYPE_SIZE:
+        case SCRIPTING_BASIC_TYPE_TEXT:
+            if (_size > 0u) {
+                result = static_cast<float>(static_cast<unsigned char>(_value_text[0u]));
+            }
+            break;
+        default:
+            KOI_LOG("Variable isn't of recognized type.");
             break;
     }
 
@@ -287,9 +364,10 @@ float Variable::get_float() const {
 
 std::string Variable::get_string() const {
     std::string result;
-    switch (_current_type) {
+
+    switch (_type) {
         case SCRIPTING_BASIC_TYPE_VOID:
-            result = "\"<void>\"";
+            result = VOID_STRING;
             break;
         case SCRIPTING_BASIC_TYPE_BOOL:
             result = _value_bool ? "true" : "false";
@@ -303,7 +381,8 @@ std::string Variable::get_string() const {
         case SCRIPTING_BASIC_TYPE_TEXT:
             result = _value_text;
             break;
-        case SCRIPTING_BASIC_TYPE_REF:
+        default:
+            KOI_LOG("Variable isn't of recognized type.");
             break;
     }
 
@@ -311,50 +390,103 @@ std::string Variable::get_string() const {
 }
 
 
+const char* Variable::get_c_string() const {
+    const char* result = nullptr;
+
+    switch (_type) {
+        case SCRIPTING_BASIC_TYPE_VOID:
+        case SCRIPTING_BASIC_TYPE_BOOL:
+        case SCRIPTING_BASIC_TYPE_INT:
+        case SCRIPTING_BASIC_TYPE_FLOAT:
+            KOI_LOG("Variable text is considered nullptr.");
+            break;
+        case SCRIPTING_BASIC_TYPE_TEXT:
+            result = _value_text;
+            break;
+        default:
+            KOI_LOG("Variable isn't of recognized type.");
+            break;
+    }
+
+    return result;
+}
+
+
+void Variable::set_value_void() {
+    _destroy_string_if_string();
+    _size = 0u;
+    _type = SCRIPTING_BASIC_TYPE_VOID;
+    _value_bool = false;
+}
+
+
+void Variable::set_value(bool value) {
+    _destroy_string_if_string();
+    _size = sizeof(bool);
+    _type = SCRIPTING_BASIC_TYPE_BOOL;
+    _value_bool = value;
+}
+
+
 void Variable::set_value(char value) {
     _destroy_string_if_string();
+    set_value(&value, 1u);
 }
 
 
 void Variable::set_value(int value) {
     _destroy_string_if_string();
+    _size = sizeof(int);
+    _type = SCRIPTING_BASIC_TYPE_INT;
     _value_int = value;
-    _current_type = SCRIPTING_BASIC_TYPE_INT;
 }
 
 
 void Variable::set_value(float value) {
     _destroy_string_if_string();
+    _size = sizeof(float);
+    _type = SCRIPTING_BASIC_TYPE_FLOAT;
     _value_float = value;
-    _current_type = SCRIPTING_BASIC_TYPE_FLOAT;
 }
 
 
-void Variable::set_value(const char* value, size_t size) {
+void Variable::set_value(const char* value, unsigned int size) {
     _destroy_string_if_string();
+    _size = size;
+    _type = SCRIPTING_BASIC_TYPE_TEXT;
     _value_text = new char[size + 1u];
     std::memcpy(_value_text, value, size);
     _value_text[size] = '\0';
-    _current_type = SCRIPTING_BASIC_TYPE_TEXT;
+}
+
+
+void Variable::set_value(const char* value) {
+    unsigned int size = strnlen(value, MAX_SIZE);
+    set_value(value, size);
+}
+
+
+void Variable::move_value(char** value) {
+    _size = strnlen(*value, MAX_SIZE);
+    _type = SCRIPTING_BASIC_TYPE_TEXT;
+    _value_text = *value;
+    *value = nullptr;
 }
 
 
 void Variable::set_value(const std::string& value) {
-    _set_string_value(value);
-    _current_type = SCRIPTING_BASIC_TYPE_TEXT;
-
-}
-
-
-void Variable::morph(BasicType in_type) {
-    //todo::
+    set_value(value.c_str(), value.size());
 }
 
 
 std::ostream& operator<<(std::ostream& lhs, const Variable& rhs) {
-    lhs << "{\"_class:\": \"Variant\", \"_current_type\": " << std::to_string(rhs._current_type) << ", \"_value\":";
+    lhs << "{\"_class:\": \"Variant\", \"_size\": "
+    << std::to_string(rhs._size)
+    << ", \"_type\": "
+    << std::to_string(rhs._type)
+    << ", \"_value\":";
 
-    if (rhs._current_type == SCRIPTING_BASIC_TYPE_TEXT) {
+    if (rhs._type == SCRIPTING_BASIC_TYPE_TEXT) {
         lhs << "\"" << rhs.get_string() << "\"";
     } else {
         lhs << rhs.get_string();
@@ -366,57 +498,41 @@ std::ostream& operator<<(std::ostream& lhs, const Variable& rhs) {
 }
 
 
-bool Variable::_set_string_value(const std::string& in_value) {
-    bool result = false;
-
-    _destroy_string_if_string();
-
-    _value_text = new char[in_value.size() + 1];
-
-    size_t size = in_value.copy(_value_text, in_value.size());
-    _value_text[in_value.size()] = '\0';
-
-    result = size == in_value.size();
-
-    if (!result) {
-        std::cout << "Variant::_set_string_value() error. Characters copied: " << size << ", expected: "
-                  << in_value.size()
-                  << " Resulting string: " << _value_text << ", original string: " << in_value << std::endl;
+void Variable::_copy(const Variable& rhs) {
+    switch (rhs.get_type()) {
+        case SCRIPTING_BASIC_TYPE_VOID:
+            set_value_void();
+            break;
+        case SCRIPTING_BASIC_TYPE_BOOL:
+            set_value(rhs.get_bool());
+            break;
+        case SCRIPTING_BASIC_TYPE_INT:
+            set_value(rhs.get_int());
+            break;
+        case SCRIPTING_BASIC_TYPE_FLOAT:
+            set_value(rhs.get_float());
+            break;
+        case SCRIPTING_BASIC_TYPE_TEXT:
+            set_value(rhs.get_c_string());
+            break;
+        default:
+            KOI_LOG("Variable isn't of recognized type.");
+            break;
     }
-
-    return result;
 }
 
 
 void Variable::_destroy_string_if_string() {
-    if (_current_type == SCRIPTING_BASIC_TYPE_TEXT && _value_text != nullptr) {
-        free(_value_text);
+    bool needs_freeing = (
+            _type == SCRIPTING_BASIC_TYPE_TEXT
+            && _size > 0u
+            && _value_text != nullptr
+    );
+
+    if (needs_freeing) {
+        std::free(_value_text);
+        _value_text = nullptr;
     }
-}
-
-
-size_t VariantHash::operator()(const Variable& in) const noexcept {
-    size_t result = 0u;
-//    combine_hash<int>(in.get_type(), result);
-    combine_hash<std::string>(in.get_string(), result);
-    return result;
-}
-
-
-template<typename type>
-void VariantHash::combine_hash(const type& in, size_t& out) const noexcept {
-    std::hash<type> hash;
-    out ^= hash(in) + 0x9e3779b9 + (out << 6) + (out >> 2);
-}
-
-
-std::string operator+(const Variable& lhs, const std::string& rhs) {
-    return lhs.get_string() + rhs;
-}
-
-
-std::string operator+(const std::string& lhs, const Variable& rhs) {
-    return lhs + rhs.get_string();
 }
 
 }
