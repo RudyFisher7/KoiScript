@@ -23,19 +23,32 @@
  */
 
 
-#ifndef KOI_SCRIPTING_ARRAY_HPP
-#define KOI_SCRIPTING_ARRAY_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_ARRAY_HPP
+#define KOI_SCRIPTING_RUNTIME_ARRAY_HPP
+
+
+#include "scripting/runtime/variable.hpp"
+
+#include <vector>
+
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
 class Array final {
+private:
+    std::vector<Variable> _values;
+public:
+    Variable& operator[](unsigned int i);
 
+    unsigned int get_size() const;
+    const Variable& cget_at(unsigned int i) const;
+    Variable& get_at(unsigned int i);
 };
 
 } // Runtime
 } // Scripting
 } // Koi
 
-#endif //KOI_SCRIPTING_ARRAY_HPP
+#endif //KOI_SCRIPTING_RUNTIME_ARRAY_HPP

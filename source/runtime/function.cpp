@@ -29,6 +29,15 @@
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
+
+Error Function::operator()(const std::vector<Variable>& arguments, Variable& out_returned_value) const {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+
+
+    return result;
+}
+
 } // Runtime
 } // Scripting
 } // Koi

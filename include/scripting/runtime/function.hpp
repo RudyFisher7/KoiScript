@@ -27,13 +27,28 @@
 #define KOI_SCRIPTING_RUNTIME_FUNCTION_HPP
 
 
+#include "scripting/runtime/error.hpp"
+#include "scripting/runtime/variable.hpp"
+#include "scripting/type.hpp"
+
+#include <memory>
+#include <vector>
+
+
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
 class Function final {
-public:
+private:
+    BasicType _return_type = SCRIPTING_BASIC_TYPE_VOID;
 
+    std::vector<BasicType> _parameter_types;
+
+    //todo:: statements
+
+public:
+    Error operator()(const std::vector<Variable>& arguments, Variable& out_returned_value) const;
 };
 
 
