@@ -148,7 +148,7 @@ TEST_CASE("Variable get value - type text", "[VARIABLE][TEXT]") {
 
         // these must be pointing to different memory addresses (deep copy
         // in constructor).
-        CHECK_FALSE(variable.get_c_string() == toasty_text);
+        CHECK_FALSE(variable.get_c_string() == toasty_text);//fixme:: this isn't right
     }
 }
 
