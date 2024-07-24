@@ -3,11 +3,11 @@
 
 # KoiScript
 A simple scripting language designed for extending C++ applications at runtime, specifically with video game scripting
-in mind. Not to be mistaken for the stunning koilang (tsevhu): https://www.reddit.com/r/tsevhu/.
+in mind. Not to be mistaken for the stunning koilang (tsevhu): https://youtu.be/pa8vhSq4EMc?si=EwH9rOi6WrT_5Pd1.
 
 
-## Very WIP
-# TODO::
+## Project Status
+Not yet implemented.
 - ...
 
 
