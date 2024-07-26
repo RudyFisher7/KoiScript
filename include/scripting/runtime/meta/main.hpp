@@ -55,7 +55,7 @@ public:
     Main& operator=(const Main& rhs) = default;
     Main& operator=(Main&& rhs) = default;
 
-    ~Main() override = default;
+    ~Main() = default;
 
 
     std::string get_key() const override;

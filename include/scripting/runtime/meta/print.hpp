@@ -42,15 +42,6 @@ namespace Runtime {
 
 class Print final: public IExe {
 public:
-    Print() = default;
-    Print(const Print& rhs) = default;
-    Print(Print&& rhs) = default;
-
-    ~Print() override = default;
-
-    Print& operator=(const Print& rhs) = default;
-    Print& operator=(Print&& rhs) = default;
-
     std::string get_key() const override;
     Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const override;
 };

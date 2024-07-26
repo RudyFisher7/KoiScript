@@ -79,6 +79,8 @@ Lexicon::Lexicon() {
 
             // reserved ids
             {"_args", Token::SCRIPTING_TOKEN_TYPE_RESERVED_ID},
+            {"lit", Token::SCRIPTING_TOKEN_TYPE_RESERVED_ID},
+            {"main", Token::SCRIPTING_TOKEN_TYPE_RESERVED_ID},
     };
 }
 

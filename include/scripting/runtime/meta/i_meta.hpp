@@ -41,29 +41,33 @@ namespace Runtime {
 
 class IMeta {
 public:
-    IMeta() = default;
-    IMeta(const IMeta& rhs) = default;
-    IMeta(IMeta&& rhs) = default;
-
-    virtual ~IMeta() = default;
-
-    IMeta& operator=(const IMeta& rhs) = default;
-    IMeta& operator=(IMeta&& rhs) = default;
-
     virtual std::string get_key() const = 0;
     virtual Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const = 0;
 };
 
 class IExe: public IMeta {
+};
+
+class IVal: public IMeta {
+};
+
+class LitVal final: public IVal {
+private:
+    Variant _value;
+
 public:
-    IExe() = default;
-    IExe(const IExe& rhs) = default;
-    IExe(IExe&& rhs) = default;
+    explicit LitVal(const Variant& in_value): _value(in_value) {
 
-    ~IExe() override = default;
+    }
 
-    IExe& operator=(const IExe& rhs) = default;
-    IExe& operator=(IExe&& rhs) = default;
+    std::string get_key() const override {
+        return "lit";
+    }
+
+    Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const override {
+        out_result = _value;
+        return SCRIPTING_RUNTIME_ERROR_OK;
+    }
 };
 
 } // Runtime
