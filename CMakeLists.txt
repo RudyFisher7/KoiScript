@@ -37,20 +37,22 @@ add_library(${PROJECT_NAME} STATIC
     source/runtime/global_environment.cpp
     include/scripting/runtime/global_environment.hpp
 
-    source/runtime/array.cpp
-    include/scripting/runtime/array.hpp
-    source/runtime/function.cpp
-    include/scripting/runtime/function.hpp
-    source/runtime/variable.cpp
-    include/scripting/runtime/variable.hpp
-    source/runtime/variant.cpp
-    include/scripting/runtime/variant.hpp
-    source/runtime/i_meta.cpp
-    include/scripting/runtime/i_meta.hpp
-    source/runtime/exe.cpp
-    include/scripting/runtime/exe.hpp
-    source/runtime/main.cpp
-    include/scripting/runtime/main.hpp
+    source/runtime/data/array.cpp
+    include/scripting/runtime/data/array.hpp
+    source/runtime/data/function.cpp
+    include/scripting/runtime/data/function.hpp
+    source/runtime/data/variable.cpp
+    include/scripting/runtime/data/variable.hpp
+    source/runtime/data/variant.cpp
+    include/scripting/runtime/data/variant.hpp
+    source/runtime/meta/i_meta.cpp
+    include/scripting/runtime/meta/i_meta.hpp
+    source/runtime/meta/exe.cpp
+    include/scripting/runtime/meta/exe.hpp
+    source/runtime/meta/main.cpp
+    include/scripting/runtime/meta/main.hpp
+    source/runtime/meta/print.cpp
+    include/scripting/runtime/meta/print.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

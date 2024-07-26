@@ -23,43 +23,38 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
-#define KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
-
-
-#include "scripting/runtime/error.hpp"
-#include "scripting/runtime/data/variant.hpp"
-
-#include "scripting/abstract_syntax_tree/node.hpp"
-
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
+#include "scripting/runtime/meta/main.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Environment {
-protected:
-    std::map<std::string, std::shared_ptr<const Variant>> _declarations;
-    std::shared_ptr<const Environment> _parent;
+Main::Main(std::vector<std::shared_ptr<const IMeta>> body_meta_instructions):
+        _body_meta_instructions(body_meta_instructions) {
+}
 
-public:
 
-    std::shared_ptr<const Variant> get(const std::string& key) const;
+std::string Main::get_key() const {
+    return "main";
+}
 
-    bool register_declaration(const std::string& key);
-    bool register_assignment(const std::string& key, const Variant& data);
 
-    void set_parent_environment(std::shared_ptr<const Environment>& in_parent);
-};
+Error Main::run(std::shared_ptr<const Environment> environment, Variant& out_result) const {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    auto it = _body_meta_instructions.cbegin();
+    auto end = _body_meta_instructions.cend();
+    while (result == SCRIPTING_RUNTIME_ERROR_OK && it != end) {
+        result = it->get()->run(environment, out_result);
+        ++it;
+    }
+
+    out_result = Variant(Variable(0));
+
+    return result;
+}
 
 } // Runtime
 } // Scripting
 } // Koi
-
-
-#endif //KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP

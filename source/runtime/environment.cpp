@@ -33,7 +33,7 @@ namespace Runtime {
 std::shared_ptr<const Variant> Environment::get(const std::string& key) const {
     std::shared_ptr<Variant> result;
     if (_declarations.find(key) != _declarations.end()) {
-        result = _declarations.at(key);
+//        result = _declarations.at(key);
     }
 
     return result;

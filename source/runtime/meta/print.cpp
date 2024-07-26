@@ -23,43 +23,28 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
-#define KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+#include "scripting/runtime/meta/print.hpp"
 
-
-#include "scripting/runtime/error.hpp"
-#include "scripting/runtime/data/variant.hpp"
-
-#include "scripting/abstract_syntax_tree/node.hpp"
-
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
+#include <ostream>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Environment {
-protected:
-    std::map<std::string, std::shared_ptr<const Variant>> _declarations;
-    std::shared_ptr<const Environment> _parent;
+std::string Print::get_key() const {
+    return "print";
+}
 
-public:
 
-    std::shared_ptr<const Variant> get(const std::string& key) const;
+Error Print::run(std::shared_ptr<const Environment> environment, Variant& out_result) const {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    bool register_declaration(const std::string& key);
-    bool register_assignment(const std::string& key, const Variant& data);
+    std::cout << "printing function" << std::endl;
 
-    void set_parent_environment(std::shared_ptr<const Environment>& in_parent);
-};
+    return result;
+}
 
 } // Runtime
 } // Scripting
 } // Koi
-
-
-#endif //KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP

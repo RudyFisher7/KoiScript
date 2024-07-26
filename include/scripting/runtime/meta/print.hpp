@@ -23,12 +23,40 @@
  */
 
 
-#include "scripting/runtime/array.hpp"
+#ifndef KOI_SCRIPTING_RUNTIME_PRINT_HPP
+#define KOI_SCRIPTING_RUNTIME_PRINT_HPP
+
+
+#include "scripting/runtime/meta/i_meta.hpp"
+
+#include "scripting/runtime/error.hpp"
+#include "scripting/runtime/data/variant.hpp"
+
+#include <memory>
+#include <string>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
+
+class Print final: public IExe {
+public:
+    Print() = default;
+    Print(const Print& rhs) = default;
+    Print(Print&& rhs) = default;
+
+    ~Print() override = default;
+
+    Print& operator=(const Print& rhs) = default;
+    Print& operator=(Print&& rhs) = default;
+
+    std::string get_key() const override;
+    Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const override;
+};
+
 } // Runtime
 } // Scripting
 } // Koi
+
+#endif //KOI_SCRIPTING_RUNTIME_PRINT_HPP

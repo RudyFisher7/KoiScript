@@ -23,7 +23,7 @@
  */
 
 
-#include "scripting/runtime/variable.hpp"
+#include "scripting/runtime/data/variable.hpp"
 
 #include "scripting/log/log.hpp"
 

@@ -29,7 +29,7 @@
 
 #include "scripting/runtime/error.hpp"
 #include "scripting/runtime/environment.hpp"
-#include "scripting/runtime/variant.hpp"
+#include "scripting/runtime/data/variant.hpp"
 #include "scripting/token.hpp"
 #include "scripting/type.hpp"
 

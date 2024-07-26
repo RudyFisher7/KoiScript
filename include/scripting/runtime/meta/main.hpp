@@ -23,12 +23,17 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ARRAY_HPP
-#define KOI_SCRIPTING_RUNTIME_ARRAY_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_MAIN_HPP
+#define KOI_SCRIPTING_RUNTIME_MAIN_HPP
 
 
-#include "scripting/runtime/variable.hpp"
+#include "i_meta.hpp"
 
+#include "scripting/runtime/error.hpp"
+#include "scripting/runtime/environment.hpp"
+#include "scripting/runtime/data/variant.hpp"
+
+#include <memory>
 #include <vector>
 
 
@@ -36,19 +41,29 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Array final {
+class Main final: public IExe {
 private:
-    std::vector<Variable> _values;
-public:
-    Variable& operator[](unsigned int i);
+    std::vector<std::shared_ptr<const IMeta>> _body_meta_instructions;
 
-    unsigned int get_size() const;
-    const Variable& cget_at(unsigned int i) const;
-    Variable& get_at(unsigned int i);
+
+public:
+    explicit Main(std::vector<std::shared_ptr<const IMeta>> body_meta_instructions);
+
+    Main(const Main& rhs) = default;
+    Main(Main&& rhs) = default;
+
+    Main& operator=(const Main& rhs) = default;
+    Main& operator=(Main&& rhs) = default;
+
+    ~Main() override = default;
+
+
+    std::string get_key() const override;
+    Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const override;
 };
 
 } // Runtime
 } // Scripting
 } // Koi
 
-#endif //KOI_SCRIPTING_RUNTIME_ARRAY_HPP
+#endif //KOI_SCRIPTING_RUNTIME_MAIN_HPP

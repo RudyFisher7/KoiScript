@@ -25,7 +25,7 @@
 
 #include <utility>
 
-#include "scripting/runtime/variant.hpp"
+#include "scripting/runtime/data/variant.hpp"
 
 
 namespace Koi {

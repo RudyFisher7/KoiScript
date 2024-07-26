@@ -23,46 +23,32 @@
  */
 
 
-#include <utility>
+#ifndef KOI_SCRIPTING_RUNTIME_ARRAY_HPP
+#define KOI_SCRIPTING_RUNTIME_ARRAY_HPP
 
-#include "scripting/runtime/exe.hpp"
+
+#include "scripting/runtime/data/variable.hpp"
+
+#include <vector>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-Exe::Exe() {
+class Array final {
+private:
+    std::vector<Variable> _values;
+public:
+    Variable& operator[](unsigned int i);
 
-}
-
-
-Exe::Exe(std::string in_key, std::vector<std::shared_ptr<const IMeta>>&& in_body_meta_instructions):
-    _key(std::move(in_key)),
-    _body_meta_instructions(std::move(in_body_meta_instructions)) {
-
-}
-
-
-Exe::~Exe() {
-
-}
-
-
-std::string Exe::get_key() const {
-    return _key;
-}
-
-
-
-Error Exe::run(std::shared_ptr<const Environment> environment, Variant& out_result) const {
-    Error result = SCRIPTING_RUNTIME_ERROR_OK;
-
-
-
-    return result;
-}
+    unsigned int get_size() const;
+    const Variable& cget_at(unsigned int i) const;
+    Variable& get_at(unsigned int i);
+};
 
 } // Runtime
 } // Scripting
 } // Koi
+
+#endif //KOI_SCRIPTING_RUNTIME_ARRAY_HPP

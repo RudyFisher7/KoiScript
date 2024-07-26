@@ -23,12 +23,51 @@
  */
 
 
-#include "scripting/runtime/i_meta.hpp"
+#ifndef KOI_SCRIPTING_RUNTIME_META_HPP
+#define KOI_SCRIPTING_RUNTIME_META_HPP
+
+
+#include "scripting/runtime/error.hpp"
+#include "scripting/runtime/environment.hpp"
+#include "scripting/runtime/data/variant.hpp"
+
+#include <string>
+#include <memory>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
+
+class IMeta {
+public:
+    IMeta() = default;
+    IMeta(const IMeta& rhs) = default;
+    IMeta(IMeta&& rhs) = default;
+
+    virtual ~IMeta() = default;
+
+    IMeta& operator=(const IMeta& rhs) = default;
+    IMeta& operator=(IMeta&& rhs) = default;
+
+    virtual std::string get_key() const = 0;
+    virtual Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const = 0;
+};
+
+class IExe: public IMeta {
+public:
+    IExe() = default;
+    IExe(const IExe& rhs) = default;
+    IExe(IExe&& rhs) = default;
+
+    ~IExe() override = default;
+
+    IExe& operator=(const IExe& rhs) = default;
+    IExe& operator=(IExe&& rhs) = default;
+};
+
 } // Runtime
 } // Scripting
 } // Koi
+
+#endif //KOI_SCRIPTING_RUNTIME_META_HPP

@@ -23,7 +23,7 @@
  */
 
 
-#include "scripting/runtime/variable.hpp"
+#include "scripting/runtime/data/variable.hpp"
 #include "scripting/type.hpp"
 
 #include <catch2/catch_session.hpp>

@@ -23,18 +23,15 @@
  */
 
 
-#ifndef KOI_SCRIPTING_EXE_HPP
-#define KOI_SCRIPTING_EXE_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_FUNCTION_HPP
+#define KOI_SCRIPTING_RUNTIME_FUNCTION_HPP
 
-
-#include "scripting/runtime/i_meta.hpp"
 
 #include "scripting/runtime/error.hpp"
-#include "scripting/runtime/environment.hpp"
-#include "scripting/runtime/function.hpp"
-#include "scripting/runtime/variant.hpp"
+#include "scripting/runtime/data/variable.hpp"
+#include "scripting/type.hpp"
 
-#include <string>
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -43,26 +40,50 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Exe: public IExe {
-protected:
-    std::string _key;
-    std::vector<std::shared_ptr<const IMeta>> _body_meta_instructions;
+class Function final {
+private:
+    bool _is_built_in = false;
+    BasicType _return_type = SCRIPTING_BASIC_TYPE_VOID;
+    std::vector<BasicType> _parameter_types;
+    std::function<Error(const std::vector<std::shared_ptr<const Variable>>&, Variable&)> _function;
 
+    //todo:: statements
 
 public:
-    Exe();
+    Function() = default;
+    Function(
+            bool in_is_built_in,
+            BasicType in_return_type,
+            std::vector<BasicType> in_parameter_types,
+            std::function<Error(const std::vector<std::shared_ptr<const Variable>>&, Variable&)> in_function
+    );
 
-    Exe(std::string in_key, std::vector<std::shared_ptr<const IMeta>>&& in_body_meta_instructions);
+    ~Function() = default;
 
-    virtual ~Exe();
 
-    std::string get_key() const override;
-    Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const override;
+    //todo:: implement
+    Function(const Function& rhs);
+    Function(Function&& rhs) noexcept;
+
+    Function& operator=(const Function& rhs);
+    Function& operator=(Function&& rhs) noexcept;
+
+
+    Error operator()(const std::vector<std::shared_ptr<const Variable>>& arguments, Variable& out_result) const;
+
+    bool is_built_in() const;
+
+
+    BasicType get_return_type() const;
+
+
+    const std::vector<BasicType>& get_parameter_types() const;
+
 };
+
 
 } // Runtime
 } // Scripting
 } // Koi
 
-
-#endif //KOI_SCRIPTING_EXE_HPP
+#endif //KOI_SCRIPTING_RUNTIME_FUNCTION_HPP

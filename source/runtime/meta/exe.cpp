@@ -23,33 +23,46 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_META_HPP
-#define KOI_SCRIPTING_RUNTIME_META_HPP
+#include <utility>
 
-
-#include "scripting/runtime/error.hpp"
-#include "scripting/runtime/environment.hpp"
-#include "scripting/runtime/variant.hpp"
-
-#include <string>
-#include <memory>
+#include "scripting/runtime/meta/exe.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class IMeta {
-public:
-    virtual std::string get_key() const = 0;
-    virtual Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const = 0;
-};
+Exe::Exe() {
 
-class IExe: public IMeta {
-};
+}
+
+
+Exe::Exe(std::string in_key, std::vector<std::shared_ptr<const IMeta>>&& in_body_meta_instructions):
+    _key(std::move(in_key)),
+    _body_meta_instructions(std::move(in_body_meta_instructions)) {
+
+}
+
+
+Exe::~Exe() {
+
+}
+
+
+std::string Exe::get_key() const {
+    return _key;
+}
+
+
+
+Error Exe::run(std::shared_ptr<const Environment> environment, Variant& out_result) const {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+
+
+    return result;
+}
 
 } // Runtime
 } // Scripting
 } // Koi
-
-#endif //KOI_SCRIPTING_RUNTIME_META_HPP

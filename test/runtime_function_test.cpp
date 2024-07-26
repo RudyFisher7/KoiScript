@@ -23,7 +23,7 @@
  */
 
 
-#include "scripting/runtime/function.hpp"
+#include "scripting/runtime/data/function.hpp"
 
 #include <catch2/catch_session.hpp>
 #include <catch2/catch_test_macros.hpp>

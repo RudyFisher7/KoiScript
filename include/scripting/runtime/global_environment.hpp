@@ -31,7 +31,7 @@
 
 #include "scripting/runtime/error.hpp"
 #include "scripting/type.hpp"
-#include "variable.hpp"
+#include "scripting/runtime/data/variable.hpp"
 
 
 namespace Koi {

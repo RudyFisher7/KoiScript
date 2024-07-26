@@ -23,36 +23,12 @@
  */
 
 
-#include "scripting/runtime/main.hpp"
+#include "scripting/runtime/meta/i_meta.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
-
-Main::Main(std::vector<std::shared_ptr<const IMeta>> body_meta_instructions):
-        _body_meta_instructions(body_meta_instructions) {
-}
-
-
-std::string Main::get_key() const {
-    return "main";
-}
-
-
-Error Main::run(std::shared_ptr<const Environment> environment, Variant& out_result) {
-    Error result = SCRIPTING_RUNTIME_ERROR_OK;
-
-    auto it = _body_meta_instructions.cbegin();
-    auto end = _body_meta_instructions.cend();
-    while (result == SCRIPTING_RUNTIME_ERROR_OK && it != end) {
-        result = it->get()->run(environment, out_result);
-        ++it;
-    }
-
-    return result;
-}
-
 } // Runtime
 } // Scripting
 } // Koi

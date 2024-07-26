@@ -23,16 +23,18 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_MAIN_HPP
-#define KOI_SCRIPTING_RUNTIME_MAIN_HPP
+#ifndef KOI_SCRIPTING_EXE_HPP
+#define KOI_SCRIPTING_EXE_HPP
 
 
-#include "scripting/runtime/i_meta.hpp"
+#include "i_meta.hpp"
 
 #include "scripting/runtime/error.hpp"
 #include "scripting/runtime/environment.hpp"
-#include "scripting/runtime/variant.hpp"
+#include "scripting/runtime/data/function.hpp"
+#include "scripting/runtime/data/variant.hpp"
 
+#include <string>
 #include <memory>
 #include <vector>
 
@@ -41,21 +43,26 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Main final: public IExe {
-private:
+class Exe: public IExe {
+protected:
+    std::string _key;
     std::vector<std::shared_ptr<const IMeta>> _body_meta_instructions;
 
 
 public:
-    explicit Main(std::vector<std::shared_ptr<const IMeta>> body_meta_instructions);
+    Exe();
 
+    Exe(std::string in_key, std::vector<std::shared_ptr<const IMeta>>&& in_body_meta_instructions);
+
+    virtual ~Exe();
 
     std::string get_key() const override;
-    Error run(std::shared_ptr<const Environment> environment, Variant& out_result);
+    Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const override;
 };
 
 } // Runtime
 } // Scripting
 } // Koi
 
-#endif //KOI_SCRIPTING_RUNTIME_MAIN_HPP
+
+#endif //KOI_SCRIPTING_EXE_HPP

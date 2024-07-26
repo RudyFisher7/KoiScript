@@ -25,7 +25,7 @@
 
 #include <utility>
 
-#include "scripting/runtime/function.hpp"
+#include "scripting/runtime/data/function.hpp"
 
 
 namespace Koi {

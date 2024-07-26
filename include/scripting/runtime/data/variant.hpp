@@ -27,9 +27,9 @@
 #define KOI_SCRIPTING_RUNTIME_VARIANT_HPP
 
 
-#include "scripting/runtime/array.hpp"
-#include "scripting/runtime/function.hpp"
-#include "scripting/runtime/variable.hpp"
+#include "array.hpp"
+#include "function.hpp"
+#include "scripting/runtime/data/variable.hpp"
 
 
 namespace Koi {
