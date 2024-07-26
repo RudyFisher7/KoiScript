@@ -31,6 +31,7 @@
 #include "scripting/runtime/variable.hpp"
 #include "scripting/type.hpp"
 
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -41,14 +42,43 @@ namespace Runtime {
 
 class Function final {
 private:
+    bool _is_built_in = false;
     BasicType _return_type = SCRIPTING_BASIC_TYPE_VOID;
-
     std::vector<BasicType> _parameter_types;
+    std::function<Error(const std::vector<std::shared_ptr<const Variable>>&, Variable&)> _function;
 
     //todo:: statements
 
 public:
-    Error operator()(const std::vector<Variable>& arguments, Variable& out_returned_value) const;
+    Function() = default;
+    Function(
+            bool in_is_built_in,
+            BasicType in_return_type,
+            std::vector<BasicType> in_parameter_types,
+            std::function<Error(const std::vector<std::shared_ptr<const Variable>>&, Variable&)> in_function
+    );
+
+    ~Function() = default;
+
+
+    //todo:: implement
+    Function(const Function& rhs);
+    Function(Function&& rhs) noexcept;
+
+    Function& operator=(const Function& rhs);
+    Function& operator=(Function&& rhs) noexcept;
+
+
+    Error operator()(const std::vector<std::shared_ptr<const Variable>>& arguments, Variable& out_result) const;
+
+    bool is_built_in() const;
+
+
+    BasicType get_return_type() const;
+
+
+    const std::vector<BasicType>& get_parameter_types() const;
+
 };
 
 

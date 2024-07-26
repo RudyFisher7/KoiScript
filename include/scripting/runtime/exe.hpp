@@ -23,48 +23,46 @@
  */
 
 
+#ifndef KOI_SCRIPTING_EXE_HPP
+#define KOI_SCRIPTING_EXE_HPP
+
+
+#include "scripting/runtime/i_meta.hpp"
+
+#include "scripting/runtime/error.hpp"
 #include "scripting/runtime/environment.hpp"
+#include "scripting/runtime/function.hpp"
+#include "scripting/runtime/variant.hpp"
+
+#include <string>
+#include <memory>
+#include <vector>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-std::shared_ptr<const Variant> Environment::get(const std::string& key) const {
-    std::shared_ptr<Variant> result;
-    if (_declarations.find(key) != _declarations.end()) {
-        result = _declarations.at(key);
-    }
-
-    return result;
-}
+class Exe: public IExe {
+protected:
+    std::string _key;
+    std::vector<std::shared_ptr<const IMeta>> _body_meta_instructions;
 
 
-bool Environment::register_declaration(const std::string& key) {
-    bool result = false;
+public:
+    Exe();
 
-    result = _declarations.emplace(key, std::shared_ptr<const Variant>()).second;
+    Exe(std::string in_key, std::vector<std::shared_ptr<const IMeta>>&& in_body_meta_instructions);
 
-    return result;
-}
+    virtual ~Exe();
 
-
-bool Environment::register_assignment(const std::string& key, const Variant& data) {
-    bool result = false;
-
-    if (_declarations.find(key) != _declarations.end()) {
-        _declarations.at(key) = std::make_shared<Variant>(data);
-        result = true;
-    }
-
-    return result;
-}
-
-
-void Environment::set_parent_environment(std::shared_ptr<const Environment>& in_parent) {
-    _parent = in_parent;
-}
+    std::string get_key() const override;
+    Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const override;
+};
 
 } // Runtime
 } // Scripting
 } // Koi
+
+
+#endif //KOI_SCRIPTING_EXE_HPP

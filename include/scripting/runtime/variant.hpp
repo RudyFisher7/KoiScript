@@ -50,12 +50,27 @@ public:
 
 private:
     Type _type = SCRIPTING_RUNTIME_VARIANT_TYPE_INVALID;
-    int _ref_value;
-    Variable _variable_value;
-    Array _array_value;
-    Function _function_value;
+
+    union {
+        int _reference_value = -1;
+        Variable* _variable_value;
+        Array* _array_value;
+        Function* _function_value;
+    };
 
 public:
+    Variant();
+
+    explicit Variant(int in_reference);
+    explicit Variant(Variable in_variable);
+    explicit Variant(Array in_array);
+    explicit Variant(Function in_function);
+
+    //todo:: rule of 5 stuff
+
+    ~Variant();
+
+
     Type get_type() const;
 
     int get_reference() const;

@@ -23,48 +23,12 @@
  */
 
 
-#include "scripting/runtime/environment.hpp"
+#include "scripting/runtime/i_meta.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
-
-std::shared_ptr<const Variant> Environment::get(const std::string& key) const {
-    std::shared_ptr<Variant> result;
-    if (_declarations.find(key) != _declarations.end()) {
-        result = _declarations.at(key);
-    }
-
-    return result;
-}
-
-
-bool Environment::register_declaration(const std::string& key) {
-    bool result = false;
-
-    result = _declarations.emplace(key, std::shared_ptr<const Variant>()).second;
-
-    return result;
-}
-
-
-bool Environment::register_assignment(const std::string& key, const Variant& data) {
-    bool result = false;
-
-    if (_declarations.find(key) != _declarations.end()) {
-        _declarations.at(key) = std::make_shared<Variant>(data);
-        result = true;
-    }
-
-    return result;
-}
-
-
-void Environment::set_parent_environment(std::shared_ptr<const Environment>& in_parent) {
-    _parent = in_parent;
-}
-
 } // Runtime
 } // Scripting
 } // Koi

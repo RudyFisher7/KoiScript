@@ -44,14 +44,17 @@ namespace Runtime {
 
 class Environment {
 protected:
-    std::map<std::string, int> _declarations;
-    std::vector<int> _declaration_environments;//fixme::
-    std::vector<std::shared_ptr<Variant>> _data;
+    std::map<std::string, std::shared_ptr<const Variant>> _declarations;
+    std::shared_ptr<const Environment> _parent;
 
 public:
 
-    int register_declaration(const std::string& key, unsigned int environment);
-    int register_assignment(int id, unsigned int environment, const Variant& data);
+    std::shared_ptr<const Variant> get(const std::string& key) const;
+
+    bool register_declaration(const std::string& key);
+    bool register_assignment(const std::string& key, const Variant& data);
+
+    void set_parent_environment(std::shared_ptr<const Environment>& in_parent);
 };
 
 } // Runtime

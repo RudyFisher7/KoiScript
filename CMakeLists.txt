@@ -21,6 +21,8 @@ add_library(${PROJECT_NAME} STATIC
 #    include/scripting/parser.hpp
     source/assembler.cpp
     include/scripting/assembler.hpp
+    source/koi_script.cpp
+    include/scripting/koi_script.hpp
 
     source/abstract_syntax_tree/node.cpp
     include/scripting/abstract_syntax_tree/node.hpp
@@ -43,6 +45,12 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/runtime/variable.hpp
     source/runtime/variant.cpp
     include/scripting/runtime/variant.hpp
+    source/runtime/i_meta.cpp
+    include/scripting/runtime/i_meta.hpp
+    source/runtime/exe.cpp
+    include/scripting/runtime/exe.hpp
+    source/runtime/main.cpp
+    include/scripting/runtime/main.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

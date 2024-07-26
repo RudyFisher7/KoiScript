@@ -23,6 +23,8 @@
  */
 
 
+#include <utility>
+
 #include "scripting/runtime/function.hpp"
 
 
@@ -30,12 +32,63 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-Error Function::operator()(const std::vector<Variable>& arguments, Variable& out_returned_value) const {
+Function::Function(
+        bool in_is_built_in,
+        BasicType in_return_type,
+        std::vector<BasicType> in_parameter_types,
+        std::function<Error(const std::vector<std::shared_ptr<const Variable>>&, Variable&)> in_function
+):
+        _is_built_in(in_is_built_in),
+        _return_type(in_return_type),
+        _parameter_types(std::move(in_parameter_types)),
+        _function(std::move(in_function)) {
+
+}
+
+
+Function::Function(const Function& rhs) {
+    //
+}
+
+
+Function::Function(Function&& rhs) noexcept {
+    //
+}
+
+
+Function& Function::operator=(const Function& rhs) {
+    //
+    return *this;
+}
+
+
+Function& Function::operator=(Function&& rhs) noexcept {
+    //
+    return *this;
+}
+
+
+Error Function::operator()(const std::vector<std::shared_ptr<const Variable>>& arguments, Variable& out_result) const {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-
+    result = _function(arguments, out_result);
 
     return result;
+}
+
+
+bool Function::is_built_in() const {
+    return _is_built_in;
+}
+
+
+BasicType Function::get_return_type() const {
+    return _return_type;
+}
+
+
+const std::vector<BasicType>& Function::get_parameter_types() const {
+    return _parameter_types;
 }
 
 } // Runtime

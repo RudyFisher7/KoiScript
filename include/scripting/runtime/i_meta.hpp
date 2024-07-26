@@ -23,48 +23,33 @@
  */
 
 
+#ifndef KOI_SCRIPTING_RUNTIME_META_HPP
+#define KOI_SCRIPTING_RUNTIME_META_HPP
+
+
+#include "scripting/runtime/error.hpp"
 #include "scripting/runtime/environment.hpp"
+#include "scripting/runtime/variant.hpp"
+
+#include <string>
+#include <memory>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-std::shared_ptr<const Variant> Environment::get(const std::string& key) const {
-    std::shared_ptr<Variant> result;
-    if (_declarations.find(key) != _declarations.end()) {
-        result = _declarations.at(key);
-    }
+class IMeta {
+public:
+    virtual std::string get_key() const = 0;
+    virtual Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const = 0;
+};
 
-    return result;
-}
-
-
-bool Environment::register_declaration(const std::string& key) {
-    bool result = false;
-
-    result = _declarations.emplace(key, std::shared_ptr<const Variant>()).second;
-
-    return result;
-}
-
-
-bool Environment::register_assignment(const std::string& key, const Variant& data) {
-    bool result = false;
-
-    if (_declarations.find(key) != _declarations.end()) {
-        _declarations.at(key) = std::make_shared<Variant>(data);
-        result = true;
-    }
-
-    return result;
-}
-
-
-void Environment::set_parent_environment(std::shared_ptr<const Environment>& in_parent) {
-    _parent = in_parent;
-}
+class IExe: public IMeta {
+};
 
 } // Runtime
 } // Scripting
 } // Koi
+
+#endif //KOI_SCRIPTING_RUNTIME_META_HPP
