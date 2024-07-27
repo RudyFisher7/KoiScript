@@ -51,20 +51,46 @@ bool Environment::register_declaration(const std::string& key) {
 }
 
 
-bool Environment::register_assignment(const std::string& key, std::shared_ptr<const IMeta> value) {
+bool Environment::set(const std::string& key, std::shared_ptr<const IMeta> value) {
     bool result = false;
 
     if (_declarations.find(key) != _declarations.end()) {
         _declarations.at(key) = std::move(value);
         result = true;
+    } else {
+        std::shared_ptr<Environment> environment = _resolve(key);
+
+        if (environment) {
+            result = environment->set(key, value);
+        }
     }
 
     return result;
 }
 
 
-void Environment::set_parent_environment(std::shared_ptr<const Environment> in_parent) {
+void Environment::set_parent_environment(std::shared_ptr<Environment> in_parent) {
     _parent = std::move(in_parent);
+}
+
+
+std::shared_ptr<Environment> Environment::_resolve(const std::string& key) {
+    std::shared_ptr<Environment> result = _parent;
+
+    while (result && result->_has_key(key)) {
+        result = result->_parent;
+    }
+
+    return result;
+}
+
+
+bool Environment::_has_key(const std::string& key) const {
+    bool result = false;
+
+    result = _declarations.find(key) != _declarations.cend();
+
+    return result;
 }
 
 } // Runtime

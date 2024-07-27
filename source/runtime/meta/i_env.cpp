@@ -23,28 +23,21 @@
  */
 
 
+#include "scripting/runtime/meta/i_env.hpp"
 
-#ifndef KOI_SCRIPTING_RUNTIME_I_DECL_HPP
-#define KOI_SCRIPTING_RUNTIME_I_DECL_HPP
-
-
-#include "scripting/runtime/meta/i_meta.hpp"
-
-#include "scripting/runtime/environment.hpp"
+#include <utility>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class IDecl: public IMeta {
-protected:
-    mutable Environment _environment;
-};
+IEnv::IEnv(std::string in_key, std::shared_ptr<Environment> in_environment):
+        _key(std::move(in_key)),
+        _environment(std::move(in_environment)) {
+
+}
 
 }
 }
 }
-
-
-#endif //KOI_SCRIPTING_RUNTIME_I_DECL_HPP

@@ -56,38 +56,6 @@ public:
     typedef std::vector<std::shared_ptr<const IMeta>> Body;
 };
 
-
-class IVal: public IMeta {
-};
-
-
-class LitVal final: public IVal {
-private:
-    Variant _value;
-
-public:
-    explicit LitVal(const Variant& in_value): _value(in_value) {
-
-    }
-
-    LitVal(const LitVal& rhs) = default;
-    LitVal(LitVal&& rhs) = default;
-
-    ~LitVal() = default;
-
-    LitVal& operator=(const LitVal& rhs) = default;
-    LitVal& operator=(LitVal&& rhs) = default;
-
-    std::string get_key() const override {
-        return "lit";
-    }
-
-    Error run(IMeta::Args arguments, Variant& out_result) const override {
-        out_result = _value;
-        return SCRIPTING_RUNTIME_ERROR_OK;
-    }
-};
-
 } // Runtime
 } // Scripting
 } // Koi

@@ -27,19 +27,14 @@
 #define KOI_SCRIPTING_RUNTIME_ASSIGN_HPP
 
 
-#include "scripting/runtime/meta/i_meta.hpp"
-
-#include "scripting/runtime/environment.hpp"
+#include "scripting/runtime/meta/i_env.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Assign final: public IExe {
-private:
-    mutable Environment _environment;
-
+class Assign final: public IEnv {
 public:
     std::string get_key() const override;
     Error run(IMeta::Args arguments, Variant& out_result) const override;//todo:: inside body, assign arg[1] with arg[2] in _environment

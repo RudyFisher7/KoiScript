@@ -23,40 +23,39 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
-#define KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_FUN_LIT_HPP
+#define KOI_SCRIPTING_RUNTIME_FUN_LIT_HPP
 
 
-#include "scripting/runtime/error.hpp"
-#include "scripting/runtime/data/variant.hpp"
 #include "scripting/runtime/meta/i_meta.hpp"
 
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
+#include "scripting/runtime/data/function.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Environment {
-protected:
-    std::map<std::string, std::shared_ptr<const IMeta>> _declarations;
-    std::shared_ptr<Environment> _parent;
+class FunLit final: public IMeta {
+private:
+    Function _value;
 
 public:
-    std::shared_ptr<const IMeta> get(const std::string& key) const;
+    FunLit() = default;
 
-    bool register_declaration(const std::string& key);
-    bool set(const std::string& key, std::shared_ptr<const IMeta> value);
+    explicit FunLit(Function in_value);
 
-    void set_parent_environment(std::shared_ptr<Environment> in_parent);
+    FunLit(const FunLit& rhs) = default;
+    FunLit(FunLit&& rhs) = default;
 
-protected:
-    std::shared_ptr<Environment> _resolve(const std::string& key);
-    bool _has_key(const std::string& key) const;
+    ~FunLit() = default;
+
+    FunLit& operator=(const FunLit& rhs) = default;
+    FunLit& operator=(FunLit&& rhs) = default;
+
+    std::string get_key() const override;
+    Error run(IMeta::Args arguments, Variant& out_result) const override;
+
 };
 
 } // Runtime
@@ -64,4 +63,4 @@ protected:
 } // Koi
 
 
-#endif //KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+#endif //KOI_SCRIPTING_RUNTIME_FUN_LIT_HPP

@@ -23,45 +23,41 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
-#define KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_VAR_LIT_HPP
+#define KOI_SCRIPTING_RUNTIME_VAR_LIT_HPP
 
 
-#include "scripting/runtime/error.hpp"
-#include "scripting/runtime/data/variant.hpp"
 #include "scripting/runtime/meta/i_meta.hpp"
 
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
+#include "scripting/runtime/data/variable.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Environment {
-protected:
-    std::map<std::string, std::shared_ptr<const IMeta>> _declarations;
-    std::shared_ptr<Environment> _parent;
+class VarLit final: public IMeta {
+private:
+    Variable _value;
 
 public:
-    std::shared_ptr<const IMeta> get(const std::string& key) const;
+    VarLit() = default;
+    explicit VarLit(Variable in_value);
 
-    bool register_declaration(const std::string& key);
-    bool set(const std::string& key, std::shared_ptr<const IMeta> value);
+    VarLit(const VarLit& rhs) = default;
+    VarLit(VarLit&& rhs) = default;
 
-    void set_parent_environment(std::shared_ptr<Environment> in_parent);
+    ~VarLit() = default;
 
-protected:
-    std::shared_ptr<Environment> _resolve(const std::string& key);
-    bool _has_key(const std::string& key) const;
+    VarLit& operator=(const VarLit& rhs) = default;
+    VarLit& operator=(VarLit&& rhs) = default;
+
+    std::string get_key() const override;
+    Error run(IMeta::Args arguments, Variant& out_result) const override;
 };
 
 } // Runtime
 } // Scripting
 } // Koi
 
-
-#endif //KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+#endif //KOI_SCRIPTING_RUNTIME_VAR_LIT_HPP

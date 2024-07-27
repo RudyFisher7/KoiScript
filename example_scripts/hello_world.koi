@@ -1,5 +1,5 @@
-exe<main>(int():{
-    exe<print>('hello world!');
+exe<main>('hello_world!', int(text):{
+    exe<print>(val<_args>(0));
 
     ret:0;
 });

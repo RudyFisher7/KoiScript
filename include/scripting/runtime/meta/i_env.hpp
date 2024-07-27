@@ -23,45 +23,42 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
-#define KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+
+#ifndef KOI_SCRIPTING_RUNTIME_I_DECL_HPP
+#define KOI_SCRIPTING_RUNTIME_I_DECL_HPP
 
 
-#include "scripting/runtime/error.hpp"
-#include "scripting/runtime/data/variant.hpp"
 #include "scripting/runtime/meta/i_meta.hpp"
 
-#include <map>
+#include "scripting/runtime/environment.hpp"
+
 #include <memory>
-#include <string>
-#include <vector>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Environment {
+class IEnv: public IMeta {
 protected:
-    std::map<std::string, std::shared_ptr<const IMeta>> _declarations;
-    std::shared_ptr<Environment> _parent;
+    std::string _key;
+    mutable std::shared_ptr<Environment> _environment;
 
 public:
-    std::shared_ptr<const IMeta> get(const std::string& key) const;
+    IEnv(std::string in_key, std::shared_ptr<Environment> in_environment);
 
-    bool register_declaration(const std::string& key);
-    bool set(const std::string& key, std::shared_ptr<const IMeta> value);
+    IEnv(const IEnv& rhs) = default;
+    IEnv(IEnv&& rhs) = default;
 
-    void set_parent_environment(std::shared_ptr<Environment> in_parent);
+    virtual ~IEnv() = default;
 
-protected:
-    std::shared_ptr<Environment> _resolve(const std::string& key);
-    bool _has_key(const std::string& key) const;
+    IEnv& operator=(const IEnv& rhs) = default;
+    IEnv& operator=(IEnv&& rhs) = default;
 };
 
-} // Runtime
-} // Scripting
-} // Koi
+}
+}
+}
 
 
-#endif //KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+#endif //KOI_SCRIPTING_RUNTIME_I_DECL_HPP

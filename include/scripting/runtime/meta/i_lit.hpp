@@ -23,40 +23,19 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
-#define KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_I_LIT_HPP
+#define KOI_SCRIPTING_RUNTIME_I_LIT_HPP
 
 
-#include "scripting/runtime/error.hpp"
-#include "scripting/runtime/data/variant.hpp"
 #include "scripting/runtime/meta/i_meta.hpp"
-
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Environment {
-protected:
-    std::map<std::string, std::shared_ptr<const IMeta>> _declarations;
-    std::shared_ptr<Environment> _parent;
+class ILit {
 
-public:
-    std::shared_ptr<const IMeta> get(const std::string& key) const;
-
-    bool register_declaration(const std::string& key);
-    bool set(const std::string& key, std::shared_ptr<const IMeta> value);
-
-    void set_parent_environment(std::shared_ptr<Environment> in_parent);
-
-protected:
-    std::shared_ptr<Environment> _resolve(const std::string& key);
-    bool _has_key(const std::string& key) const;
 };
 
 } // Runtime
@@ -64,4 +43,4 @@ protected:
 } // Koi
 
 
-#endif //KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+#endif //KOI_SCRIPTING_RUNTIME_I_LIT_HPP

@@ -23,45 +23,30 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
-#define KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP
+#include <utility>
 
-
-#include "scripting/runtime/error.hpp"
-#include "scripting/runtime/data/variant.hpp"
-#include "scripting/runtime/meta/i_meta.hpp"
-
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
+#include "scripting/runtime/meta/fun_lit.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Environment {
-protected:
-    std::map<std::string, std::shared_ptr<const IMeta>> _declarations;
-    std::shared_ptr<Environment> _parent;
+FunLit::FunLit(Function in_value): _value(std::move(in_value)) {
 
-public:
-    std::shared_ptr<const IMeta> get(const std::string& key) const;
+}
 
-    bool register_declaration(const std::string& key);
-    bool set(const std::string& key, std::shared_ptr<const IMeta> value);
 
-    void set_parent_environment(std::shared_ptr<Environment> in_parent);
+std::string FunLit::get_key() const {
+    return "funlit";
+}
 
-protected:
-    std::shared_ptr<Environment> _resolve(const std::string& key);
-    bool _has_key(const std::string& key) const;
-};
+
+Error FunLit::run(IMeta::Args arguments, Variant& out_result) const {
+    out_result = Variant(_value);
+    return SCRIPTING_RUNTIME_ERROR_OK;
+}
 
 } // Runtime
 } // Scripting
 } // Koi
-
-
-#endif //KOI_SCRIPTING_RUNTIME_ENVIRONMENT_HPP

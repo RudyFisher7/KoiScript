@@ -53,9 +53,20 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/runtime/meta/print.hpp
     source/runtime/meta/var.cpp
     include/scripting/runtime/meta/var.hpp
-    include/scripting/runtime/meta/i_decl.hpp
+    include/scripting/runtime/meta/i_env.hpp
     source/runtime/meta/assign.cpp
     include/scripting/runtime/meta/assign.hpp
+    source/runtime/meta/i_env.cpp
+    source/runtime/meta/fun_lit.cpp
+    include/scripting/runtime/meta/fun_lit.hpp
+    source/runtime/meta/i_lit.cpp
+    include/scripting/runtime/meta/i_lit.hpp
+    source/runtime/meta/val.cpp
+    include/scripting/runtime/meta/val.hpp
+    source/runtime/meta/ref.cpp
+    include/scripting/runtime/meta/ref.hpp
+    source/runtime/meta/var_lit.cpp
+    include/scripting/runtime/meta/var_lit.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
