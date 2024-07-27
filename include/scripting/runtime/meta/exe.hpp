@@ -63,7 +63,7 @@ public:
     Exe& operator=(Exe&& rhs) = default;
 
     std::string get_key() const override;
-    Error run(IMeta::Args arguments, Variant& out_result) const override;
+    Error run(IMeta::Args arguments, IMeta& out_result) const override;
 };
 
 } // Runtime

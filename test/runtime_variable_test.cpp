@@ -23,8 +23,8 @@
  */
 
 
-#include "scripting/runtime/data/variable.hpp"
-#include "scripting/type.hpp"
+#include "scripting/runtime/variant/variable.hpp"
+#include "scripting/runtime/basic_type.hpp"
 
 #include <catch2/catch_session.hpp>
 #include <catch2/catch_test_macros.hpp>
@@ -34,13 +34,13 @@
 #include <limits>
 
 
-namespace KoiScript = Koi::Scripting;
+namespace KoiRuntime = Koi::Scripting::Runtime;
 
 
 TEST_CASE("Variable get value - type void", "[VARIABLE][VOID]") {
-    KoiScript::Runtime::Variable variable;
+    KoiRuntime::Variable variable;
 
-    CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_VOID);
+    CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_VOID);
     CHECK(variable.get_size() == 0u);
 
     SECTION("Get bool") {
@@ -60,7 +60,7 @@ TEST_CASE("Variable get value - type void", "[VARIABLE][VOID]") {
     }
 
     SECTION("Get text") {
-        CHECK(variable.get_string() == KoiScript::Runtime::Variable::VOID_STRING);
+        CHECK(variable.get_string() == KoiRuntime::Variable::VOID_STRING);
     }
 
     SECTION("Get all") {
@@ -68,21 +68,21 @@ TEST_CASE("Variable get value - type void", "[VARIABLE][VOID]") {
         CHECK(variable.get_char() == '\0');
         CHECK(variable.get_int() == 0);
         CHECK(variable.get_float() == 0.0f);
-        CHECK(variable.get_string() == KoiScript::Runtime::Variable::VOID_STRING);
+        CHECK(variable.get_string() == KoiRuntime::Variable::VOID_STRING);
     }
 }
 
 
 TEST_CASE("Variable set value - type void", "[VARIABLE][VOID]") {
-    KoiScript::Runtime::Variable variable;
+    KoiRuntime::Variable variable;
 
-    CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_VOID);
+    CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_VOID);
     CHECK(variable.get_size() == 0u);
 
     SECTION("bool") {
         variable.set_value(true);
         CHECK(variable.get_bool());
-        CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_BOOL);
+        CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_BOOL);
         CHECK(variable.get_size() == sizeof(bool));
     }
 
@@ -90,7 +90,7 @@ TEST_CASE("Variable set value - type void", "[VARIABLE][VOID]") {
         char expected = 'a';
         variable.set_value(expected);
         CHECK(variable.get_char() == expected);
-        CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_TEXT);
+        CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT);
         CHECK(variable.get_size() == 1u);
     }
 
@@ -98,7 +98,7 @@ TEST_CASE("Variable set value - type void", "[VARIABLE][VOID]") {
         int expected = 8;
         variable.set_value(expected);
         CHECK(variable.get_int() == expected);
-        CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_INT);
+        CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_INT);
         CHECK(variable.get_size() == sizeof(int));
     }
 
@@ -106,7 +106,7 @@ TEST_CASE("Variable set value - type void", "[VARIABLE][VOID]") {
         float expected = 8.14f;
         variable.set_value(expected);
         CHECK(variable.get_float() == expected);
-        CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_FLOAT);
+        CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT);
         CHECK(variable.get_size() == sizeof(float));
     }
 
@@ -114,7 +114,7 @@ TEST_CASE("Variable set value - type void", "[VARIABLE][VOID]") {
         const char* expected = "toasty text";
         variable.set_value(expected);
         CHECK(variable.get_string() == expected);
-        CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_TEXT);
+        CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT);
         CHECK(variable.get_size() == std::strlen(expected));
     }
 }
@@ -122,9 +122,9 @@ TEST_CASE("Variable set value - type void", "[VARIABLE][VOID]") {
 
 TEST_CASE("Variable get value - type text", "[VARIABLE][TEXT]") {
     const char* toasty_text = "toasty text";
-    KoiScript::Runtime::Variable variable(toasty_text);
+    KoiRuntime::Variable variable(toasty_text);
 
-    CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_TEXT);
+    CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT);
     CHECK(variable.get_size() == std::strlen(toasty_text));
 
     SECTION("Get bool") {
@@ -155,9 +155,9 @@ TEST_CASE("Variable get value - type text", "[VARIABLE][TEXT]") {
 
 TEST_CASE("Variable set value - type text", "[VARIABLE][TEXT]") {
     const char* toasty_text = "toasty text";
-    KoiScript::Runtime::Variable variable(toasty_text);
+    KoiRuntime::Variable variable(toasty_text);
 
-    CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_TEXT);
+    CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT);
     CHECK(variable.get_size() == std::strlen(toasty_text));
 
     SECTION("void") {
@@ -166,14 +166,14 @@ TEST_CASE("Variable set value - type text", "[VARIABLE][TEXT]") {
         CHECK(variable.get_char() == '\0');
         CHECK(variable.get_int() == 0);
         CHECK(variable.get_float() == 0.0f);
-        CHECK(variable.get_string() == KoiScript::Runtime::Variable::VOID_STRING);
+        CHECK(variable.get_string() == KoiRuntime::Variable::VOID_STRING);
         CHECK(variable.get_c_string() == nullptr);
     }
 
     SECTION("bool") {
         variable.set_value(true);
         CHECK(variable.get_bool());
-        CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_BOOL);
+        CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_BOOL);
         CHECK(variable.get_size() == sizeof(bool));
     }
 
@@ -181,7 +181,7 @@ TEST_CASE("Variable set value - type text", "[VARIABLE][TEXT]") {
         char expected = 'a';
         variable.set_value(expected);
         CHECK(variable.get_char() == expected);
-        CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_TEXT);
+        CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT);
         CHECK(variable.get_size() == 1u);
     }
 
@@ -189,7 +189,7 @@ TEST_CASE("Variable set value - type text", "[VARIABLE][TEXT]") {
         int expected = 8;
         variable.set_value(expected);
         CHECK(variable.get_int() == expected);
-        CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_INT);
+        CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_INT);
         CHECK(variable.get_size() == sizeof(int));
     }
 
@@ -197,7 +197,7 @@ TEST_CASE("Variable set value - type text", "[VARIABLE][TEXT]") {
         float expected = 8.14f;
         variable.set_value(expected);
         CHECK(variable.get_float() == expected);
-        CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_FLOAT);
+        CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT);
         CHECK(variable.get_size() == sizeof(float));
     }
 
@@ -205,7 +205,7 @@ TEST_CASE("Variable set value - type text", "[VARIABLE][TEXT]") {
         const char* expected = "toasty text";
         variable.set_value(expected);
         CHECK(variable.get_string() == expected);
-        CHECK(variable.get_type() == KoiScript::SCRIPTING_BASIC_TYPE_TEXT);
+        CHECK(variable.get_type() == KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT);
         CHECK(variable.get_size() == std::strlen(expected));
     }
 }

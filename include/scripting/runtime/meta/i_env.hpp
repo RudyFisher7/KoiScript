@@ -42,7 +42,7 @@ namespace Runtime {
 class IEnv: public IMeta {
 protected:
     std::string _key;
-    mutable std::shared_ptr<Environment> _environment;
+    std::shared_ptr<Environment> _environment;
 
 public:
     IEnv(std::string in_key, std::shared_ptr<Environment> in_environment);
@@ -54,6 +54,8 @@ public:
 
     IEnv& operator=(const IEnv& rhs) = default;
     IEnv& operator=(IEnv&& rhs) = default;
+
+    std::string get_key() const override;
 };
 
 }

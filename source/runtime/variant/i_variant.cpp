@@ -23,72 +23,65 @@
  */
 
 
-#include <utility>
-
-#include "scripting/runtime/data/function.hpp"
+#include "scripting/runtime/variant/i_variant.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-Function::Function(
-        bool in_is_built_in,
-        BasicType in_return_type,
-        std::vector<BasicType> in_parameter_types,
-        std::function<Error(const std::vector<std::shared_ptr<const Variable>>&, Variable&)> in_function
-):
-        _is_built_in(in_is_built_in),
-        _return_type(in_return_type),
-        _parameter_types(std::move(in_parameter_types)),
-        _function(std::move(in_function)) {
+IVariant::IVariant(IVariant::Type in_type): _variant_type(in_type) {
 
 }
 
 
-Function::Function(const Function& rhs) {
-    //
+bool IVariant::operator==(const IVariant& rhs) const {
+    return _equals(rhs);
 }
 
 
-Function::Function(Function&& rhs) noexcept {
-    //
+bool IVariant::operator!=(const IVariant& rhs) const {
+    return !_equals(rhs);
 }
 
 
-Function& Function::operator=(const Function& rhs) {
-    //
-    return *this;
+IVariant::operator bool() const {
+    return get_bool();
 }
 
 
-Function& Function::operator=(Function&& rhs) noexcept {
-    //
-    return *this;
+IVariant::operator char() const {
+    return get_char();
 }
 
 
-Error Function::operator()(const std::vector<std::shared_ptr<const Variable>>& arguments, Variable& out_result) const {
-    Error result = SCRIPTING_RUNTIME_ERROR_OK;
-
-    result = _function(arguments, out_result);
-
-    return result;
+IVariant::operator int() const {
+    return get_int();
 }
 
 
-bool Function::is_built_in() const {
-    return _is_built_in;
+IVariant::operator float() const {
+    return get_float();
 }
 
 
-BasicType Function::get_return_type() const {
-    return _return_type;
+IVariant::operator const char*() const {
+    return get_c_string();
 }
 
 
-const std::vector<BasicType>& Function::get_parameter_types() const {
-    return _parameter_types;
+IVariant::operator std::string() const {
+    return get_string();
+}
+
+
+IVariant::Type IVariant::get_variant_type() const {
+    return _variant_type;
+}
+
+
+BasicType IVariant::get_type() const {
+    return _type;
 }
 
 } // Runtime

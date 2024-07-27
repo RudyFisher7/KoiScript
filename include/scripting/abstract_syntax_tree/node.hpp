@@ -29,9 +29,9 @@
 
 #include "scripting/runtime/error.hpp"
 #include "scripting/runtime/environment.hpp"
-#include "scripting/runtime/data/variant.hpp"
+#include "scripting/runtime/variant/i_variant.hpp"
 #include "scripting/token.hpp"
-#include "scripting/type.hpp"
+#include "scripting/runtime/basic_type.hpp"
 
 #include <ostream>
 #include <string>

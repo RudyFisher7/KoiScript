@@ -55,10 +55,8 @@ std::string Exe::get_key() const {
 
 
 
-Error Exe::run(IMeta::Args arguments, Variant& out_result) const {
+Error Exe::run(IMeta::Args arguments, IMeta& out_result) const {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
-
-    IMeta::ArgResults arg_results(arguments.size());
 
     IMeta::Args empty_args;
 
@@ -70,7 +68,7 @@ Error Exe::run(IMeta::Args arguments, Variant& out_result) const {
 
     i = 0u;
     while (result == SCRIPTING_RUNTIME_ERROR_OK && i < _body_meta_instructions.size()) {
-        Variant temp_result;
+        IMeta temp_result;
         result = _body_meta_instructions.at(i)->run(arguments, temp_result);//fixme:: arguments passed in here is implementation detail
         ++i;
 

@@ -25,6 +25,8 @@
 
 #include "scripting/runtime/meta/print.hpp"
 
+#include "scripting/runtime/variant/variable.hpp"
+
 #include <ostream>
 
 
@@ -37,20 +39,22 @@ std::string Print::get_key() const {
 }
 
 
-Error Print::run(IMeta::Args arguments, Variant& out_result) const {
+Error Print::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
     IMeta::Args empty_args;
-    for (auto& argument: arguments) {
-        Variant argument_result;
+    for (auto& argument: arguments) {//fixme::
+        std::shared_ptr<IVariant> argument_result;
         result = argument->run(empty_args, argument_result);
 
-        std::cout << argument_result.get_variable().get_c_string();
+        if (result == SCRIPTING_RUNTIME_ERROR_OK) {
+            std::cout << argument_result->get_c_string();
+        }
     }
 
     std::cout << std::endl;
 
-    out_result = Variant(Variable());
+    out_result = std::unique_ptr<Variable>();
 
     return result;
 }

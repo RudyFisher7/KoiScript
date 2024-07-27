@@ -36,8 +36,17 @@ namespace Runtime {
 
 class Assign final: public IEnv {
 public:
-    std::string get_key() const override;
-    Error run(IMeta::Args arguments, Variant& out_result) const override;//todo:: inside body, assign arg[1] with arg[2] in _environment
+    Assign(std::string in_key, std::shared_ptr<Environment> in_environment);
+
+    Assign(const Assign& rhs) = default;
+    Assign(Assign&& rhs) = default;
+
+    ~Assign() override = default;
+
+    Assign& operator=(const Assign& rhs) = default;
+    Assign& operator=(Assign&& rhs) = default;
+
+    Error run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) override;//todo:: inside body, assign arg[1] with arg[2] in _environment
 };
 
 } // Runtime

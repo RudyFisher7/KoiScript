@@ -23,26 +23,12 @@
  */
 
 
-#include "scripting/runtime/meta/i_env.hpp"
-
-#include <utility>
+#include "scripting/runtime/variant/array.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
-
-IEnv::IEnv(std::string in_key, std::shared_ptr<Environment> in_environment):
-        _key(std::move(in_key)),
-        _environment(std::move(in_environment)) {
-
-}
-
-
-std::string IEnv::get_key() const {
-    return _key;
-}
-
-}
-}
-}
+} // Runtime
+} // Scripting
+} // Koi

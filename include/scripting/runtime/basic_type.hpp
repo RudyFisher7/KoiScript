@@ -23,12 +23,35 @@
  */
 
 
-#include "scripting/runtime/meta/i_meta.hpp"
+#ifndef KOI_SCRIPTING_TYPE_HPP
+#define KOI_SCRIPTING_TYPE_HPP
+
+
+#include <iostream>
+#include <vector>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
-} // Runtime
-} // Scripting
-} // Koi
+
+enum BasicType : int {
+    SCRIPTING_RUNTIME_BASIC_TYPE_INVALID = -1,
+    SCRIPTING_RUNTIME_BASIC_TYPE_MIN = 0,
+    SCRIPTING_RUNTIME_BASIC_TYPE_VOID = SCRIPTING_RUNTIME_BASIC_TYPE_MIN,
+    SCRIPTING_RUNTIME_BASIC_TYPE_BOOL,
+    SCRIPTING_RUNTIME_BASIC_TYPE_INT,
+    SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT,
+    SCRIPTING_RUNTIME_BASIC_TYPE_TEXT,
+    SCRIPTING_RUNTIME_BASIC_TYPE_REF,
+    SCRIPTING_RUNTIME_BASIC_TYPE_ARR,
+    SCRIPTING_RUNTIME_BASIC_TYPE_FUN,
+    SCRIPTING_RUNTIME_BASIC_TYPE_SIZE,
+};
+
+}
+}
+}
+
+
+#endif //KOI_SCRIPTING_TYPE_HPP

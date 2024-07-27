@@ -27,7 +27,8 @@
 #define KOI_SCRIPTING_RUNTIME_VARIABLE_HPP
 
 
-#include "scripting/type.hpp"
+#include "scripting/runtime/variant/i_variant.hpp"
+#include "scripting/runtime/basic_type.hpp"
 
 #include <ostream>
 #include <string>
@@ -37,14 +38,14 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Variable final {
+class Variable final: public IVariant {
 public:
     static const unsigned int MAX_SIZE;
     static const std::string VOID_STRING;
 
 private:
-    unsigned int _size = 0u;
-    BasicType _type = SCRIPTING_BASIC_TYPE_VOID;
+    int _size = 0u;
+    BasicType _type = SCRIPTING_RUNTIME_BASIC_TYPE_VOID;
     union {
         bool _value_bool = false;
         int _value_int;
@@ -83,10 +84,10 @@ public:
     Variable& operator=(const Variable& rhs);
 
 
-    Variable& operator=(Variable&& rhs);
+    Variable& operator=(Variable&& rhs) noexcept;
 
 
-    ~Variable();
+    ~Variable() override;
 
 
     bool operator==(const Variable& rhs) const;
@@ -95,52 +96,32 @@ public:
     bool operator!=(const Variable& rhs) const;
 
 
-    operator bool() const;
+    explicit operator bool() const override;
 
 
-    operator char() const;
+    explicit operator char() const override;
 
 
-    operator int() const;
+    explicit operator int() const override;
 
 
-    operator float() const;
+    explicit operator float() const override;
 
 
-    operator const char*() const;
+    explicit operator const char*() const override;
 
 
-    operator std::string() const;
+    explicit operator std::string() const override;
 
 
-    unsigned int get_size() const;
-
-
-    BasicType get_type() const;
-
-
-    bool get_bool() const;
-
-
-    /**
-     * @brief Function that can be used to explicitly get the char
-     * representation of the variant when there is ambiguity otherwise
-     * such as the cases when interfacing with certain json libraries.
-     * @return The char representation of this variant.
-     */
-    char get_char() const;
-
-
-    int get_int() const;
-
-
-    float get_float() const;
-
-
-    std::string get_string() const;
-
-
-    const char* get_c_string() const;
+    int get_size() const override;
+    bool get_bool() const override;
+    char get_char() const override;
+    int get_int() const override;
+    float get_float() const override;
+    const char* get_c_string() const override;
+    std::string get_string() const override;
+    std::shared_ptr<IVariant> clone() const override;
 
 
     void set_value_void();
@@ -174,6 +155,8 @@ public:
 
 
 private:
+    bool _equals(const IVariant& rhs) const override;
+
     void _copy(const Variable& rhs);
 
 

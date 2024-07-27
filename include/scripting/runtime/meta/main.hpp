@@ -31,7 +31,7 @@
 
 #include "scripting/runtime/error.hpp"
 #include "scripting/runtime/environment.hpp"
-#include "scripting/runtime/data/variant.hpp"
+#include "scripting/runtime/variant/i_variant.hpp"
 
 #include <string>
 #include <map>
@@ -60,7 +60,7 @@ public:
 
 
     std::string get_key() const override;
-    Error run(IMeta::Args arguments, Variant& out_result) const override;
+    Error run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) override;
 };
 
 } // Runtime

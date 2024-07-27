@@ -27,18 +27,17 @@
 #define KOI_SCRIPTING_RUNTIME_VARIANT_HPP
 
 
-#include "scripting/runtime/data/array.hpp"
-#include "scripting/runtime/data/function.hpp"
-#include "scripting/runtime/data/variable.hpp"
+#include "scripting/runtime/basic_type.hpp"
 
-#include <ostream>
+#include <string>
+#include <memory>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Variant final {
+class IVariant {
 public:
     enum Type: int {
         SCRIPTING_RUNTIME_VARIANT_TYPE_INVALID = -1,
@@ -50,55 +49,50 @@ public:
         SCRIPTING_RUNTIME_VARIANT_TYPE_SIZE
     };
 
-private:
-    Type _type = SCRIPTING_RUNTIME_VARIANT_TYPE_INVALID;
 
-    union {
-        int _reference_value = -1;
-        Variable* _variable_value;
-        Array* _array_value;
-        Function* _function_value;
-    };
+protected:
+    Type _variant_type = SCRIPTING_RUNTIME_VARIANT_TYPE_INVALID;
+    BasicType _type = SCRIPTING_RUNTIME_BASIC_TYPE_INVALID;
+
 
 public:
-    Variant();
+    IVariant() = default;
+    explicit IVariant(Type in_type);
 
-    explicit Variant(int in_reference);
-    explicit Variant(Variable in_variable);
-    explicit Variant(Array in_array);
-    explicit Variant(Function in_function);
+    IVariant(const IVariant& rhs) = default;
+    IVariant(IVariant&& rhs) = default;
 
-    //todo:: rule of 5 stuff
+    virtual ~IVariant() = default;
 
-    Variant(const Variant& rhs);
-    Variant(Variant&& rhs) noexcept;
+    IVariant& operator=(const IVariant& rhs) = default;
+    IVariant& operator=(IVariant&& rhs) = default;
 
-    ~Variant();
-
-    Variant& operator=(const Variant& rhs);
-    Variant& operator=(Variant&& rhs) noexcept ;
+    bool operator==(const IVariant& rhs) const;
+    bool operator!=(const IVariant& rhs) const;
 
 
-    Type get_type() const;
+    virtual explicit operator bool() const;
+    virtual explicit operator char() const;
+    virtual explicit operator int() const;
+    virtual explicit operator float() const;
+    virtual explicit operator const char*() const;
+    virtual explicit operator std::string() const;
 
-    int get_reference() const;
+    Type get_variant_type() const;
 
-    Variable get_variable() const;
-    void get_variable_by_move(Variable& out_result);
-    Variable& get_variable_by_reference();
+    virtual BasicType get_type() const;
 
-    Array get_array() const;
-    void get_array_by_move(Array& out_result);
-    Array& get_array_by_reference();
+    virtual int get_size() const = 0;
+    virtual bool get_bool() const = 0;
+    virtual char get_char() const = 0;
+    virtual int get_int() const = 0;
+    virtual float get_float() const = 0;
+    virtual const char* get_c_string() const = 0;
+    virtual std::string get_string() const = 0;
+    virtual std::shared_ptr<IVariant> clone() const = 0;
 
-    Function get_function() const;
-    void get_function_by_move(Function& out_result);
-    Function& get_function_by_reference();
-
-    friend std::ostream& operator<<(std::ostream& lhs, const Variant& rhs);//fixme:: implement
-
-private:
-    void _copy(const Variant& rhs);
+protected:
+    virtual bool _equals(const IVariant& rhs) const = 0;
 };
 
 } // Runtime

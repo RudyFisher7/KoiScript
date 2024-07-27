@@ -23,12 +23,38 @@
  */
 
 
-#include "scripting/runtime/data/array.hpp"
+#ifndef KOI_SCRIPTING_RUNTIME_ARRAY_HPP
+#define KOI_SCRIPTING_RUNTIME_ARRAY_HPP
+
+
+#include "scripting/runtime/variant/variable.hpp"
+
+#include <vector>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
+
+class Array final: public IVariant {
+private:
+    std::vector<Variable> _values;
+public:
+
+    virtual int get_size() const = 0;
+    virtual bool get_bool() const = 0;
+    virtual char get_char() const = 0;
+    virtual int get_int() const = 0;
+    virtual float get_float() const = 0;
+    virtual const char* get_c_string() const = 0;
+    virtual std::string get_string() const = 0;
+
+protected:
+    virtual bool _equals(const IVariant& rhs) const = 0;
+};
+
 } // Runtime
 } // Scripting
 } // Koi
+
+#endif //KOI_SCRIPTING_RUNTIME_ARRAY_HPP

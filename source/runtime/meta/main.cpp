@@ -37,7 +37,7 @@ std::string Main::get_key() const {
 }
 
 
-Error Main::run(IMeta::Args arguments, Variant& out_result) const {
+Error Main::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
     IMeta::Args cmdln_args;

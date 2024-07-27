@@ -23,19 +23,19 @@
  */
 
 
-#include <utility>
-
 #include "scripting/runtime/environment.hpp"
+
+#include <utility>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-std::shared_ptr<const IMeta> Environment::get(const std::string& key) const {
-    std::shared_ptr<const IMeta> result;
+std::shared_ptr<IVariant> Environment::get(const std::string& key) const {
+    std::shared_ptr<IVariant> result;
     if (_declarations.find(key) != _declarations.end()) {
-        result = _declarations.at(key);
+        result = _declarations.at(key)->clone();
     }
 
     return result;
@@ -45,13 +45,13 @@ std::shared_ptr<const IMeta> Environment::get(const std::string& key) const {
 bool Environment::register_declaration(const std::string& key) {
     bool result = false;
 
-    result = _declarations.emplace(key, std::shared_ptr<const IMeta>()).second;
+    result = _declarations.emplace(key, std::shared_ptr<const IVariant>()).second;
 
     return result;
 }
 
 
-bool Environment::set(const std::string& key, std::shared_ptr<const IMeta> value) {
+bool Environment::set(const std::string& key, std::shared_ptr<const IVariant> value) {
     bool result = false;
 
     if (_declarations.find(key) != _declarations.end()) {

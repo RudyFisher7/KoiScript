@@ -28,7 +28,7 @@
 
 
 #include "scripting/runtime/error.hpp"
-#include "scripting/runtime/data/variant.hpp"
+#include "scripting/runtime/variant/i_variant.hpp"
 
 #include <string>
 #include <map>
@@ -42,18 +42,17 @@ namespace Runtime {
 
 class IMeta {
 public:
-    typedef std::vector<std::shared_ptr<const IMeta>> Args;
-    typedef std::vector<std::shared_ptr<Variant>> ArgResults;
+    typedef std::vector<std::shared_ptr<IMeta>> Args;
 
 public:
     virtual std::string get_key() const = 0;
-    virtual Error run(IMeta::Args arguments, Variant& out_result) const = 0;
+    virtual Error run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) = 0;
 };
 
 
 class IExe: public IMeta {
 public:
-    typedef std::vector<std::shared_ptr<const IMeta>> Body;
+    typedef std::vector<std::shared_ptr<IMeta>> Body;
 };
 
 } // Runtime

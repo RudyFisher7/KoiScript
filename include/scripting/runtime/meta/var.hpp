@@ -49,8 +49,7 @@ public:
     Var& operator=(const Var& rhs) = default;
     Var& operator=(Var&& rhs) = default;
 
-    std::string get_key() const override;
-    Error run(IMeta::Args arguments, Variant& out_result) const override;//todo:: inside body, add arg[1] as declaration in _environment
+    Error run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) override;//todo:: inside body, add arg[1] as declaration in _environment
 };
 
 } // Runtime

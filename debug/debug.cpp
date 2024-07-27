@@ -23,23 +23,21 @@
  */
 
 
-#include "scripting/assembler.hpp"
-#include "scripting/abstract_syntax_tree/node.hpp"
-#include "scripting/koi_script.hpp"
+//#include "scripting/assembler.hpp"
+//#include "scripting/abstract_syntax_tree/node.hpp"
 #include "scripting/lexer.hpp"
 //#include "scripting/parser.hpp"
 #include "scripting/extensions/extensions.hpp"
 #include "scripting/runtime/environment.hpp"
-#include "scripting/runtime/data/function.hpp"
 #include "scripting/runtime/meta/i_meta.hpp"
-#include "scripting/runtime/meta/fun_lit.hpp"
-#include "scripting/runtime/meta/var_lit.hpp"
-#include "scripting/runtime/meta/var.hpp"
-#include "scripting/runtime/meta/exe.hpp"
+//#include "scripting/runtime/meta/fun_lit.hpp"
+//#include "scripting/runtime/meta/var_lit.hpp"
+//#include "scripting/runtime/meta/var.hpp"
+//#include "scripting/runtime/meta/exe.hpp"
 #include "scripting/runtime/meta/main.hpp"
 #include "scripting/runtime/meta/print.hpp"
-#include "scripting/runtime/data/variable.hpp"
-#include "scripting/runtime/data/variant.hpp"
+#include "scripting/runtime/variant/variable.hpp"
+#include "scripting/runtime/variant/i_variant.hpp"
 
 #include <cstring>
 #include <fstream>
@@ -103,27 +101,27 @@ int main() {
 
     std::shared_ptr<KoiRuntime::IMeta> main_meta = std::make_shared<KoiRuntime::Main>();
     std::shared_ptr<KoiRuntime::IMeta> print_meta = std::make_shared<KoiRuntime::Print>();
-    std::shared_ptr<KoiRuntime::IMeta> var_meta = std::make_shared<KoiRuntime::Var>("myint1", main_environment);
+//    std::shared_ptr<KoiRuntime::IMeta> var_meta = std::make_shared<KoiRuntime::Var>("myint1", main_environment);
 
-    global_environment.register_declaration(main_meta->get_key());
-    global_environment.set(main_meta->get_key(), main_meta);
-    global_environment.register_declaration(print_meta->get_key());
-    global_environment.set(print_meta->get_key(), print_meta);
+//    global_environment.register_declaration(main_meta->get_key());
+//    global_environment.set(main_meta->get_key(), main_meta);
+//    global_environment.register_declaration(print_meta->get_key());
+//    global_environment.set(print_meta->get_key(), print_meta);
 
 
 
     //todo:: 4. run
-    KoiRuntime::Variant runtime_result;
+//    KoiRuntime::Variant runtime_result;
+//
+//    KoiRuntime::IMeta::Args main_args(2u);
+//    main_args.at(0u) = std::make_shared<const KoiRuntime::VarLit>(KoiRuntime::Variable("hello world!"));
+//
+//    KoiRuntime::IExe::Body body;
+//    body.push_back(print_meta);
+//    body.push_back(std::make_shared<const KoiRuntime::FunLit>(KoiRuntime::Variant(KoiRuntime::Variable(33))));
+//    main_args.at(1u) = std::make_shared<const KoiRuntime::Exe>("root-fixme::", body);
 
-    KoiRuntime::IMeta::Args main_args(2u);
-    main_args.at(0u) = std::make_shared<const KoiRuntime::VarLit>(KoiRuntime::Variable("hello world!"));
-
-    KoiRuntime::IExe::Body body;
-    body.push_back(print_meta);
-    body.push_back(std::make_shared<const KoiRuntime::FunLit>(KoiRuntime::Variant(KoiRuntime::Variable(33))));
-    main_args.at(1u) = std::make_shared<const KoiRuntime::Exe>("root-fixme::", body);
-
-    main_meta->run(main_args, runtime_result);
+//    main_meta->run(main_args, runtime_result);
 
 //    KoiRuntime::IMeta::Args print_args;
 //    KoiRuntime::Variant str(KoiRuntime::Variable("hello world!"));
@@ -131,7 +129,7 @@ int main() {
 //    print_args.push_back(arg);
 //    print_meta->run(print_args, runtime_result);
 
-    std::cout << "Runtime result: " << runtime_result.get_variable() << std::endl;
+//    std::cout << "Runtime result: " << runtime_result.get_variable() << std::endl;
 
     return 0;
 }

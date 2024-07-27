@@ -94,9 +94,9 @@ dec<myfuncid>:(dec<x>:()int, dec<y>:()text)bool = bool<{
     return:val<equals>(val<x>(), int<6>);
 }>();
 
-# WIP a _type definition example
+# WIP a _variant_type definition example
   stdec declares variables with persisting state (stdec = state + declaration)
-dec<object>:(stdec<publicmember1>:()text = text<'hello world object'>)_type = _type<{
+dec<object>:(stdec<publicmember1>:()text = text<'hello world object'>)_variant_type = _variant_type<{
     stdec<privatemember1>:()bool;
 }>;
 

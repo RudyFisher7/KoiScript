@@ -32,7 +32,10 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-FunLit::FunLit(Function in_value): _value(std::move(in_value)) {
+FunLit::FunLit(Function in_value, Body in_body, Ret in_ret):
+        _value(std::move(in_value)),
+        _body(std::move(in_body)),
+        _ret(std::move(in_ret)) {
 
 }
 

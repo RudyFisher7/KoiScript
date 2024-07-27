@@ -31,19 +31,30 @@
 
 #include "scripting/runtime/data/function.hpp"
 
+#include <memory>
+
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
 class FunLit final: public IMeta {
+public:
+    typedef std::vector<std::shared_ptr<const IMeta>> Body;
+    typedef std::shared_ptr<const IMeta> Ret;
+
+
 private:
-    Function _value;
+    Function _value;//fixme::
+
+    Body _body;
+    Ret _ret;
+
 
 public:
     FunLit() = default;
 
-    explicit FunLit(Function in_value);
+    explicit FunLit(Function in_value, Body in_body, Ret in_ret);
 
     FunLit(const FunLit& rhs) = default;
     FunLit(FunLit&& rhs) = default;
@@ -54,7 +65,7 @@ public:
     FunLit& operator=(FunLit&& rhs) = default;
 
     std::string get_key() const override;
-    Error run(IMeta::Args arguments, Variant& out_result) const override;
+    Error run(IMeta::Args arguments, IMeta& out_result) const override;
 
 };
 

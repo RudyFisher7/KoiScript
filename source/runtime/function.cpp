@@ -23,71 +23,60 @@
  */
 
 
-#include "../include/scripting/type.hpp"
+#include "scripting/runtime/data/function.hpp"
 
 #include <utility>
-#include <string>
 
 
 namespace Koi {
 namespace Scripting {
+namespace Runtime {
 
-
-Type::Type(): return_type(SCRIPTING_BASIC_TYPE_INVALID), parameter_types({}) {
-
-}
-
-
-Type::Type(BasicType in_return_type):
-        return_type(in_return_type),
-        array_dimensions(0u),
-        parameter_types({}) {
+Function::Function(Body in_body, Ret in_ret): _body(std::move(in_body)), _ret(std::move(in_ret)) {
 
 }
 
 
-Type::~Type() {
-
+Function::Function(const Function& rhs) {
+    //
 }
 
 
-Type::Type(
-        BasicType in_return_type,
-        unsigned int in_array_dimensions,
-        std::vector<BasicType>&& in_parameter_types
-):
-        return_type(in_return_type),
-        array_dimensions(in_array_dimensions),
-        parameter_types(std::move(in_parameter_types)) {
-
+Function::Function(Function&& rhs) noexcept {
+    //
 }
 
 
-std::ostream& operator<<(std::ostream& lhs, const Type& rhs) {
-    lhs << "{\"_class:\": \"Type\", \"return_type\": " << std::to_string(rhs.return_type) << ", \"array_dimensions\": " << std::to_string(rhs.array_dimensions) << ", \"parameter_types\": [";
-
-    auto it = rhs.parameter_types.cbegin();
-    auto end = rhs.parameter_types.cend();
-
-    while (it != end) {
-        lhs << std::to_string(*it);
-
-        if ((it + 1u) != end) {
-            lhs << ", ";
-        }
-
-        ++it;
-    }
-
-    lhs << "]}";
-
-    return lhs;
+Function& Function::operator=(const Function& rhs) {
+    //
+    return *this;
 }
 
 
-TypeDecorator* TypeDecorator::get_next_return_type() const {
-    return _return_type_decorator;
+Function& Function::operator=(Function&& rhs) noexcept {
+    //
+    return *this;
 }
 
+
+Error Function::operator()(const Args& arguments, IMeta& out_result) const {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    while (result == SCRIPTING_RUNTIME_ERROR_OK)
+
+    return result;
 }
+
+
+BasicType Function::get_return_type() const {
+    return SCRIPTING_BASIC_TYPE_VOID;
 }
+
+
+//const std::vector<BasicType>& Function::get_parameter_types() const {
+//    return _parameter_types;
+//}
+
+} // Runtime
+} // Scripting
+} // Koi

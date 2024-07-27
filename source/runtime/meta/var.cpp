@@ -37,12 +37,7 @@ Var::Var(std::string in_key, std::shared_ptr<Environment> in_environment):
 }
 
 
-std::string Var::get_key() const {
-    return _key;
-}
-
-
-Error Var::run(IMeta::Args arguments, Variant& out_result) const {
+Error Var::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
     bool declaration_result = _environment->register_declaration(_key);

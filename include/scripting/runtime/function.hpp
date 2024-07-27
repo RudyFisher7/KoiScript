@@ -23,12 +23,17 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ARRAY_HPP
-#define KOI_SCRIPTING_RUNTIME_ARRAY_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_FUNCTION_HPP
+#define KOI_SCRIPTING_RUNTIME_FUNCTION_HPP
 
 
-#include "scripting/runtime/data/variable.hpp"
+#include "scripting/runtime/error.hpp"
+#include "scripting/runtime/variant/variable.hpp"
+#include "scripting/runtime/meta/i_meta.hpp"
+#include "scripting/runtime/basic_type.hpp"
 
+#include <functional>
+#include <memory>
 #include <vector>
 
 
@@ -36,19 +41,47 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Array final {
-private:
-    std::vector<Variable> _values;
+class Function final {
 public:
-    Variable& operator[](unsigned int i);
+    typedef std::vector<std::shared_ptr<const IMeta>> Args;
+    typedef std::vector<std::shared_ptr<const IMeta>> Body;
+    typedef std::shared_ptr<const IMeta> Ret;
 
-    unsigned int get_size() const;
-    const Variable& cget_at(unsigned int i) const;
-    Variable& get_at(unsigned int i);
+
+private:
+    Body _body;
+    Ret _ret;
+
+    //todo:: statements
+
+public:
+    Function() = default;
+    Function(Body in_body, Ret in_ret);
+
+    ~Function() = default;
+
+
+    //todo:: implement
+    Function(const Function& rhs);
+    Function(Function&& rhs) noexcept;
+
+    Function& operator=(const Function& rhs);
+    Function& operator=(Function&& rhs) noexcept;
+
+
+    Error operator()(const Args& arguments, IMeta& out_result) const;
+
+
+    BasicType get_return_type() const;//fixme::
+
+//fixme::
+//    const std::vector<BasicType>& get_parameter_types() const;
+
 };
+
 
 } // Runtime
 } // Scripting
 } // Koi
 
-#endif //KOI_SCRIPTING_RUNTIME_ARRAY_HPP
+#endif //KOI_SCRIPTING_RUNTIME_FUNCTION_HPP

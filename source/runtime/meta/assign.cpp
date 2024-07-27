@@ -25,10 +25,39 @@
 
 #include "scripting/runtime/meta/assign.hpp"
 
+#include <utility>
+
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
+
+Assign::Assign(std::string in_key, std::shared_ptr<Environment> in_environment) : IEnv(std::move(in_key), std::move(in_environment)) {
+
+}
+
+
+Error Assign::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    if (arguments.size() == 2u) {
+        IMeta::Args empty_args;
+        std::shared_ptr<IVariant> ref;
+        result = arguments.at(0u)->run(empty_args, ref);
+
+        if (result == SCRIPTING_RUNTIME_ERROR_OK) {
+            std::shared_ptr<IVariant> value;
+            result = arguments.at(1u)->run(empty_args);
+            _environment->set(ref->get_string(), arguments.at(1u));
+        }
+
+    } else {
+        result = SCRIPTING_RUNTIME_ERROR_WRONG_NUM_ARGS;
+    }
+
+    return result;
+}
+
 } // Runtime
 } // Scripting
 } // Koi

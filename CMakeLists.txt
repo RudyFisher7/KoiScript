@@ -8,8 +8,6 @@ add_library(${PROJECT_NAME} STATIC
     source/log/log.cpp
     include/scripting/log/log.hpp
 
-    source/type.cpp
-    include/scripting/type.hpp
     source/token.cpp
     include/scripting/token.hpp
 
@@ -19,54 +17,57 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/lexer.hpp
 #    source/parser.cpp
 #    include/scripting/parser.hpp
-    source/assembler.cpp
-    include/scripting/assembler.hpp
-    source/koi_script.cpp
-    include/scripting/koi_script.hpp
+#    source/assembler.cpp
+#    include/scripting/assembler.hpp
+#    source/koi_script.cpp
+#    include/scripting/koi_script.hpp
 
-    source/abstract_syntax_tree/node.cpp
-    include/scripting/abstract_syntax_tree/node.hpp
+#    source/abstract_syntax_tree/node.cpp
+#    include/scripting/abstract_syntax_tree/node.hpp
 
     source/extensions/extensions.cpp
     include/scripting/extensions/extensions.hpp
 
+    include/scripting/runtime/basic_type.hpp
     include/scripting/runtime/error.hpp
 
     source/runtime/environment.cpp
     include/scripting/runtime/environment.hpp
 
-    source/runtime/data/array.cpp
-    include/scripting/runtime/data/array.hpp
-    source/runtime/data/function.cpp
-    include/scripting/runtime/data/function.hpp
-    source/runtime/data/variable.cpp
-    include/scripting/runtime/data/variable.hpp
-    source/runtime/data/variant.cpp
-    include/scripting/runtime/data/variant.hpp
-    source/runtime/meta/i_meta.cpp
+    source/runtime/variant/i_variant.cpp
+    include/scripting/runtime/variant/i_variant.hpp
+    source/runtime/variant/variable.cpp
+    include/scripting/runtime/variant/variable.hpp
+#    source/runtime/variant/array.cpp
+#    include/scripting/runtime/variant/array.hpp
+#    source/runtime/function.cpp
+#    include/scripting/runtime/function.hpp
+
     include/scripting/runtime/meta/i_meta.hpp
-    source/runtime/meta/exe.cpp
-    include/scripting/runtime/meta/exe.hpp
+
+    include/scripting/runtime/meta/i_env.hpp
+    source/runtime/meta/i_env.cpp
+    source/runtime/meta/ref.cpp
+    include/scripting/runtime/meta/ref.hpp
+    source/runtime/meta/var.cpp
+    include/scripting/runtime/meta/var.hpp
+    source/runtime/meta/assign.cpp
+    include/scripting/runtime/meta/assign.hpp
+#    source/runtime/meta/exe.cpp
+#    include/scripting/runtime/meta/exe.hpp
+#    source/runtime/meta/val.cpp
+#    include/scripting/runtime/meta/val.hpp
+
     source/runtime/meta/main.cpp
     include/scripting/runtime/meta/main.hpp
     source/runtime/meta/print.cpp
     include/scripting/runtime/meta/print.hpp
-    source/runtime/meta/var.cpp
-    include/scripting/runtime/meta/var.hpp
-    include/scripting/runtime/meta/i_env.hpp
-    source/runtime/meta/assign.cpp
-    include/scripting/runtime/meta/assign.hpp
-    source/runtime/meta/i_env.cpp
-    source/runtime/meta/fun_lit.cpp
-    include/scripting/runtime/meta/fun_lit.hpp
-    source/runtime/meta/i_lit.cpp
-    include/scripting/runtime/meta/i_lit.hpp
-    source/runtime/meta/val.cpp
-    include/scripting/runtime/meta/val.hpp
-    source/runtime/meta/ref.cpp
-    include/scripting/runtime/meta/ref.hpp
-    source/runtime/meta/var_lit.cpp
-    include/scripting/runtime/meta/var_lit.hpp
+#    source/runtime/meta/fun_lit.cpp
+#    include/scripting/runtime/meta/fun_lit.hpp
+#    source/runtime/meta/i_lit.cpp
+#    include/scripting/runtime/meta/i_lit.hpp
+#    source/runtime/meta/var_lit.cpp
+#    include/scripting/runtime/meta/var_lit.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

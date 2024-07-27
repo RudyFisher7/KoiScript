@@ -29,6 +29,21 @@
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
+
+Ref::Ref(std::string in_key, std::shared_ptr<Environment> in_environment)
+        : IEnv(in_key, in_environment) {
+
+}
+
+
+Error Ref::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    std::shared_ptr<IVariant> ref = _environment->get(_key);
+
+    return result;
+}
+
 } // Runtime
 } // Scripting
 } // Koi

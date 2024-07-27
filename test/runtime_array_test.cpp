@@ -23,7 +23,7 @@
  */
 
 
-#include "scripting/runtime/data/array.hpp"
+//#include "scripting/runtime/data/array.hpp"
 
 #include <catch2/catch_session.hpp>
 #include <catch2/catch_test_macros.hpp>
@@ -34,7 +34,7 @@
 #include <vector>
 
 
-namespace KoiScript = Koi::Scripting::Runtime;
+//namespace KoiScript = Koi::Scripting::Runtime;
 
 
 int main( int argc, char* argv[] ) {
