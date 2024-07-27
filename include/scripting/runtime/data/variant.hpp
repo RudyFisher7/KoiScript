@@ -27,9 +27,11 @@
 #define KOI_SCRIPTING_RUNTIME_VARIANT_HPP
 
 
-#include "array.hpp"
-#include "function.hpp"
+#include "scripting/runtime/data/array.hpp"
+#include "scripting/runtime/data/function.hpp"
 #include "scripting/runtime/data/variable.hpp"
+
+#include <ostream>
 
 
 namespace Koi {
@@ -68,7 +70,13 @@ public:
 
     //todo:: rule of 5 stuff
 
+    Variant(const Variant& rhs);
+    Variant(Variant&& rhs) noexcept;
+
     ~Variant();
+
+    Variant& operator=(const Variant& rhs);
+    Variant& operator=(Variant&& rhs) noexcept ;
 
 
     Type get_type() const;
@@ -86,6 +94,11 @@ public:
     Function get_function() const;
     void get_function_by_move(Function& out_result);
     Function& get_function_by_reference();
+
+    friend std::ostream& operator<<(std::ostream& lhs, const Variant& rhs);//fixme:: implement
+
+private:
+    void _copy(const Variant& rhs);
 };
 
 } // Runtime

@@ -33,6 +33,8 @@
 #include "scripting/runtime/environment.hpp"
 #include "scripting/runtime/data/variant.hpp"
 
+#include <string>
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -43,11 +45,10 @@ namespace Runtime {
 
 class Main final: public IExe {
 private:
-    std::vector<std::shared_ptr<const IMeta>> _body_meta_instructions;
-
+    mutable Environment _environment;
 
 public:
-    explicit Main(std::vector<std::shared_ptr<const IMeta>> body_meta_instructions);
+    Main() = default;
 
     Main(const Main& rhs) = default;
     Main(Main&& rhs) = default;
@@ -59,7 +60,7 @@ public:
 
 
     std::string get_key() const override;
-    Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const override;
+    Error run(IMeta::Args arguments, Variant& out_result) const override;
 };
 
 } // Runtime

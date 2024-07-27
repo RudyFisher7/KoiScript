@@ -23,32 +23,25 @@
  */
 
 
-#ifndef KOI_SCRIPTING_GLOBAL_ENVIRONMENT_HPP
-#define KOI_SCRIPTING_GLOBAL_ENVIRONMENT_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_VAR_HPP
+#define KOI_SCRIPTING_RUNTIME_VAR_HPP
 
 
-#include "scripting/runtime/environment.hpp"
-
-#include "scripting/runtime/error.hpp"
-#include "scripting/type.hpp"
-#include "scripting/runtime/data/variable.hpp"
+#include "scripting/runtime/meta/i_meta.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class GlobalEnvironment: public Environment {
+class Var: public IDecl {
 public:
-    Error exe(const std::string& key, const std::vector<std::shared_ptr<Ast::Node>>& args) const;
-
-protected:
-    Error print(const Runtime::Variable& value) const;
-
+    std::string get_key() const override;
+    Error run(IMeta::Args arguments, Variant& out_result) const override;
 };
 
 } // Runtime
 } // Scripting
 } // Koi
 
-#endif //KOI_SCRIPTING_GLOBAL_ENVIRONMENT_HPP
+#endif //KOI_SCRIPTING_RUNTIME_VAR_HPP

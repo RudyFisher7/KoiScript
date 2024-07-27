@@ -23,6 +23,8 @@
  */
 
 
+#include <utility>
+
 #include "scripting/runtime/environment.hpp"
 
 
@@ -30,10 +32,10 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-std::shared_ptr<const Variant> Environment::get(const std::string& key) const {
-    std::shared_ptr<Variant> result;
+std::shared_ptr<const IMeta> Environment::get(const std::string& key) const {
+    std::shared_ptr<const IMeta> result;
     if (_declarations.find(key) != _declarations.end()) {
-//        result = _declarations.at(key);
+        result = _declarations.at(key);
     }
 
     return result;
@@ -43,17 +45,17 @@ std::shared_ptr<const Variant> Environment::get(const std::string& key) const {
 bool Environment::register_declaration(const std::string& key) {
     bool result = false;
 
-    result = _declarations.emplace(key, std::shared_ptr<const Variant>()).second;
+    result = _declarations.emplace(key, std::shared_ptr<const IMeta>()).second;
 
     return result;
 }
 
 
-bool Environment::register_assignment(const std::string& key, const Variant& data) {
+bool Environment::register_assignment(const std::string& key, std::shared_ptr<const IMeta> value) {
     bool result = false;
 
     if (_declarations.find(key) != _declarations.end()) {
-        _declarations.at(key) = std::make_shared<Variant>(data);
+        _declarations.at(key) = std::move(value);
         result = true;
     }
 
@@ -61,8 +63,8 @@ bool Environment::register_assignment(const std::string& key, const Variant& dat
 }
 
 
-void Environment::set_parent_environment(std::shared_ptr<const Environment>& in_parent) {
-    _parent = in_parent;
+void Environment::set_parent_environment(std::shared_ptr<const Environment> in_parent) {
+    _parent = std::move(in_parent);
 }
 
 } // Runtime

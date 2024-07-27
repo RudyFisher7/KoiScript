@@ -23,6 +23,8 @@
  */
 
 
+#include <utility>
+
 #include "scripting/runtime/meta/main.hpp"
 
 
@@ -30,27 +32,29 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-Main::Main(std::vector<std::shared_ptr<const IMeta>> body_meta_instructions):
-        _body_meta_instructions(body_meta_instructions) {
-}
-
-
 std::string Main::get_key() const {
     return "main";
 }
 
 
-Error Main::run(std::shared_ptr<const Environment> environment, Variant& out_result) const {
+Error Main::run(IMeta::Args arguments, Variant& out_result) const {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    auto it = _body_meta_instructions.cbegin();
-    auto end = _body_meta_instructions.cend();
-    while (result == SCRIPTING_RUNTIME_ERROR_OK && it != end) {
-        result = it->get()->run(environment, out_result);
-        ++it;
-    }
+    IMeta::Args cmdln_args;
+    if (arguments.size() == 2u) {
+        cmdln_args.push_back(arguments.at(0u));
+        result = arguments.at(1u)->run(cmdln_args, out_result);
 
-    out_result = Variant(Variable(0));
+//        IMeta::Args empty_args;
+//        Variant commandline_arguments;
+//        result = arguments.at(0u)->run(empty_args, commandline_arguments);
+//        _environment.register_declaration("cmdln_args");
+//        _environment.register_assignment("cmdln_args", std::make_shared<const LitVal>(commandline_arguments));
+//
+//        ++i;
+    } else if (arguments.size() == 1u) {
+        result = arguments.at(0u)->run(cmdln_args, out_result);
+    }
 
     return result;
 }

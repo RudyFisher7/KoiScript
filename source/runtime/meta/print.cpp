@@ -37,10 +37,20 @@ std::string Print::get_key() const {
 }
 
 
-Error Print::run(std::shared_ptr<const Environment> environment, Variant& out_result) const {
+Error Print::run(IMeta::Args arguments, Variant& out_result) const {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    std::cout << "printing function" << std::endl;
+    IMeta::Args empty_args;
+    for (auto& argument: arguments) {
+        Variant argument_result;
+        result = argument->run(empty_args, argument_result);
+
+        std::cout << argument_result.get_variable().get_c_string();
+    }
+
+    std::cout << std::endl;
+
+    out_result = Variant(Variable());
 
     return result;
 }

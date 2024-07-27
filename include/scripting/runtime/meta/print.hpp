@@ -34,6 +34,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 
 namespace Koi {
@@ -43,7 +44,7 @@ namespace Runtime {
 class Print final: public IExe {
 public:
     std::string get_key() const override;
-    Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const override;
+    Error run(IMeta::Args arguments, Variant& out_result) const override;
 };
 
 } // Runtime

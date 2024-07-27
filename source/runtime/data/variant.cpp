@@ -57,6 +57,39 @@ Variant::Variant(Function in_function): _type(SCRIPTING_RUNTIME_VARIANT_TYPE_FUN
 }
 
 
+Variant::Variant(const Variant& rhs) {
+    _copy(rhs);
+}
+
+
+Variant::Variant(Variant&& rhs) noexcept {
+    _type = rhs.get_type();
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_VARIANT_TYPE_VAR:
+            _variable_value = rhs._variable_value;
+            rhs._variable_value = nullptr;
+            break;
+        case SCRIPTING_RUNTIME_VARIANT_TYPE_REF:
+            _reference_value = rhs._reference_value;
+            break;
+        case SCRIPTING_RUNTIME_VARIANT_TYPE_ARR:
+            _array_value = rhs._array_value;
+            rhs._array_value = nullptr;
+            break;
+        case SCRIPTING_RUNTIME_VARIANT_TYPE_FUN:
+            _function_value = rhs._function_value;
+            rhs._function_value = nullptr;
+            break;
+        default:
+            break;
+    }
+
+    rhs._type = SCRIPTING_RUNTIME_VARIANT_TYPE_INVALID;
+    rhs._reference_value = -1;
+}
+
+
 Variant::~Variant() {
     switch (_type) {
         case SCRIPTING_RUNTIME_VARIANT_TYPE_VAR:
@@ -72,6 +105,48 @@ Variant::~Variant() {
             // do nothing
             break;
     }
+}
+
+
+Variant& Variant::operator=(const Variant& rhs) {
+    if (this != &rhs) {
+        _copy(rhs);
+    }
+
+    return *this;
+}
+
+
+Variant& Variant::operator=(Variant&& rhs) noexcept {
+
+    if (this != &rhs) {
+        _type = rhs.get_type();
+
+        switch (_type) {
+            case SCRIPTING_RUNTIME_VARIANT_TYPE_VAR:
+                _variable_value = rhs._variable_value;
+                rhs._variable_value = nullptr;
+                break;
+            case SCRIPTING_RUNTIME_VARIANT_TYPE_REF:
+                _reference_value = rhs._reference_value;
+                break;
+            case SCRIPTING_RUNTIME_VARIANT_TYPE_ARR:
+                _array_value = rhs._array_value;
+                rhs._array_value = nullptr;
+                break;
+            case SCRIPTING_RUNTIME_VARIANT_TYPE_FUN:
+                _function_value = rhs._function_value;
+                rhs._function_value = nullptr;
+                break;
+            default:
+                break;
+        }
+
+        rhs._type = SCRIPTING_RUNTIME_VARIANT_TYPE_INVALID;
+        rhs._reference_value = -1;
+    }
+
+    return *this;
 }
 
 
@@ -127,6 +202,57 @@ void Variant::get_function_by_move(Function& out_result) {
 
 Function& Variant::get_function_by_reference() {
     return *_function_value;
+}
+
+
+std::ostream& operator<<(std::ostream& lhs, const Variant& rhs) {
+    lhs << "{\"_class\": \"Variant\", \"_type\": " << rhs.get_type() << ", ";
+
+    switch (rhs.get_type()) {
+        case Variant::SCRIPTING_RUNTIME_VARIANT_TYPE_INVALID:
+            lhs << "\"_reference_value\": " << rhs.get_reference();
+            break;
+        case Variant::SCRIPTING_RUNTIME_VARIANT_TYPE_VAR:
+            lhs << "\"_variable_value\": " << rhs.get_variable();
+            break;
+        case Variant::SCRIPTING_RUNTIME_VARIANT_TYPE_REF:
+            lhs << "\"_reference_value\": " << rhs.get_reference();
+            break;
+        case Variant::SCRIPTING_RUNTIME_VARIANT_TYPE_ARR:
+            lhs << "\"_array_value\": \"<variable>\"";//fixme:: << rhs.get_array();
+            break;
+        case Variant::SCRIPTING_RUNTIME_VARIANT_TYPE_FUN:
+            lhs << "\"_function_value\": \"<function>\"";//fixme:: << rhs.get_function();
+            break;
+        default:
+            break;
+    }
+
+    lhs << "}";
+
+    return lhs;
+}
+
+
+void Variant::_copy(const Variant& rhs) {
+    _type = rhs.get_type();
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_VARIANT_TYPE_VAR:
+            _variable_value = new Variable(rhs.get_variable());
+            break;
+        case SCRIPTING_RUNTIME_VARIANT_TYPE_REF:
+            _reference_value = rhs.get_reference();
+            break;
+        case SCRIPTING_RUNTIME_VARIANT_TYPE_ARR:
+            _array_value = new Array();//fixme::
+            break;
+        case SCRIPTING_RUNTIME_VARIANT_TYPE_FUN:
+            _function_value = new Function();//fixme::
+            break;
+        default:
+            break;
+    }
 }
 } // Runtime
 } // Scripting

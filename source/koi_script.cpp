@@ -31,11 +31,11 @@ namespace Scripting {
 Runtime::Error KoiScript::execute(const std::string& key, const Runtime::Environment& environment, const std::vector<std::shared_ptr<const Runtime::Variable>>& arguments, Runtime::Variable& out_result) {
     Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 
-    std::shared_ptr<const Runtime::Variant> current = environment.get(key);
+//    std::shared_ptr<const Runtime::Variant> current = environment.get(key);
 
-    if (current->get_type() == Runtime::Variant::SCRIPTING_RUNTIME_VARIANT_TYPE_FUN) {
-        result = (current->get_function())(arguments, out_result);
-    }
+//    if (current->get_type() == Runtime::Variant::SCRIPTING_RUNTIME_VARIANT_TYPE_FUN) {
+//        result = (current->get_function())(arguments, out_result);
+//    }
 
     return result;
 }

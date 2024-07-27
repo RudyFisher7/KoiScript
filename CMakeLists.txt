@@ -34,8 +34,6 @@ add_library(${PROJECT_NAME} STATIC
 
     source/runtime/environment.cpp
     include/scripting/runtime/environment.hpp
-    source/runtime/global_environment.cpp
-    include/scripting/runtime/global_environment.hpp
 
     source/runtime/data/array.cpp
     include/scripting/runtime/data/array.hpp
@@ -53,6 +51,8 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/runtime/meta/main.hpp
     source/runtime/meta/print.cpp
     include/scripting/runtime/meta/print.hpp
+    source/runtime/meta/var.cpp
+    include/scripting/runtime/meta/var.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

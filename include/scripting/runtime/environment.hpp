@@ -29,8 +29,7 @@
 
 #include "scripting/runtime/error.hpp"
 #include "scripting/runtime/data/variant.hpp"
-
-#include "scripting/abstract_syntax_tree/node.hpp"
+#include "scripting/runtime/meta/i_meta.hpp"
 
 #include <map>
 #include <memory>
@@ -44,17 +43,17 @@ namespace Runtime {
 
 class Environment {
 protected:
-    std::map<std::string, std::shared_ptr<const Variant>> _declarations;
+    std::map<std::string, std::shared_ptr<const IMeta>> _declarations;
     std::shared_ptr<const Environment> _parent;
 
 public:
 
-    std::shared_ptr<const Variant> get(const std::string& key) const;
+    std::shared_ptr<const IMeta> get(const std::string& key) const;
 
     bool register_declaration(const std::string& key);
-    bool register_assignment(const std::string& key, const Variant& data);
+    bool register_assignment(const std::string& key, std::shared_ptr<const IMeta> value);
 
-    void set_parent_environment(std::shared_ptr<const Environment>& in_parent);
+    void set_parent_environment(std::shared_ptr<const Environment> in_parent);
 };
 
 } // Runtime

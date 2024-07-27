@@ -88,61 +88,46 @@ int main() {
 //    std::cout << *ast_tree << std::endl;
 
     //todo:: 3. assemble
-    Koi::Scripting::Runtime::Environment environment;
+    Koi::Scripting::Runtime::Environment global_environment;
     Koi::Scripting::Assembler assembler;
 
-    assembler.assemble(environment);
+    assembler.assemble(global_environment);
 
-//    KoiRuntime::Function main_function(
-//            true,
-//            Koi::Scripting::BasicType::SCRIPTING_BASIC_TYPE_INT,
-//            {
-//                    Koi::Scripting::BasicType::SCRIPTING_BASIC_TYPE_TEXT,
-//                    Koi::Scripting::BasicType::SCRIPTING_BASIC_TYPE_FUN,
-//            },
-//            [](const std::vector<std::shared_ptr<const KoiRuntime::Variable>>& arguments, KoiRuntime::Variable& out_result) -> KoiRuntime::Error {
-//                out_result.set_value(0);
-//
-//                return KoiRuntime::Error::SCRIPTING_RUNTIME_ERROR_OK;
-//            }
-//    );
-//
-//    int id = environment.register_declaration("main");
-//    environment.register_assignment("main", Koi::Scripting::Runtime::Variant(main_function));
-//
-//    KoiRuntime::Function print_function(
-//            true,
-//            Koi::Scripting::BasicType::SCRIPTING_BASIC_TYPE_VOID,
-//            {
-//                    Koi::Scripting::BasicType::SCRIPTING_BASIC_TYPE_TEXT,
-//            },
-//            [](const std::vector<std::shared_ptr<const KoiRuntime::Variable>>& arguments, KoiRuntime::Variable& out_result) -> KoiRuntime::Error {
-//                std::cout << arguments.front()->get_c_string() << std::endl;
-//
-//                return KoiRuntime::Error::SCRIPTING_RUNTIME_ERROR_OK;
-//            }
-//    );
 
     std::shared_ptr<KoiRuntime::Environment> main_environment = std::make_shared<KoiRuntime::Environment>();
-
-    std::shared_ptr<const KoiRuntime::Environment> parent = std::make_shared<const KoiRuntime::Environment>(environment);
+    std::shared_ptr<const KoiRuntime::Environment> parent = std::make_shared<const KoiRuntime::Environment>(global_environment);
     main_environment->set_parent_environment(parent);
 
-    std::vector<std::shared_ptr<const KoiRuntime::IMeta>> main_instructions;
-
+    std::shared_ptr<KoiRuntime::IMeta> main_meta = std::make_shared<KoiRuntime::Main>();
     std::shared_ptr<KoiRuntime::IMeta> print_meta = std::make_shared<KoiRuntime::Print>();
 
-    main_instructions.push_back(print_meta);
-    std::shared_ptr<KoiRuntime::IMeta> main_meta = std::make_shared<KoiRuntime::Main>(main_instructions);
+    global_environment.register_declaration(main_meta->get_key());
+    global_environment.register_assignment(main_meta->get_key(), main_meta);
+    global_environment.register_declaration(print_meta->get_key());
+    global_environment.register_assignment(print_meta->get_key(), print_meta);
+
 
 
     //todo:: 4. run
     Koi::Scripting::Runtime::Variant runtime_result;
 
-    main_meta->run(main_environment, runtime_result);
+    KoiRuntime::IMeta::Args main_args(2u);
+    main_args.at(0u) = std::make_shared<const KoiRuntime::LitVal>(KoiRuntime::Variant(KoiRuntime::Variable("hello world!")));
+
+    KoiRuntime::IExe::Body body;
+    body.push_back(print_meta);
+    body.push_back(std::make_shared<const KoiRuntime::LitVal>(KoiRuntime::Variant(KoiRuntime::Variable(33))));
+    main_args.at(1u) = std::make_shared<const KoiRuntime::Exe>("root-fixme::", body);
+
+    main_meta->run(main_args, runtime_result);
+
+//    KoiRuntime::IMeta::Args print_args;
+//    KoiRuntime::Variant str(KoiRuntime::Variable("hello world!"));
+//    std::shared_ptr<const KoiRuntime::IMeta> arg = std::make_shared<const KoiRuntime::LitVal>(str);
+//    print_args.push_back(arg);
+//    print_meta->run(print_args, runtime_result);
 
     std::cout << "Runtime result: " << runtime_result.get_variable() << std::endl;
-
 
     return 0;
 }

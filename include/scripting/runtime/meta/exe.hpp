@@ -46,18 +46,24 @@ namespace Runtime {
 class Exe: public IExe {
 protected:
     std::string _key;
-    std::vector<std::shared_ptr<const IMeta>> _body_meta_instructions;
+    IExe::Body _body_meta_instructions;
 
 
 public:
     Exe();
 
-    Exe(std::string in_key, std::vector<std::shared_ptr<const IMeta>>&& in_body_meta_instructions);
+    Exe(std::string in_key, IExe::Body in_body_meta_instructions);
+
+    Exe(const Exe& rhs) = default;
+    Exe(Exe&& rhs) = default;
 
     virtual ~Exe();
 
+    Exe& operator=(const Exe& rhs) = default;
+    Exe& operator=(Exe&& rhs) = default;
+
     std::string get_key() const override;
-    Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const override;
+    Error run(IMeta::Args arguments, Variant& out_result) const override;
 };
 
 } // Runtime

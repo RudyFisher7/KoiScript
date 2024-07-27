@@ -23,53 +23,12 @@
  */
 
 
-#include "scripting/runtime/global_environment.hpp"
-
-#include "scripting/log/log.hpp"
-
-#include <ostream>
-#include <string>
+#include "scripting/runtime/meta/var.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
-
-Error GlobalEnvironment::exe(const std::string& key, const std::vector<std::shared_ptr<Ast::Node>>& args) const {
-    Error result = SCRIPTING_RUNTIME_ERROR_OK;
-
-    if (key == "print") {
-        Runtime::Variable arg;
-    }
-
-    return result;
-}
-
-
-Error GlobalEnvironment::print(const Runtime::Variable& value) const {
-    Error result = SCRIPTING_RUNTIME_ERROR_OK;
-
-    if (
-            value.get_type() == BasicType::SCRIPTING_BASIC_TYPE_VOID
-            || value.get_type() == BasicType::SCRIPTING_BASIC_TYPE_INVALID
-    ) {
-        result = SCRIPTING_RUNTIME_ERROR_TYPE_MISMATCH;
-    }
-
-    if (result == SCRIPTING_RUNTIME_ERROR_OK) {
-        std::cout << value << std::endl;
-    }
-
-    KOI_LOG_IF_NOT(
-            result == SCRIPTING_RUNTIME_ERROR_OK,
-            std::string("Variant of type: ")
-            + std::to_string(value.get_type())
-            + std::string(" is invalid for native print() function.")
-    );
-
-    return result;
-}
-
 } // Runtime
 } // Scripting
 } // Koi

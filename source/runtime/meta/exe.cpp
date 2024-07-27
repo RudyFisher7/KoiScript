@@ -37,7 +37,7 @@ Exe::Exe() {
 }
 
 
-Exe::Exe(std::string in_key, std::vector<std::shared_ptr<const IMeta>>&& in_body_meta_instructions):
+Exe::Exe(std::string in_key, IExe::Body in_body_meta_instructions):
     _key(std::move(in_key)),
     _body_meta_instructions(std::move(in_body_meta_instructions)) {
 
@@ -55,10 +55,29 @@ std::string Exe::get_key() const {
 
 
 
-Error Exe::run(std::shared_ptr<const Environment> environment, Variant& out_result) const {
+Error Exe::run(IMeta::Args arguments, Variant& out_result) const {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
+    IMeta::ArgResults arg_results(arguments.size());
 
+    IMeta::Args empty_args;
+
+    unsigned int i = 0u;
+//    while (result == SCRIPTING_RUNTIME_ERROR_OK && i < arguments.size()) {
+//        result = arguments.at(i)->run(empty_args, *arg_results.at(i));
+//        ++i;
+//    }
+
+    i = 0u;
+    while (result == SCRIPTING_RUNTIME_ERROR_OK && i < _body_meta_instructions.size()) {
+        Variant temp_result;
+        result = _body_meta_instructions.at(i)->run(arguments, temp_result);//fixme:: arguments passed in here is implementation detail
+        ++i;
+
+        if (i >= _body_meta_instructions.size()) {
+            out_result = temp_result;
+        }
+    }
 
     return result;
 }

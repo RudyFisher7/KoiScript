@@ -28,11 +28,12 @@
 
 
 #include "scripting/runtime/error.hpp"
-#include "scripting/runtime/environment.hpp"
 #include "scripting/runtime/data/variant.hpp"
 
 #include <string>
+#include <map>
 #include <memory>
+#include <vector>
 
 
 namespace Koi {
@@ -41,15 +42,28 @@ namespace Runtime {
 
 class IMeta {
 public:
+    typedef std::vector<std::shared_ptr<const IMeta>> Args;
+    typedef std::vector<std::shared_ptr<Variant>> ArgResults;
+
+public:
     virtual std::string get_key() const = 0;
-    virtual Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const = 0;
+    virtual Error run(IMeta::Args arguments, Variant& out_result) const = 0;
 };
 
-class IExe: public IMeta {
+
+class IDecl: public IMeta {
 };
+
+
+class IExe: public IMeta {
+public:
+    typedef std::vector<std::shared_ptr<const IMeta>> Body;
+};
+
 
 class IVal: public IMeta {
 };
+
 
 class LitVal final: public IVal {
 private:
@@ -60,11 +74,19 @@ public:
 
     }
 
+    LitVal(const LitVal& rhs) = default;
+    LitVal(LitVal&& rhs) = default;
+
+    ~LitVal() = default;
+
+    LitVal& operator=(const LitVal& rhs) = default;
+    LitVal& operator=(LitVal&& rhs) = default;
+
     std::string get_key() const override {
         return "lit";
     }
 
-    Error run(std::shared_ptr<const Environment> environment, Variant& out_result) const override {
+    Error run(IMeta::Args arguments, Variant& out_result) const override {
         out_result = _value;
         return SCRIPTING_RUNTIME_ERROR_OK;
     }
