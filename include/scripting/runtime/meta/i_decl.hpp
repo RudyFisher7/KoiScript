@@ -23,25 +23,28 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_VAR_HPP
-#define KOI_SCRIPTING_RUNTIME_VAR_HPP
+
+#ifndef KOI_SCRIPTING_RUNTIME_I_DECL_HPP
+#define KOI_SCRIPTING_RUNTIME_I_DECL_HPP
 
 
-#include "scripting/runtime/meta/i_decl.hpp"
+#include "scripting/runtime/meta/i_meta.hpp"
+
+#include "scripting/runtime/environment.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Var final: public IDecl {
-public:
-    std::string get_key() const override;
-    Error run(IMeta::Args arguments, Variant& out_result) const override;//todo:: inside body, add arg[1] as declaration in _environment
+class IDecl: public IMeta {
+protected:
+    mutable Environment _environment;
 };
 
-} // Runtime
-} // Scripting
-} // Koi
+}
+}
+}
 
-#endif //KOI_SCRIPTING_RUNTIME_VAR_HPP
+
+#endif //KOI_SCRIPTING_RUNTIME_I_DECL_HPP

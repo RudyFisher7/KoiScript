@@ -23,73 +23,31 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_META_HPP
-#define KOI_SCRIPTING_RUNTIME_META_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_ASSIGN_HPP
+#define KOI_SCRIPTING_RUNTIME_ASSIGN_HPP
 
 
-#include "scripting/runtime/error.hpp"
-#include "scripting/runtime/data/variant.hpp"
+#include "scripting/runtime/meta/i_meta.hpp"
 
-#include <string>
-#include <map>
-#include <memory>
-#include <vector>
+#include "scripting/runtime/environment.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class IMeta {
-public:
-    typedef std::vector<std::shared_ptr<const IMeta>> Args;
-    typedef std::vector<std::shared_ptr<Variant>> ArgResults;
-
-public:
-    virtual std::string get_key() const = 0;
-    virtual Error run(IMeta::Args arguments, Variant& out_result) const = 0;
-};
-
-
-class IExe: public IMeta {
-public:
-    typedef std::vector<std::shared_ptr<const IMeta>> Body;
-};
-
-
-class IVal: public IMeta {
-};
-
-
-class LitVal final: public IVal {
+class Assign final: public IExe {
 private:
-    Variant _value;
+    mutable Environment _environment;
 
 public:
-    explicit LitVal(const Variant& in_value): _value(in_value) {
-
-    }
-
-    LitVal(const LitVal& rhs) = default;
-    LitVal(LitVal&& rhs) = default;
-
-    ~LitVal() = default;
-
-    LitVal& operator=(const LitVal& rhs) = default;
-    LitVal& operator=(LitVal&& rhs) = default;
-
-    std::string get_key() const override {
-        return "lit";
-    }
-
-    Error run(IMeta::Args arguments, Variant& out_result) const override {
-        out_result = _value;
-        return SCRIPTING_RUNTIME_ERROR_OK;
-    }
+    std::string get_key() const override;
+    Error run(IMeta::Args arguments, Variant& out_result) const override;//todo:: inside body, assign arg[1] with arg[2] in _environment
 };
 
 } // Runtime
 } // Scripting
 } // Koi
 
-#endif //KOI_SCRIPTING_RUNTIME_META_HPP
+
+#endif //KOI_SCRIPTING_RUNTIME_ASSIGN_HPP

@@ -53,6 +53,9 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/runtime/meta/print.hpp
     source/runtime/meta/var.cpp
     include/scripting/runtime/meta/var.hpp
+    include/scripting/runtime/meta/i_decl.hpp
+    source/runtime/meta/assign.cpp
+    include/scripting/runtime/meta/assign.hpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
