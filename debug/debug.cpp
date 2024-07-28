@@ -29,15 +29,8 @@
 //#include "scripting/parser.hpp"
 #include "scripting/extensions/extensions.hpp"
 #include "scripting/runtime/environment.hpp"
-#include "scripting/runtime/meta/i_meta.hpp"
-//#include "scripting/runtime/meta/fun_lit.hpp"
-//#include "scripting/runtime/meta/var_lit.hpp"
-//#include "scripting/runtime/meta/var.hpp"
-//#include "scripting/runtime/meta/exe.hpp"
-#include "scripting/runtime/meta/main.hpp"
-#include "scripting/runtime/meta/print.hpp"
+#include "scripting/runtime/variant/array.hpp"
 #include "scripting/runtime/variant/variable.hpp"
-#include "scripting/runtime/variant/i_variant.hpp"
 
 #include <cstring>
 #include <fstream>
@@ -81,7 +74,7 @@ int main() {
 
     std::cout << tokens << std::endl;
 
-    // 2. parse
+    //todo:: 2. parse
 //    Koi::Scripting::Parser parser;
 //    std::shared_ptr<Koi::Scripting::Ast::Node> ast_tree;
 //    parser.parse(tokens, ast_tree);
@@ -89,47 +82,46 @@ int main() {
 //    std::cout << *ast_tree << std::endl;
 
     //todo:: 3. assemble
-//    Koi::Scripting::Assembler assembler;
-//
-//    assembler.assemble(global_environment);
+    std::shared_ptr<KoiRuntime::Environment> global_environment = std::make_shared<KoiRuntime::Environment>();
 
+    // var<toasty>:text;
+    global_environment->declare_var("toasty", KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT);
 
-    KoiRuntime::Environment global_environment;
-    std::shared_ptr<KoiRuntime::Environment> main_environment = std::make_shared<KoiRuntime::Environment>();
-    std::shared_ptr<KoiRuntime::Environment> parent = std::make_shared<KoiRuntime::Environment>(global_environment);
-    main_environment->set_parent_environment(parent);
+    // var<toasty>:float[];
+    global_environment->declare_arr("toasty_array", KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT);
 
-    std::shared_ptr<KoiRuntime::IMeta> main_meta = std::make_shared<KoiRuntime::Main>();
-    std::shared_ptr<KoiRuntime::IMeta> print_meta = std::make_shared<KoiRuntime::Print>();
-//    std::shared_ptr<KoiRuntime::IMeta> var_meta = std::make_shared<KoiRuntime::Var>("myint1", main_environment);
+    // ref<toasty>();
+    std::shared_ptr<KoiRuntime::Variable> toasty = global_environment->get_var_ref("toasty");
 
-//    global_environment.register_declaration(main_meta->get_key());
-//    global_environment.set(main_meta->get_key(), main_meta);
-//    global_environment.register_declaration(print_meta->get_key());
-//    global_environment.set(print_meta->get_key(), print_meta);
+    // exe<assign>(ref<toasty>(), 'hello world!');
+    toasty->set_value("hello world!");
 
+    // ref<toasty_array>();
+    std::shared_ptr<KoiRuntime::Array> toasty_array = global_environment->get_arr_ref("toasty_array");
+
+    // exe<append>(ref<toasty_array>(), 'hello world!');
+    toasty_array->emplace_back("hello world!");
+
+    // exe<append>(ref<toasty_array>(), 'howdy USA!');
+    toasty_array->emplace_back("howdy USA!");
+
+    // exe<append>(ref<toasty_array>(), 'konnichiwa nihon!');
+    toasty_array->emplace_back("konnichiwa nihon!");
+
+    {
+        std::shared_ptr<KoiRuntime::Environment> child_environment = KoiRuntime::Environment::make_child_environment(
+                global_environment
+        );
+
+        // ref<toasty>();
+        std::shared_ptr<KoiRuntime::Variable> toasty_from_child = child_environment->get_var_ref("toasty");
+
+        // exe<assign>(ref<toasty>(), 'sayonara');
+        toasty->set_value("sayonara");
+    }
 
 
     //todo:: 4. run
-//    KoiRuntime::Variant runtime_result;
-//
-//    KoiRuntime::IMeta::Args main_args(2u);
-//    main_args.at(0u) = std::make_shared<const KoiRuntime::VarLit>(KoiRuntime::Variable("hello world!"));
-//
-//    KoiRuntime::IExe::Body body;
-//    body.push_back(print_meta);
-//    body.push_back(std::make_shared<const KoiRuntime::FunLit>(KoiRuntime::Variant(KoiRuntime::Variable(33))));
-//    main_args.at(1u) = std::make_shared<const KoiRuntime::Exe>("root-fixme::", body);
-
-//    main_meta->run(main_args, runtime_result);
-
-//    KoiRuntime::IMeta::Args print_args;
-//    KoiRuntime::Variant str(KoiRuntime::Variable("hello world!"));
-//    std::shared_ptr<const KoiRuntime::IMeta> arg = std::make_shared<const KoiRuntime::LitVal>(str);
-//    print_args.push_back(arg);
-//    print_meta->run(print_args, runtime_result);
-
-//    std::cout << "Runtime result: " << runtime_result.get_variable() << std::endl;
 
     return 0;
 }

@@ -40,11 +40,11 @@ Var::Var(std::string in_key, std::shared_ptr<Environment> in_environment):
 Error Var::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    bool declaration_result = _environment->register_declaration(_key);
+//    bool declaration_result = _environment->register_declaration(_key);
 
-    if (!declaration_result) {
-        result = SCRIPTING_RUNTIME_ERROR_ALREADY_EXISTS;
-    }
+//    if (!declaration_result) {
+//        result = SCRIPTING_RUNTIME_ERROR_ALREADY_EXISTS;
+//    }
 
     return result;
 }

@@ -27,7 +27,6 @@
 #define KOI_SCRIPTING_RUNTIME_VARIABLE_HPP
 
 
-#include "scripting/runtime/variant/i_variant.hpp"
 #include "scripting/runtime/basic_type.hpp"
 
 #include <ostream>
@@ -38,7 +37,7 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Variable final: public IVariant {
+class Variable final {
 public:
     static const unsigned int MAX_SIZE;
     static const std::string VOID_STRING;
@@ -55,6 +54,8 @@ private:
 
 public:
     Variable();
+
+    explicit Variable(BasicType in_type);
 
 
     explicit Variable(char in_value);
@@ -87,7 +88,7 @@ public:
     Variable& operator=(Variable&& rhs) noexcept;
 
 
-    ~Variable() override;
+    ~Variable();
 
 
     bool operator==(const Variable& rhs) const;
@@ -96,32 +97,33 @@ public:
     bool operator!=(const Variable& rhs) const;
 
 
-    explicit operator bool() const override;
+    explicit operator bool() const;
 
 
-    explicit operator char() const override;
+    explicit operator char() const;
 
 
-    explicit operator int() const override;
+    explicit operator int() const;
 
 
-    explicit operator float() const override;
+    explicit operator float() const;
 
 
-    explicit operator const char*() const override;
+    explicit operator const char*() const;
 
 
-    explicit operator std::string() const override;
+    explicit operator std::string() const;
+
+    BasicType get_type() const;
 
 
-    int get_size() const override;
-    bool get_bool() const override;
-    char get_char() const override;
-    int get_int() const override;
-    float get_float() const override;
-    const char* get_c_string() const override;
-    std::string get_string() const override;
-    std::shared_ptr<IVariant> clone() const override;
+    int get_size() const;
+    bool get_bool() const;
+    char get_char() const;
+    int get_int() const;
+    float get_float() const;
+    const char* get_c_string() const;
+    std::string get_string() const;
 
 
     void set_value_void();
@@ -153,12 +155,10 @@ public:
 
     friend std::ostream& operator<<(std::ostream& lhs, const Variable& rhs);
 
-
 private:
-    bool _equals(const IVariant& rhs) const override;
+    bool _equals(const Variable& rhs) const;
 
     void _copy(const Variable& rhs);
-
 
     void _destroy_string_if_string();
 };

@@ -32,37 +32,102 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-std::shared_ptr<IVariant> Environment::get(const std::string& key) const {
-    std::shared_ptr<IVariant> result;
-    if (_declarations.find(key) != _declarations.end()) {
-        result = _declarations.at(key)->clone();
+std::shared_ptr<Environment> Environment::make_child_environment(const std::shared_ptr<Environment>& in_parent) {
+    std::shared_ptr<Environment> result = std::make_shared<Environment>(in_parent);
+    return result;
+}
+
+
+Environment::Environment(const std::shared_ptr<Environment>& in_parent):
+        _all_declarations(),
+        _variables(),
+        _arrays(),
+        _native_functions(),
+        _parent(in_parent) {
+
+}
+
+
+std::shared_ptr<Variable> Environment::get_var_val(const std::string& key) const {
+    std::shared_ptr<Variable> result;
+
+    if (_variables.find(key) != _variables.end()) {
+        result = std::make_shared<Variable>(*_variables.at(key));
     }
 
     return result;
 }
 
 
-bool Environment::register_declaration(const std::string& key) {
-    bool result = false;
+std::shared_ptr<Variable> Environment::get_var_ref(const std::string& key) {
+    std::shared_ptr<Variable> result;
 
-    result = _declarations.emplace(key, std::shared_ptr<const IVariant>()).second;
+    if (_variables.find(key) != _variables.end()) {
+        result = _variables.at(key);
+    } else {
+        std::shared_ptr<Environment> environment = _resolve(key);
+
+        if (environment) {
+            result = environment->get_var_ref(key);
+        }
+    }
 
     return result;
 }
 
 
-bool Environment::set(const std::string& key, std::shared_ptr<const IVariant> value) {
-    bool result = false;
+std::shared_ptr<Variable> Environment::get_var_val(const std::string& key, int index) const {
+    std::shared_ptr<Variable> result;
 
-    if (_declarations.find(key) != _declarations.end()) {
-        _declarations.at(key) = std::move(value);
-        result = true;
+    if (_arrays.find(key) != _arrays.end() && _arrays.at(key)->size() > index) {
+        result = std::make_shared<Variable>(_arrays.at(key)->at(index));
     } else {
         std::shared_ptr<Environment> environment = _resolve(key);
 
         if (environment) {
-            result = environment->set(key, value);
+            result = environment->get_var_val(key);
         }
+    }
+
+    return result;
+}
+
+
+std::shared_ptr<Array> Environment::get_arr_ref(const std::string& key) {
+    std::shared_ptr<Array> result;
+
+    if (_arrays.find(key) != _arrays.end()) {
+        result = _arrays.at(key);
+    } else {
+        std::shared_ptr<Environment> environment = _resolve(key);
+
+        if (environment) {
+            result = environment->get_arr_ref(key);
+        }
+    }
+
+    return result;
+}
+
+
+bool Environment::declare_var(const std::string& key, BasicType type) {
+    bool result = false;
+
+    if (_all_declarations.find(key) == _all_declarations.end()) {
+        result = _variables.emplace(key, std::make_shared<Variable>(type)).second;
+        _all_declarations.emplace(key);
+    }
+
+    return result;
+}
+
+
+bool Environment::declare_arr(const std::string& key, BasicType type) {
+    bool result = false;
+
+    if (_all_declarations.find(key) == _all_declarations.end()) {
+        result = _arrays.emplace(key, std::make_shared<Array>(type)).second;
+        _all_declarations.emplace(key);
     }
 
     return result;
@@ -74,21 +139,21 @@ void Environment::set_parent_environment(std::shared_ptr<Environment> in_parent)
 }
 
 
-std::shared_ptr<Environment> Environment::_resolve(const std::string& key) {
-    std::shared_ptr<Environment> result = _parent;
+bool Environment::_has_key(const std::string& key) const {
+    bool result = false;
 
-    while (result && result->_has_key(key)) {
-        result = result->_parent;
-    }
+    result = _all_declarations.find(key) != _all_declarations.cend();
 
     return result;
 }
 
 
-bool Environment::_has_key(const std::string& key) const {
-    bool result = false;
+std::shared_ptr<Environment> Environment::_resolve(const std::string& key) const {
+    std::shared_ptr<Environment> result = _parent;
 
-    result = _declarations.find(key) != _declarations.cend();
+    while (result && !result->_has_key(key)) {
+        result = result->_parent;
+    }
 
     return result;
 }

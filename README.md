@@ -10,11 +10,29 @@ in mind. Not to be mistaken for the stunning koilang (tsevhu): https://www.reddi
 # TODO::
 - ...
 
+## Meta Functions
+These act on the runtime environment.
+### does stuff
+- val
+- ref
+- exe
+- imp
+### makes stuff
+- var
+- arr
+- fun
+- lib
+### removes stuff
+- rem
 
 ## Built-In Functions
+These are part of the runtime environment.
 ### special
 - assign
 - print
+### arrays
+- append
+- insert
 ### variable and function info
 - size
 ### logical

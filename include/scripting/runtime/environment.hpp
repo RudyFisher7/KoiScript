@@ -28,11 +28,15 @@
 
 
 #include "scripting/runtime/error.hpp"
-#include "scripting/runtime/variant/i_variant.hpp"
+#include "scripting/runtime/basic_type.hpp"
+#include "scripting/runtime/variant/array.hpp"
+#include "scripting/runtime/variant/variable.hpp"
+//#include "scripting/runtime/function.hpp"//todo::
 #include "scripting/runtime/meta/i_meta.hpp"
 
 #include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -43,20 +47,41 @@ namespace Runtime {
 
 class Environment {
 protected:
-    std::map<std::string, std::shared_ptr<const IVariant>> _declarations;
+    std::set<std::string> _all_declarations;
+    std::map<std::string, std::shared_ptr<Variable>> _variables;
+    std::map<std::string, std::shared_ptr<Array>> _arrays;
+    std::set<std::string> _native_functions;
     std::shared_ptr<Environment> _parent;
 
 public:
-    std::shared_ptr<IVariant> get(const std::string& key) const;
+    static std::shared_ptr<Environment> make_child_environment(const std::shared_ptr<Environment>& in_parent);
 
-    bool register_declaration(const std::string& key);
-    bool set(const std::string& key, std::shared_ptr<const IVariant> value);
+    Environment() = default;
+    explicit Environment(const std::shared_ptr<Environment>& in_parent);
+
+    Environment(const Environment& rhs) = default;
+    Environment(Environment&& rhs) = default;
+
+    ~Environment() = default;
+
+    Environment& operator=(const Environment& rhs) = default;
+    Environment& operator=(Environment&& rhs) = default;
+
+    std::shared_ptr<Variable> get_var_val(const std::string& key) const;
+    std::shared_ptr<Variable> get_var_ref(const std::string& key);
+
+    std::shared_ptr<Variable> get_var_val(const std::string& key, int index) const;
+    std::shared_ptr<Array> get_arr_ref(const std::string& key);
+
+    bool declare_var(const std::string& key, BasicType type);
+    bool declare_arr(const std::string& key, BasicType type);
+
 
     void set_parent_environment(std::shared_ptr<Environment> in_parent);
 
 protected:
-    std::shared_ptr<Environment> _resolve(const std::string& key);
     bool _has_key(const std::string& key) const;
+    std::shared_ptr<Environment> _resolve(const std::string& key) const;
 };
 
 } // Runtime

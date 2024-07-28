@@ -54,7 +54,7 @@ Error Print::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) {
 
     std::cout << std::endl;
 
-    out_result = std::unique_ptr<Variable>();
+//    out_result = std::unique_ptr<Variable>();
 
     return result;
 }

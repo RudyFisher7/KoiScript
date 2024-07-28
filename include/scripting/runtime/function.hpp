@@ -27,10 +27,9 @@
 #define KOI_SCRIPTING_RUNTIME_FUNCTION_HPP
 
 
+#include "scripting/runtime/basic_type.hpp"
 #include "scripting/runtime/error.hpp"
 #include "scripting/runtime/variant/variable.hpp"
-#include "scripting/runtime/meta/i_meta.hpp"
-#include "scripting/runtime/basic_type.hpp"
 
 #include <functional>
 #include <memory>

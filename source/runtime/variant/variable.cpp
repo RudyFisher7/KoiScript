@@ -41,7 +41,6 @@ const std::string Variable::VOID_STRING("\"<void>\"");
 
 
 Variable::Variable():
-        IVariant(IVariant::SCRIPTING_RUNTIME_VARIANT_TYPE_VAR),
         _size(0u),
         _type(SCRIPTING_RUNTIME_BASIC_TYPE_VOID),
         _value_bool(false) {
@@ -49,8 +48,32 @@ Variable::Variable():
 }
 
 
+Variable::Variable(BasicType in_type) {
+    switch (in_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            set_value(false);
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            set_value(0);
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            set_value(0.0f);
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            set_value("");
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_REF:
+            break;
+        default:
+            KOI_LOG("Invalid BasicType for Variable: " + std::to_string(in_type));
+            break;
+    }
+}
+
+
 Variable::Variable(char in_value):
-        IVariant(IVariant::SCRIPTING_RUNTIME_VARIANT_TYPE_VAR),
         _size(sizeof(char)),
         _type(SCRIPTING_RUNTIME_BASIC_TYPE_TEXT) {
     set_value(&in_value, 1u);
@@ -58,7 +81,6 @@ Variable::Variable(char in_value):
 
 
 Variable::Variable(int in_value):
-        IVariant(IVariant::SCRIPTING_RUNTIME_VARIANT_TYPE_VAR),
         _size(sizeof(int)),
         _type(SCRIPTING_RUNTIME_BASIC_TYPE_INT),
         _value_int(in_value) {
@@ -67,7 +89,6 @@ Variable::Variable(int in_value):
 
 
 Variable::Variable(float in_value):
-        IVariant(IVariant::SCRIPTING_RUNTIME_VARIANT_TYPE_VAR),
         _size(sizeof(float)),
         _type(SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT),
         _value_float(in_value) {
@@ -76,7 +97,6 @@ Variable::Variable(float in_value):
 
 
 Variable::Variable(const char* in_value):
-        IVariant(IVariant::SCRIPTING_RUNTIME_VARIANT_TYPE_VAR),
         _type(SCRIPTING_RUNTIME_BASIC_TYPE_TEXT),
         _value_text(nullptr) {
     set_value(in_value);
@@ -84,7 +104,6 @@ Variable::Variable(const char* in_value):
 
 
 Variable::Variable(const char* in_value, unsigned int size):
-        IVariant(IVariant::SCRIPTING_RUNTIME_VARIANT_TYPE_VAR),
         _type(SCRIPTING_RUNTIME_BASIC_TYPE_TEXT),
         _value_text(nullptr) {
     set_value(in_value, size);
@@ -92,14 +111,13 @@ Variable::Variable(const char* in_value, unsigned int size):
 
 
 Variable::Variable(const std::string& in_value):
-        IVariant(IVariant::SCRIPTING_RUNTIME_VARIANT_TYPE_VAR),
         _type(SCRIPTING_RUNTIME_BASIC_TYPE_TEXT),
         _value_text(nullptr) {
     set_value(in_value);
 }
 
 
-Variable::Variable(const Variable& rhs): IVariant(rhs) {
+Variable::Variable(const Variable& rhs) {
     _copy(rhs);
 }
 
@@ -211,6 +229,11 @@ Variable::operator const char*() const {
 
 Variable::operator std::string() const {
     return get_string();
+}
+
+
+BasicType Variable::get_type() const {
+    return _type;
 }
 
 
@@ -387,11 +410,6 @@ std::string Variable::get_string() const {
 }
 
 
-std::shared_ptr<IVariant> Variable::clone() const {
-    return std::make_shared<Variable>(*this);
-}
-
-
 void Variable::set_value_void() {
     _destroy_string_if_string();
     _size = 0u;
@@ -478,13 +496,10 @@ std::ostream& operator<<(std::ostream& lhs, const Variable& rhs) {
 }
 
 
-bool Variable::_equals(const IVariant& rhs) const {
+bool Variable::_equals(const Variable& rhs) const {
     bool result = false;
 
-    result = (
-            get_variant_type() == rhs.get_variant_type()
-            && get_type() == rhs.get_type()
-    );
+    result = get_type() == rhs.get_type();
 
     if (result) {
         switch (rhs.get_type()) {

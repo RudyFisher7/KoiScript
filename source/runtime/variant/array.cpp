@@ -29,6 +29,16 @@
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
+
+Array::Array(BasicType in_type): _type(in_type) {
+
+}
+
+
+BasicType Array::get_type() const {
+    return _type;
+}
+
 } // Runtime
 } // Scripting
 } // Koi

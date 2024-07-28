@@ -23,7 +23,7 @@
  */
 
 
-#include "scripting/runtime/data/function.hpp"
+#include "scripting/runtime/function.hpp"
 
 #include <utility>
 
@@ -69,7 +69,7 @@ Error Function::operator()(const Args& arguments, IMeta& out_result) const {
 
 
 BasicType Function::get_return_type() const {
-    return SCRIPTING_BASIC_TYPE_VOID;
+    return SCRIPTING_RUNTIME_BASIC_TYPE_VOID;
 }
 
 

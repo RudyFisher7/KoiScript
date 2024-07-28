@@ -47,8 +47,8 @@ Error Assign::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) 
 
         if (result == SCRIPTING_RUNTIME_ERROR_OK) {
             std::shared_ptr<IVariant> value;
-            result = arguments.at(1u)->run(empty_args);
-            _environment->set(ref->get_string(), arguments.at(1u));
+//            result = arguments.at(1u)->run(empty_args);
+//            _environment->set(ref->get_string(), arguments.at(1u));
         }
 
     } else {

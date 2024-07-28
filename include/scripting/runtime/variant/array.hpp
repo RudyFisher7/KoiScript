@@ -27,8 +27,10 @@
 #define KOI_SCRIPTING_RUNTIME_ARRAY_HPP
 
 
+#include "scripting/runtime/basic_type.hpp"
 #include "scripting/runtime/variant/variable.hpp"
 
+#include <string>
 #include <vector>
 
 
@@ -36,21 +38,25 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Array final: public IVariant {
+
+class Array final: public std::vector<Variable> {
 private:
-    std::vector<Variable> _values;
+    BasicType _type = SCRIPTING_RUNTIME_BASIC_TYPE_INVALID;
+
 public:
+    Array() = default;
+    explicit Array(BasicType in_type);
 
-    virtual int get_size() const = 0;
-    virtual bool get_bool() const = 0;
-    virtual char get_char() const = 0;
-    virtual int get_int() const = 0;
-    virtual float get_float() const = 0;
-    virtual const char* get_c_string() const = 0;
-    virtual std::string get_string() const = 0;
+    Array(const Array& rhs) = default;
+    Array(Array&& rhs) = default;
 
-protected:
-    virtual bool _equals(const IVariant& rhs) const = 0;
+    ~Array() = default;
+
+    Array& operator=(const Array& rhs) = default;
+    Array& operator=(Array&& rhs) = default;
+
+    BasicType get_type() const;
+
 };
 
 } // Runtime
