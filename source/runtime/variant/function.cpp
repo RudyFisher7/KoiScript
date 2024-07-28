@@ -89,7 +89,11 @@ Error Function::operator()(const Args<Variable>& args, Ret<Variable>& ret) const
 
         unsigned int i = 0u;
         while (is_valid_call && i < args.size()) {
-            is_valid_call = args.at(i)->get_type() == _parameter_types.at(i);
+            is_valid_call = (
+                    _parameter_types.at(i) == SCRIPTING_RUNTIME_BASIC_TYPE_DYNAMIC
+                    || args.at(i)->get_type() == _parameter_types.at(i)
+            );
+
             ++i;
         }
     }

@@ -90,7 +90,7 @@ int main() {
     global_environment->declare_var("toasty", KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT);
 
     // var<toasty>:float[];
-    global_environment->declare_arr("toasty_array", KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT);
+    global_environment->declare_arr("toasty_array", KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT);
 
     // ref<toasty>();
     std::shared_ptr<KoiRuntime::Variable> toasty = global_environment->get_var_ref("toasty");
@@ -147,6 +147,13 @@ int main() {
 
     //todo:: 4. run
     KoiRuntime::Error fun_res = global_environment->execute_fun("print", ret, args_1);
+
+    KoiRuntime::Args<KoiRuntime::Variable> args_2 {
+            std::make_shared<KoiRuntime::Variable>("toasty_array", std::strlen("toasty_array"), KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_KEY),
+            std::make_shared<KoiRuntime::Variable>("you got appended me!"),
+    };
+
+    KoiRuntime::Error fun_res_2 = global_environment->execute_fun("append", ret, args_2);
 
     std::cout << *ret << std::endl;
 

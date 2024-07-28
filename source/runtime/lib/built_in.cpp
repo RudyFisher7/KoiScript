@@ -54,7 +54,7 @@ void BuiltIn::import(std::shared_ptr<Environment> environment) const {
             "append",
             SCRIPTING_RUNTIME_BASIC_TYPE_VOID,
             {
-                    SCRIPTING_RUNTIME_BASIC_TYPE_ID,
+                    SCRIPTING_RUNTIME_BASIC_TYPE_KEY,
                     SCRIPTING_RUNTIME_BASIC_TYPE_DYNAMIC,
             }
     );
@@ -65,7 +65,7 @@ void BuiltIn::import(std::shared_ptr<Environment> environment) const {
                     std::bind(BuiltIn::append, environment, std::placeholders::_1, std::placeholders::_2),
                     SCRIPTING_RUNTIME_BASIC_TYPE_VOID,
                     {
-                            SCRIPTING_RUNTIME_BASIC_TYPE_ID,
+                            SCRIPTING_RUNTIME_BASIC_TYPE_KEY,
                             SCRIPTING_RUNTIME_BASIC_TYPE_DYNAMIC,
                     }
             )
