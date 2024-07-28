@@ -146,14 +146,21 @@ public:
 
     void set_value(const char* value, unsigned int size);
 
+    void set_id(const char* value, unsigned int size);
+
 
     void set_value(const char* value);
 
 
     void move_value(char** value);
 
+    void move_id(char** value);
+
 
     void set_value(const std::string& value);
+
+
+    void set_id(const std::string& value);
 
 
     friend std::ostream& operator<<(std::ostream& lhs, const Variable& rhs);

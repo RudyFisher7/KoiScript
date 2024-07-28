@@ -29,8 +29,9 @@
 //#include "scripting/parser.hpp"
 #include "scripting/extensions/extensions.hpp"
 #include "scripting/runtime/environment.hpp"
+#include "scripting/runtime/lib/built_in.hpp"
 #include "scripting/runtime/variant/array.hpp"
-#include "scripting/runtime/function.hpp"
+#include "scripting/runtime/variant/function.hpp"
 #include "scripting/runtime/variant/variable.hpp"
 
 #include <cstring>
@@ -111,6 +112,9 @@ int main() {
 
     global_environment->assign_var("toasty_array", KoiRuntime::Variable("hello world!"), 0);
 
+    KoiRuntime::BuiltIn built_in_lib;
+    built_in_lib.import(global_environment);
+
     {
         std::shared_ptr<KoiRuntime::Environment> child_environment = KoiRuntime::Environment::make_child_environment(
                 global_environment
@@ -124,20 +128,27 @@ int main() {
     }
 
 
-    KoiRuntime::Function function(
+    KoiRuntime::Function print_fn(
             [](const KoiRuntime::Args<KoiRuntime::Variable>& args, KoiRuntime::Ret<KoiRuntime::Variable>& ret) -> KoiRuntime::Error {
                 KoiRuntime::Error result = KoiRuntime::SCRIPTING_RUNTIME_ERROR_OK;
-                ret = KoiRuntime::Function::make_ret<KoiRuntime::Variable>(KoiRuntime::Variable(33));
+                std::cout << args.at(0u)->get_c_string() << std::endl;
+                ret->set_value_void();
                 return result;
             },
-            KoiRuntime::BasicType::SCRIPTING_RUNTIME_BASIC_TYPE_INT
+            KoiRuntime::BasicType::SCRIPTING_RUNTIME_BASIC_TYPE_VOID,
+            {KoiRuntime::BasicType::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT}
     );
 
-    KoiRuntime::Ret<KoiRuntime::Variable> ret;
-    KoiRuntime::Error fun_res = function(KoiRuntime::Args<KoiRuntime::Variable>(), ret);
+    KoiRuntime::Ret<KoiRuntime::Variable> ret = std::make_shared<KoiRuntime::Variable>();
+    KoiRuntime::Args<KoiRuntime::Variable> args_1 {
+        std::make_shared<KoiRuntime::Variable>("hello world!")
+    };
 
 
     //todo:: 4. run
+    KoiRuntime::Error fun_res = global_environment->execute_fun("print", ret, args_1);
+
+    std::cout << *ret << std::endl;
 
     return 0;
 }

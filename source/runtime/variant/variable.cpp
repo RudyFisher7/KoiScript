@@ -135,6 +135,7 @@ Variable::Variable(Variable&& rhs) noexcept {
             set_value(rhs.get_float());
             break;
         case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+        case SCRIPTING_RUNTIME_BASIC_TYPE_ID:
             move_value(&rhs._value_text);
             break;
         default:
@@ -170,6 +171,9 @@ Variable& Variable::operator=(Variable&& rhs) noexcept {
                 break;
             case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
                 move_value(&rhs._value_text);
+                break;
+            case SCRIPTING_RUNTIME_BASIC_TYPE_ID:
+                move_id(&rhs._value_text);
                 break;
             default:
                 KOI_LOG("Variable isn't of recognized type.");
@@ -257,6 +261,7 @@ bool Variable::get_bool() const {
             result = static_cast<bool>(_value_float);
             break;
         case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+        case SCRIPTING_RUNTIME_BASIC_TYPE_ID:
             result = _size > 0u;
             break;
         default:
@@ -285,6 +290,7 @@ char Variable::get_char() const {
             result = static_cast<char>(_value_float);
             break;
         case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+        case SCRIPTING_RUNTIME_BASIC_TYPE_ID:
             if (_size > 0u) {
                 result = _value_text[0u];
             }
@@ -315,6 +321,7 @@ int Variable::get_int() const {
             result = static_cast<int>(_value_float);
             break;
         case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+        case SCRIPTING_RUNTIME_BASIC_TYPE_ID:
             if (_size > 0u) {
                 result = static_cast<int>(static_cast<unsigned char>(_value_text[0u]));
             }
@@ -345,6 +352,7 @@ float Variable::get_float() const {
             result = _value_float;
             break;
         case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+        case SCRIPTING_RUNTIME_BASIC_TYPE_ID:
             if (_size > 0u) {
                 result = static_cast<float>(static_cast<unsigned char>(_value_text[0u]));
             }
@@ -369,6 +377,7 @@ const char* Variable::get_c_string() const {
         KOI_LOG("Variable text is considered nullptr.");
             break;
         case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+        case SCRIPTING_RUNTIME_BASIC_TYPE_ID:
             result = _value_text;
             break;
         default:
@@ -397,6 +406,7 @@ std::string Variable::get_string() const {
             result = std::to_string(_value_float);
             break;
         case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+        case SCRIPTING_RUNTIME_BASIC_TYPE_ID:
             result = _value_text;
             break;
         default:
@@ -461,6 +471,16 @@ void Variable::set_value(const char* value, unsigned int size) {
 }
 
 
+void Variable::set_id(const char* value, unsigned int size) {//fixme:: remove duplicate code
+    _destroy_string_if_string();
+    _size = size;
+    _type = SCRIPTING_RUNTIME_BASIC_TYPE_ID;
+    _value_text = new char[size + 1u];
+    std::memcpy(_value_text, value, size);
+    _value_text[size] = '\0';
+}
+
+
 void Variable::set_value(const char* value) {
     unsigned int size = strnlen(value, MAX_SIZE);
     set_value(value, size);
@@ -475,8 +495,21 @@ void Variable::move_value(char** value) {
 }
 
 
+void Variable::move_id(char** value) {
+    _size = strnlen(*value, MAX_SIZE);
+    _type = SCRIPTING_RUNTIME_BASIC_TYPE_ID;
+    _value_text = *value;
+    *value = nullptr;
+}
+
+
 void Variable::set_value(const std::string& value) {
     set_value(value.c_str(), value.size());
+}
+
+
+void Variable::set_id(const std::string& value) {
+    set_id(value.c_str(), value.size());
 }
 
 
@@ -557,7 +590,7 @@ void Variable::_copy(const Variable& rhs) {
 
 void Variable::_destroy_string_if_string() {
     bool needs_freeing = (
-            _type == SCRIPTING_RUNTIME_BASIC_TYPE_TEXT
+            (_type == SCRIPTING_RUNTIME_BASIC_TYPE_TEXT || _type == SCRIPTING_RUNTIME_BASIC_TYPE_ID)
             && _size > 0u
             && _value_text != nullptr
     );

@@ -23,36 +23,27 @@
  */
 
 
-#ifndef KOI_SCRIPTING_TYPE_HPP
-#define KOI_SCRIPTING_TYPE_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_I_LIBRARY_HPP
+#define KOI_SCRIPTING_RUNTIME_I_LIBRARY_HPP
 
 
-#include <iostream>
-#include <vector>
+#include "scripting/runtime/environment.hpp"
+
+#include <memory>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-enum BasicType : int {
-    SCRIPTING_RUNTIME_BASIC_TYPE_INVALID = -1,
-    SCRIPTING_RUNTIME_BASIC_TYPE_MIN = 0,
-    SCRIPTING_RUNTIME_BASIC_TYPE_VOID = SCRIPTING_RUNTIME_BASIC_TYPE_MIN,
-    SCRIPTING_RUNTIME_BASIC_TYPE_BOOL,
-    SCRIPTING_RUNTIME_BASIC_TYPE_INT,
-    SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT,
-    SCRIPTING_RUNTIME_BASIC_TYPE_TEXT,
-    SCRIPTING_RUNTIME_BASIC_TYPE_ID,
-    SCRIPTING_RUNTIME_BASIC_TYPE_DYNAMIC,
-    SCRIPTING_RUNTIME_BASIC_TYPE_ANY,
-    SCRIPTING_RUNTIME_BASIC_TYPE_VAR_ARGS,
-    SCRIPTING_RUNTIME_BASIC_TYPE_SIZE,
+class ILibrary {
+public:
+    virtual void import(std::shared_ptr<Environment> environment) const = 0;
 };
 
-}
-}
-}
+} // Runtime
+} // Scripting
+} // Koi
 
 
-#endif //KOI_SCRIPTING_TYPE_HPP
+#endif //KOI_SCRIPTING_RUNTIME_I_LIBRARY_HPP

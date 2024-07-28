@@ -23,7 +23,7 @@
  */
 
 
-#include "scripting/runtime/function.hpp"
+#include "scripting/runtime/variant/function.hpp"
 
 #include <utility>
 
@@ -77,6 +77,11 @@ Error Function::operator()(const Args<Variable>& args, Ret<Variable>& ret) const
     bool is_valid_call = args.size() == _parameter_types.size();//fixme:: support var args and dynamic
     if (!is_valid_call) {
         result = SCRIPTING_RUNTIME_ERROR_WRONG_NUM_ARGS;
+    }
+
+    if (is_valid_call && !ret) {
+        result = SCRIPTING_RUNTIME_ERROR_RETURN_VARIABLE_NOT_INITIALIZED;
+        is_valid_call = false;
     }
 
     if (is_valid_call) {

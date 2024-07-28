@@ -40,8 +40,8 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/runtime/variant/variable.hpp
     source/runtime/variant/array.cpp
     include/scripting/runtime/variant/array.hpp
-    source/runtime/function.cpp
-    include/scripting/runtime/function.hpp
+    source/runtime/variant/function.cpp
+    include/scripting/runtime/variant/function.hpp
 
     include/scripting/runtime/meta/i_meta.hpp
 
@@ -62,7 +62,10 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/runtime/meta/main.hpp
     source/runtime/meta/print.cpp
     include/scripting/runtime/meta/print.hpp
-#    source/runtime/meta/fun_lit.cpp
+    source/runtime/lib/built_in.cpp
+    include/scripting/runtime/lib/built_in.hpp
+    include/scripting/runtime/lib/i_library.hpp
+    #    source/runtime/meta/fun_lit.cpp
 #    include/scripting/runtime/meta/fun_lit.hpp
 #    source/runtime/meta/i_lit.cpp
 #    include/scripting/runtime/meta/i_lit.hpp

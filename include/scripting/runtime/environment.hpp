@@ -31,7 +31,7 @@
 #include "scripting/runtime/basic_type.hpp"
 #include "scripting/runtime/variant/array.hpp"
 #include "scripting/runtime/variant/variable.hpp"
-#include "scripting/runtime/function.hpp"
+#include "scripting/runtime/variant/function.hpp"
 #include "scripting/runtime/meta/i_meta.hpp"
 
 #include <map>
@@ -83,6 +83,7 @@ public:
     Error assign_var(const std::string& key, const Variable& value);
     Error assign_var(const std::string& key, const Variable& value, int index);
     Error assign_fun(const std::string& key, const Function& value);
+
 
     Error execute_fun(const std::string& key, Ret<Variable>& ret, const Args<Variable>& args = {});
 
