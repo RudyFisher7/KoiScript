@@ -64,8 +64,6 @@ Variable::Variable(BasicType in_type) {
         case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
             set_value("");
             break;
-        case SCRIPTING_RUNTIME_BASIC_TYPE_REF:
-            break;
         default:
             KOI_LOG("Invalid BasicType for Variable: " + std::to_string(in_type));
             break;
@@ -407,6 +405,11 @@ std::string Variable::get_string() const {
     }
 
     return result;
+}
+
+
+bool Variable::is_same_type(const Variable& other) const {
+    return get_type() == other.get_type();
 }
 
 

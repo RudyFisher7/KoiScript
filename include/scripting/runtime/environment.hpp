@@ -31,7 +31,7 @@
 #include "scripting/runtime/basic_type.hpp"
 #include "scripting/runtime/variant/array.hpp"
 #include "scripting/runtime/variant/variable.hpp"
-//#include "scripting/runtime/function.hpp"//todo::
+#include "scripting/runtime/function.hpp"
 #include "scripting/runtime/meta/i_meta.hpp"
 
 #include <map>
@@ -50,7 +50,7 @@ protected:
     std::set<std::string> _all_declarations;
     std::map<std::string, std::shared_ptr<Variable>> _variables;
     std::map<std::string, std::shared_ptr<Array>> _arrays;
-    std::set<std::string> _native_functions;
+    std::map<std::string, std::shared_ptr<Function>> _functions;
     std::shared_ptr<Environment> _parent;
 
 public:
@@ -73,8 +73,18 @@ public:
     std::shared_ptr<Variable> get_var_val(const std::string& key, int index) const;
     std::shared_ptr<Array> get_arr_ref(const std::string& key);
 
-    bool declare_var(const std::string& key, BasicType type);
-    bool declare_arr(const std::string& key, BasicType type);
+    std::shared_ptr<Function> get_fun_val(const std::string& key) const;
+    std::shared_ptr<Function> get_fun_ref(const std::string& key);
+
+    Error declare_var(const std::string& key, BasicType type);
+    Error declare_arr(const std::string& key, BasicType type);
+    Error declare_fun(const std::string& key, BasicType return_type, const std::vector<BasicType>& parameter_types);
+
+    Error assign_var(const std::string& key, const Variable& value);
+    Error assign_var(const std::string& key, const Variable& value, int index);
+    Error assign_fun(const std::string& key, const Function& value);
+
+    Error execute_fun(const std::string& key, Ret<Variable>& ret, const Args<Variable>& args = {});
 
 
     void set_parent_environment(std::shared_ptr<Environment> in_parent);

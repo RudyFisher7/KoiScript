@@ -126,6 +126,9 @@ public:
     std::string get_string() const;
 
 
+    bool is_same_type(const Variable& other) const;
+
+
     void set_value_void();
 
 

@@ -57,6 +57,8 @@ public:
 
     BasicType get_type() const;
 
+    bool is_same_type(const Array& other) const;
+
 };
 
 } // Runtime

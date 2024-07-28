@@ -40,42 +40,58 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Function final {
-public:
-    typedef std::vector<std::shared_ptr<const IMeta>> Args;
-    typedef std::vector<std::shared_ptr<const IMeta>> Body;
-    typedef std::shared_ptr<const IMeta> Ret;
+template<typename T>
+using Args = std::vector<std::shared_ptr<T>>;
 
 
+template<typename T>
+using Ret = std::shared_ptr<T>;
+
+
+template<typename ArgT, typename RetT>
+using Fun = std::function<Error(const Args<ArgT>&, Ret<RetT>&)>;
+
+
+class Function final: public Fun<Variable, Variable> {
 private:
-    Body _body;
-    Ret _ret;
+    BasicType _return_type = SCRIPTING_RUNTIME_BASIC_TYPE_VOID;
+    std::vector<BasicType> _parameter_types;
 
-    //todo:: statements
 
 public:
+    template<typename T>
+    static Ret<T> make_ret(const T& value) {
+        return std::make_shared<T>(value);
+    }
+
     Function() = default;
-    Function(Body in_body, Ret in_ret);
+    Function(Fun<Variable, Variable> fn, BasicType  in_return_type);
+    Function(BasicType in_return_type, std::vector<BasicType> in_parameter_types);
+    Function(Fun<Variable, Variable> fn, BasicType  in_return_type, std::vector<BasicType> in_parameter_types);
+
+    Function(const Function& rhs) = default;
+    Function(Function&& rhs) = default;
 
     ~Function() = default;
 
 
-    //todo:: implement
-    Function(const Function& rhs);
-    Function(Function&& rhs) noexcept;
+    Function& operator=(const Function& rhs) = default;
+    Function& operator=(Function&& rhs) = default;
 
-    Function& operator=(const Function& rhs);
-    Function& operator=(Function&& rhs) noexcept;
+    /**
+     * @brief Implements the function call operator.
+     * @remarks Hides this class' base class' function call operator.
+     * Performs type checks before executing.
+     * @param args
+     * @param ret
+     * @return
+     */
+    Error operator()(const Args<Variable>& args, Ret<Variable>& ret) const;
 
+    BasicType get_return_type() const;
+    const std::vector<BasicType>& get_parameter_types() const;
 
-    Error operator()(const Args& arguments, IMeta& out_result) const;
-
-
-    BasicType get_return_type() const;//fixme::
-
-//fixme::
-//    const std::vector<BasicType>& get_parameter_types() const;
-
+    bool is_same_type(const Function& other) const;
 };
 
 

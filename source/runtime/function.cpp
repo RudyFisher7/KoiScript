@@ -32,50 +32,93 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-Function::Function(Body in_body, Ret in_ret): _body(std::move(in_body)), _ret(std::move(in_ret)) {
+Function::Function(
+        Fun<Variable, Variable> fn,
+        BasicType in_return_type
+):
+        Fun<Variable, Variable>(std::move(fn)),
+        _return_type(in_return_type),
+        _parameter_types() {
 
 }
 
 
-Function::Function(const Function& rhs) {
-    //
+Function::Function(
+        BasicType in_return_type,
+        std::vector<BasicType> in_parameter_types
+):
+        Fun<Variable, Variable>(
+                [in_return_type](const Args<Variable>&, Ret<Variable>& ret) -> Error {
+                    ret = make_ret<Variable>(Variable(in_return_type));
+                    return SCRIPTING_RUNTIME_ERROR_OK;
+                }
+        ),
+        _return_type(in_return_type),
+        _parameter_types(std::move(in_parameter_types)) {
+
 }
 
 
-Function::Function(Function&& rhs) noexcept {
-    //
+Function::Function(
+        Fun<Variable, Variable> fn,
+        BasicType in_return_type,
+        std::vector<BasicType> in_parameter_types
+):
+        Fun<Variable, Variable>(std::move(fn)),
+        _return_type(in_return_type),
+        _parameter_types(std::move(in_parameter_types)) {
+
 }
 
 
-Function& Function::operator=(const Function& rhs) {
-    //
-    return *this;
-}
-
-
-Function& Function::operator=(Function&& rhs) noexcept {
-    //
-    return *this;
-}
-
-
-Error Function::operator()(const Args& arguments, IMeta& out_result) const {
+Error Function::operator()(const Args<Variable>& args, Ret<Variable>& ret) const {//fixme:: add more error info as this stack could be larger than 1
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    while (result == SCRIPTING_RUNTIME_ERROR_OK)
+    bool is_valid_call = args.size() == _parameter_types.size();//fixme:: support var args and dynamic
+    if (!is_valid_call) {
+        result = SCRIPTING_RUNTIME_ERROR_WRONG_NUM_ARGS;
+    }
+
+    if (is_valid_call) {
+        is_valid_call = ret->get_type() == _return_type;
+
+        unsigned int i = 0u;
+        while (is_valid_call && i < args.size()) {
+            is_valid_call = args.at(i)->get_type() == _parameter_types.at(i);
+            ++i;
+        }
+    }
+
+    if (!is_valid_call) {
+        result = SCRIPTING_RUNTIME_ERROR_TYPE_MISMATCH;
+    } else {
+        result = Fun<Variable, Variable>::operator()(args, ret);
+    }
 
     return result;
 }
 
 
 BasicType Function::get_return_type() const {
-    return SCRIPTING_RUNTIME_BASIC_TYPE_VOID;
+    return _return_type;
 }
 
 
-//const std::vector<BasicType>& Function::get_parameter_types() const {
-//    return _parameter_types;
-//}
+const std::vector<BasicType>& Function::get_parameter_types() const {
+    return _parameter_types;
+}
+
+
+bool Function::is_same_type(const Function& other) const {
+    bool result = false;
+
+    result = (
+            get_return_type() == other.get_return_type()
+            && get_parameter_types() == other.get_parameter_types()
+    );
+
+    return result;
+}
 
 } // Runtime
 } // Scripting

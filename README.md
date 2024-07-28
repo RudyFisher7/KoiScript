@@ -12,23 +12,23 @@ in mind. Not to be mistaken for the stunning koilang (tsevhu): https://www.reddi
 
 ## Meta Functions
 These act on the runtime environment.
-### does stuff
-- val
-- ref
-- exe
-- imp
 ### makes stuff
 - var
 - arr
 - fun
 - lib
+### does stuff
+- val
+- ref
+- exe
+- asn
+- imp
 ### removes stuff
 - rem
 
 ## Built-In Functions
 These are part of the runtime environment.
 ### special
-- assign
 - print
 ### arrays
 - append

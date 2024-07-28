@@ -40,8 +40,8 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/runtime/variant/variable.hpp
     source/runtime/variant/array.cpp
     include/scripting/runtime/variant/array.hpp
-#    source/runtime/function.cpp
-#    include/scripting/runtime/function.hpp
+    source/runtime/function.cpp
+    include/scripting/runtime/function.hpp
 
     include/scripting/runtime/meta/i_meta.hpp
 

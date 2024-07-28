@@ -30,6 +30,7 @@
 #include "scripting/extensions/extensions.hpp"
 #include "scripting/runtime/environment.hpp"
 #include "scripting/runtime/variant/array.hpp"
+#include "scripting/runtime/function.hpp"
 #include "scripting/runtime/variant/variable.hpp"
 
 #include <cstring>
@@ -93,8 +94,8 @@ int main() {
     // ref<toasty>();
     std::shared_ptr<KoiRuntime::Variable> toasty = global_environment->get_var_ref("toasty");
 
-    // exe<assign>(ref<toasty>(), 'hello world!');
-    toasty->set_value("hello world!");
+    // asn<toasty>('hello world!');
+    global_environment->assign_var("toasty", KoiRuntime::Variable("hello world!"));
 
     // ref<toasty_array>();
     std::shared_ptr<KoiRuntime::Array> toasty_array = global_environment->get_arr_ref("toasty_array");
@@ -108,6 +109,8 @@ int main() {
     // exe<append>(ref<toasty_array>(), 'konnichiwa nihon!');
     toasty_array->emplace_back("konnichiwa nihon!");
 
+    global_environment->assign_var("toasty_array", KoiRuntime::Variable("hello world!"), 0);
+
     {
         std::shared_ptr<KoiRuntime::Environment> child_environment = KoiRuntime::Environment::make_child_environment(
                 global_environment
@@ -116,9 +119,22 @@ int main() {
         // ref<toasty>();
         std::shared_ptr<KoiRuntime::Variable> toasty_from_child = child_environment->get_var_ref("toasty");
 
-        // exe<assign>(ref<toasty>(), 'sayonara');
-        toasty->set_value("sayonara");
+        // asn<toasty>('sayonara');
+        global_environment->assign_var("toasty", KoiRuntime::Variable("sayonara"));
     }
+
+
+    KoiRuntime::Function function(
+            [](const KoiRuntime::Args<KoiRuntime::Variable>& args, KoiRuntime::Ret<KoiRuntime::Variable>& ret) -> KoiRuntime::Error {
+                KoiRuntime::Error result = KoiRuntime::SCRIPTING_RUNTIME_ERROR_OK;
+                ret = KoiRuntime::Function::make_ret<KoiRuntime::Variable>(KoiRuntime::Variable(33));
+                return result;
+            },
+            KoiRuntime::BasicType::SCRIPTING_RUNTIME_BASIC_TYPE_INT
+    );
+
+    KoiRuntime::Ret<KoiRuntime::Variable> ret;
+    KoiRuntime::Error fun_res = function(KoiRuntime::Args<KoiRuntime::Variable>(), ret);
 
 
     //todo:: 4. run

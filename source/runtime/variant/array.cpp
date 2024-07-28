@@ -39,6 +39,11 @@ BasicType Array::get_type() const {
     return _type;
 }
 
+
+bool Array::is_same_type(const Array& other) const {
+    return get_type() == other.get_type();
+}
+
 } // Runtime
 } // Scripting
 } // Koi
