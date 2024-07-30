@@ -37,6 +37,7 @@ Runtime::Error Interpreter::interpret(std::shared_ptr<Runtime::Environment> root
 Runtime::Error Interpreter::_evaluate_instructions(const std::shared_ptr<Runtime::Environment>& environment, std::shared_ptr<Runtime::Instruction>& instructions, std::shared_ptr<Runtime::Variable>& out_result) const {
     Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 
+    //fixme:: these cached variables need to be used for something
     std::shared_ptr<Runtime::Variable> value_variable;
     std::shared_ptr<Runtime::Function> value_function;
     std::shared_ptr<Runtime::Array> value_array;
@@ -66,29 +67,43 @@ Runtime::Error Interpreter::_evaluate_instructions(const std::shared_ptr<Runtime
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_LIB_KOI:
                 result = _make_library(environment, current_instruction->key);
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_VAR:
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_VAR: //todo:: this value is needed for something...
                 value_variable = environment->get_var_val(current_instruction->key);
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_FUN:
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_FUN: //todo:: this value is needed for something...
                 value_function = environment->get_fun_val(current_instruction->key);
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_VAR:
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_VAR: //todo:: this reference is needed for something...
                 value_variable = environment->get_var_ref(current_instruction->key);
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_ARR:
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_ARR: //todo:: this reference is needed for something...
                 value_array = environment->get_arr_ref(current_instruction->key);
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_FUN:
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_FUN: //todo:: this reference is needed for something...
                 value_function = environment->get_fun_ref(current_instruction->key);
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_EXE:
-                result = _execute(environment, current_instruction->key, out_result);
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_EXE_NATIVE: //todo:: the result here is needed for something...
+                result = _execute_native(Runtime::Environment::make_child_environment(environment), current_instruction->key, out_result);
+                break;
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_EXE_KOI: //todo:: the result here is needed for something...
+                result = _execute_koi(Runtime::Environment::make_child_environment(environment), current_instruction->key, out_result);//todo:: this function enters the function's body and calls this function recursively
+                break;
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_RET_VAR: //todo:: the result here is needed for something...
+                out_result = current_instruction->value_variable;
+                break;
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_RET_ARR: //todo:: the result here is needed for something... need to know return type of Function executing so can enter the correct evaluate_instructions() function
+//                out_result = fixme::
+                result = Runtime::SCRIPTING_RUNTIME_ERROR_UNSUPPORTED_INSTRUCTION;
+                break;
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_RET_FUN: //todo:: the result here is needed for something...
+//                out_result = fixme::
+                result = Runtime::SCRIPTING_RUNTIME_ERROR_UNSUPPORTED_INSTRUCTION;
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_IMP_NATIVE:
-                result = _import_library(environment, current_instruction->key, out_result);
+                result = _import_library(environment, current_instruction->key);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_IMP_KOI:
-                result = _import_library(environment, current_instruction->key, current_instruction->path, out_result);
+                result = _import_library(environment, current_instruction->key, current_instruction->path);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REM:
                 result = _remove(environment, current_instruction->key);

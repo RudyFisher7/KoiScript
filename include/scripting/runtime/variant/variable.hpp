@@ -71,7 +71,7 @@ public:
 
 
     Variable(const char* in_value, unsigned int size);
-    Variable(const char* in_value, unsigned int size, BasicType in_type);//fixme::
+    Variable(const char* in_value, unsigned int size, BasicType in_type);//fixme:: don't need type of key
 
 
     explicit Variable(const std::string& in_value);
