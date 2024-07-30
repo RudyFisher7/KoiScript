@@ -37,6 +37,7 @@ enum Error : int {
 
     // type-related
     SCRIPTING_RUNTIME_ERROR_TYPE_MISMATCH,
+    SCRIPTING_RUNTIME_ERROR_TYPE_UNRECOGNIZED,
 
     // declaration-related
     SCRIPTING_RUNTIME_ERROR_ALREADY_EXISTS,
