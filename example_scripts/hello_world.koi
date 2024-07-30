@@ -1,5 +1,5 @@
-exe<main>('hello_world!', int(text):{
-    exe<print>(val<_args>(0));
+var<msg>:text;
 
-    ret:0;
-});
+asn<msg>('hello world!');
+
+exe<print>(val<msg>());

@@ -10,6 +10,15 @@ in mind. Not to be mistaken for the stunning koilang (tsevhu): https://www.reddi
 # TODO::
 - ...
 
+## Datatypes
+- bool
+- int
+- float
+- text
+- key
+- array (of bool, int, float, text, or key)
+
+
 ## Meta Functions
 These act on the runtime environment.
 ### makes stuff
@@ -20,8 +29,8 @@ These act on the runtime environment.
 ### does stuff
 - val
 - ref
-- exe
 - asn
+- exe
 - imp
 ### removes stuff
 - rem

@@ -23,42 +23,21 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ERROR_HPP
-#define KOI_SCRIPTING_RUNTIME_ERROR_HPP
+#include "scripting/runtime/instruction.hpp"
+
+#include <utility>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
-
-enum Error : int {
-    SCRIPTING_RUNTIME_ERROR_MIN = 0,
-    SCRIPTING_RUNTIME_ERROR_OK = SCRIPTING_RUNTIME_ERROR_MIN,
-
-    // type-related
-    SCRIPTING_RUNTIME_ERROR_TYPE_MISMATCH,
-
-    // declaration-related
-    SCRIPTING_RUNTIME_ERROR_ALREADY_EXISTS,
-    SCRIPTING_RUNTIME_ERROR_NOT_YET_DECLARED,
-
-    // array-related
-    SCRIPTING_RUNTIME_ERROR_INDEX_OUT_OF_BOUNDS,
-
-    // function-related
-    SCRIPTING_RUNTIME_ERROR_WRONG_NUM_ARGS,
-    SCRIPTING_RUNTIME_ERROR_RETURN_VARIABLE_NOT_INITIALIZED,
-
-    // instruction-based
-    SCRIPTING_RUNTIME_ERROR_UNRECOGNIZED_INSTRUCTION,
-
-
-    SCRIPTING_RUNTIME_ERROR_SIZE,
-};
-
+Instruction::Instruction(
+        Instruction::Type type,
+        BasicType data_type,
+        std::string  key,
+        std::shared_ptr<Instruction> next
+): type(type), data_type(data_type), key(std::move(key)), next(std::move(next)) {
 }
-}
-}
-
-
-#endif //KOI_SCRIPTING_RUNTIME_ERROR_HPP
+} // Runtime
+} // Scripting
+} // Koi
