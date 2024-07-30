@@ -30,7 +30,7 @@ namespace Koi {
 namespace Scripting {
 
 Runtime::Error Interpreter::interpret(std::shared_ptr<Runtime::Environment> root_environment, std::shared_ptr<Runtime::Instruction> instructions, std::shared_ptr<Runtime::Variable>& out_result) const {
-    return _evaluate_instruction(root_environment, instructions, out_result);
+    return _evaluate_instructions(root_environment, instructions, out_result);
 }
 
 
