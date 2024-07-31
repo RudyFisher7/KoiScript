@@ -25,19 +25,34 @@
 
 #include "scripting/runtime/instruction.hpp"
 
-#include <utility>
-
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
+
 Instruction::Instruction(
-        Instruction::Type type,
-        BasicType data_type,
-        std::string  key,
-        std::shared_ptr<Instruction> next
-): type(type), data_type(data_type), key(std::move(key)), next(std::move(next)) {
+        Type in_type,
+        std::string in_key,
+        Instruction* in_next
+): _type(in_type), _key(std::move(in_key)), _next(in_next) {
+
 }
+
+
+Instruction::Type Instruction::get_type() const {
+    return _type;
+}
+
+
+std::string Instruction::get_key() const {
+    return _key;
+}
+
+
+Instruction* Instruction::get_next() {
+    return _next;
+}
+
 } // Runtime
 } // Scripting
 } // Koi
