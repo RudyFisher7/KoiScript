@@ -82,7 +82,7 @@ std::shared_ptr<Variable> Environment::get_var_ref(const std::string& key) {
 }
 
 
-std::shared_ptr<Variable> Environment::get_var_val(const std::string& key, int index) const {
+std::shared_ptr<Variable> Environment::get_var_val(const std::string& key, unsigned int index) const {
     std::shared_ptr<Variable> result;
 
     if (_arrays.find(key) != _arrays.end() && _arrays.at(key)->size() > index) {
@@ -215,7 +215,7 @@ Error Environment::assign_var(const std::string& key, const Variable& value) {
 }
 
 
-Error Environment::assign_var(const std::string& key, const Variable& value, int index) {
+Error Environment::assign_var(const std::string& key, const Variable& value, unsigned int index) {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
     std::shared_ptr<Array> array = get_arr_ref(key);

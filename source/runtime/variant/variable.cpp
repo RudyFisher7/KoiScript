@@ -246,7 +246,7 @@ BasicType Variable::get_type() const {
 }
 
 
-int Variable::get_size() const {
+unsigned int Variable::get_size() const {
     return _size;
 }
 

@@ -78,7 +78,7 @@ public:
     std::shared_ptr<Variable> get_var_val(const std::string& key) const;
     std::shared_ptr<Variable> get_var_ref(const std::string& key);
 
-    std::shared_ptr<Variable> get_var_val(const std::string& key, int index) const;
+    std::shared_ptr<Variable> get_var_val(const std::string& key, unsigned int index) const;
     std::shared_ptr<Array> get_arr_ref(const std::string& key);
 
     std::shared_ptr<Function> get_fun_val(const std::string& key) const;
@@ -89,7 +89,7 @@ public:
     Error declare_fun(const std::string& key, BasicType return_type, const std::vector<BasicType>& parameter_types);
 
     Error assign_var(const std::string& key, const Variable& value);
-    Error assign_var(const std::string& key, const Variable& value, int index);
+    Error assign_var(const std::string& key, const Variable& value, unsigned int index);
     Error assign_fun(const std::string& key, const Function& value);
 
 

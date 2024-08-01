@@ -43,7 +43,7 @@ public:
     static const std::string VOID_STRING;
 
 private:
-    int _size = 0u;
+    unsigned int _size = 0u;
     BasicType _type = SCRIPTING_RUNTIME_BASIC_TYPE_VOID;
     union {
         bool _value_bool = false;
@@ -118,7 +118,7 @@ public:
     BasicType get_type() const;
 
 
-    int get_size() const;
+    unsigned int get_size() const;
     bool get_bool() const;
     char get_char() const;
     int get_int() const;

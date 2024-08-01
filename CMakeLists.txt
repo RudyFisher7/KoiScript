@@ -3,6 +3,9 @@ project(KoiScript VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wpedantic")
+
+message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
 add_library(${PROJECT_NAME} STATIC
     source/log/log.cpp
@@ -85,6 +88,14 @@ add_library(${PROJECT_NAME} STATIC
 target_include_directories(${PROJECT_NAME} PUBLIC
     include
 )
+
+#target_compile_definitions(${PROJECT_NAME} PRIVATE
+#    ENABLE_KOI_SCRIPTING_LOG=1
+#)
+#
+#target_compile_options(${PROJECT_NAME} PRIVATE
+#    -pedantic
+#)
 
 
 add_subdirectory(debug)

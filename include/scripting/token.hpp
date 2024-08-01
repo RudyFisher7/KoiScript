@@ -89,6 +89,7 @@ public:
 
 
 protected:
+    static const char* TRUE_BOOL;
     Type _type = SCRIPTING_TOKEN_TYPE_INVALID;
     InternalType _internal_type = SCRIPTING_TOKEN_INTERNAL_TYPE_INVALID;
 
