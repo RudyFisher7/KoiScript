@@ -73,6 +73,7 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/runtime/instruction/assignment.hpp
     include/scripting/runtime/instruction/import.hpp
     include/scripting/runtime/instruction/execute.hpp
+    include/scripting/runtime/instruction/get_value.hpp
     #    source/runtime/meta/fun_lit.cpp
 #    include/scripting/runtime/meta/fun_lit.hpp
 #    source/runtime/meta/i_lit.cpp

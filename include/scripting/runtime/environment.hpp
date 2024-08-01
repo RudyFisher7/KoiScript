@@ -47,7 +47,15 @@ namespace Runtime {
 
 class Environment {
 protected:
-    std::set<std::string> _all_declarations;
+    enum DeclarationType: int {
+        SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_MIN = 0,
+        SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_VAR = SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_MIN,
+        SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_ARR,
+        SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_FUN,
+        SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_SIZE
+    };
+
+    std::map<std::string, DeclarationType> _all_declarations;
     std::map<std::string, std::shared_ptr<Variable>> _variables;
     std::map<std::string, std::shared_ptr<Array>> _arrays;
     std::map<std::string, std::shared_ptr<Function>> _functions;
@@ -86,6 +94,8 @@ public:
 
 
     Error execute_fun(const std::string& key, Ret<Variable>& ret, const Args<Variable>& args = {});
+
+    Error remove(const std::string& key);
 
 
     void set_parent_environment(std::shared_ptr<Environment> in_parent);

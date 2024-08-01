@@ -37,19 +37,19 @@ namespace Runtime {
 template<typename T, Instruction::Type TypeValue>
 class Assignment: public Instruction {
 protected:
-    std::shared_ptr<T> _data_value;
+    T _data_value;
 
 public:
     Assignment(
             std::string in_key,
             Instruction* in_next,
-            std::shared_ptr<T> in_data_value
+            T in_data_value
     ):
             Instruction(TypeValue, in_key, in_next),
             _data_value(std::move(in_data_value)) {
     }
 
-    std::shared_ptr<T> get_value() const {
+    const T& get_value() const {
         return _data_value;
     }
 };
@@ -67,7 +67,7 @@ public:
     ArrayElementAssignment(
             std::string in_key,
             Instruction* in_next,
-            std::shared_ptr<Variable> in_data_value,
+            Variable in_data_value,
             int in_index
     ):
             Assignment(std::move(in_key), in_next, std::move(in_data_value)),

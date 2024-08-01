@@ -96,11 +96,13 @@ Error Function::operator()(const Args<Variable>& args, Ret<Variable>& ret) const
 
             ++i;
         }
+
+        if (!is_valid_call) {
+            result = SCRIPTING_RUNTIME_ERROR_TYPE_MISMATCH;
+        }
     }
 
-    if (!is_valid_call) {
-        result = SCRIPTING_RUNTIME_ERROR_TYPE_MISMATCH;
-    } else {
+    if (is_valid_call) {
         result = Fun<Variable, Variable>::operator()(args, ret);
     }
 

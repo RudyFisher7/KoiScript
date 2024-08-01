@@ -75,22 +75,23 @@ protected:
     std::string _key;
     Instruction* _next;
 
-    Instruction(Type in_type, std::string in_key, Instruction* in_next);
+public:
+    Instruction(Type in_type, std::string in_key, Instruction* in_next = nullptr);
 
     Instruction(const Instruction& rhs) = default;
     Instruction(Instruction&& rhs) = default;
 
-    ~Instruction() = default;
+    virtual ~Instruction();
 
     Instruction& operator=(const Instruction& rhs) = default;
     Instruction& operator=(Instruction&& rhs) = default;
 
-public:
     Type get_type() const;
 
     std::string get_key() const;
 
     Instruction* get_next();
+    void set_next(Instruction* value);
 };
 
 

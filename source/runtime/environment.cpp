@@ -153,7 +153,7 @@ std::shared_ptr<Function> Environment::get_fun_ref(const std::string& key) {
 Error Environment::declare_var(const std::string& key, BasicType type) {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    if (!_all_declarations.emplace(key).second) {
+    if (!_all_declarations.emplace(key, SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_VAR).second) {
         result = SCRIPTING_RUNTIME_ERROR_ALREADY_EXISTS;
     } else {
         _variables.emplace(key, std::make_shared<Variable>(type));
@@ -166,7 +166,7 @@ Error Environment::declare_var(const std::string& key, BasicType type) {
 Error Environment::declare_arr(const std::string& key, BasicType type) {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    if (!_all_declarations.emplace(key).second) {
+    if (!_all_declarations.emplace(key, SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_ARR).second) {
         result = SCRIPTING_RUNTIME_ERROR_ALREADY_EXISTS;
     } else {
         _arrays.emplace(key, std::make_shared<Array>(type));
@@ -183,7 +183,7 @@ Error Environment::declare_fun(
 ) {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    if (!_all_declarations.emplace(key).second) {
+    if (!_all_declarations.emplace(key, SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_FUN).second) {
         result = SCRIPTING_RUNTIME_ERROR_ALREADY_EXISTS;
     } else {
         _functions.emplace(
@@ -249,6 +249,36 @@ Error Environment::assign_fun(const std::string& key, const Function& value) {
         }
     } else {
         result = SCRIPTING_RUNTIME_ERROR_NOT_YET_DECLARED;
+    }
+
+    return result;
+}
+
+
+Error Environment::remove(const std::string& key) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    if (_has_key(key)) {
+        switch (_all_declarations.at(key)) {
+            case SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_VAR:
+                _variables.erase(key);
+                break;
+            case SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_ARR:
+                _arrays.erase(key);
+                break;
+            case SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_FUN:
+                _functions.erase(key);
+                break;
+            default:
+                result = SCRIPTING_RUNTIME_ERROR_TYPE_UNRECOGNIZED;
+                break;
+        }
+    } else {
+        std::shared_ptr<Environment> environment = _resolve(key);
+
+        if (environment) {
+            result = environment->remove(key);
+        }
     }
 
     return result;

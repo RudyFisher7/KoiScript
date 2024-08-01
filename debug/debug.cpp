@@ -99,26 +99,28 @@ int main() {
         global_environment->get_var_val("msg")
     };
 
-    KoiRuntime::Instruction* first = new KoiRuntime::VariableDeclaration(
-        "msg_2",
+    KoiRuntime::Instruction* first = new KoiRuntime::ExecuteNative(
+        "print",
         nullptr,
-        KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT
+        {new KoiRuntime::Instruction(KoiRuntime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_VAR, "msg")}
     );
 
     //todo:: 4. run
     Koi::Scripting::Interpreter interpreter;
     KoiRuntime::Error interpreter_error = interpreter.interpret(global_environment, first, ret);
 
-    KoiRuntime::Error fun_res = global_environment->execute_fun("print", ret, args_1);
+//    KoiRuntime::Error fun_res = global_environment->execute_fun("print", ret, args_1);
 
-    KoiRuntime::Args<KoiRuntime::Variable> args_2 {
-            std::make_shared<KoiRuntime::Variable>("toasty_array", std::strlen("toasty_array"), KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_KEY),
-            std::make_shared<KoiRuntime::Variable>("you got appended me!"),
-    };
+//    KoiRuntime::Args<KoiRuntime::Variable> args_2 {
+//            std::make_shared<KoiRuntime::Variable>("toasty_array", std::strlen("toasty_array"), KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_KEY),
+//            std::make_shared<KoiRuntime::Variable>("you got appended me!"),
+//    };
+//
+//    KoiRuntime::Error fun_res_2 = global_environment->execute_fun("append", ret, args_2);
 
-    KoiRuntime::Error fun_res_2 = global_environment->execute_fun("append", ret, args_2);
+    std::cout << "Interpreter result: " << interpreter_error << " - " << *ret << std::endl;
 
-    std::cout << *ret << std::endl;
+    delete first;
 
     return 0;
 }

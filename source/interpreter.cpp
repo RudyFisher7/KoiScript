@@ -68,22 +68,22 @@ Runtime::Error Interpreter::_evaluate_instructions(const std::shared_ptr<Runtime
                 result = _make_library(environment, current_instruction->get_key());
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_VAR: //todo:: this value is needed for something...
-                result = _get_value(environment, current_instruction->get_key(), value_variable);
+                result = _get_value(environment, current_instruction->get_key(), out_result);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_ARR_VAR: //todo:: this value is needed for something...
-                result = _get_value(environment, static_cast<Runtime::ArrayElementValue*>(current_instruction), value_variable);
+                result = _get_value(environment, static_cast<Runtime::ArrayElementValue*>(current_instruction), out_result);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_FUN: //todo:: this value is needed for something...
                 result = _get_value(environment, current_instruction->get_key(), value_function);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_VAR: //todo:: this reference is needed for something...
-                result = _get_reference(environment, current_instruction->get_key(), value_variable);
+                result = _get_reference(environment, current_instruction->get_key(), out_result);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_ARR: //todo:: this reference is needed for something...
-                result = _get_reference(environment, current_instruction->get_key(), value_variable);
+                result = _get_reference(environment, current_instruction->get_key(), out_result);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_FUN: //todo:: this reference is needed for something...
-                result = _get_reference(environment, current_instruction->get_key(), value_function);
+                result = _get_reference(environment, current_instruction->get_key(), out_result);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_EXE_NATIVE: //todo:: the result here is needed for something...
                 result = _execute_native(Runtime::Environment::make_child_environment(environment), static_cast<Runtime::ExecuteNative*>(current_instruction), out_result);
@@ -125,7 +125,7 @@ Runtime::Error Interpreter::_evaluate_instructions(const std::shared_ptr<Runtime
 
 Runtime::Error Interpreter::_make_variable(
         const std::shared_ptr<Runtime::Environment>& environment,
-        const Runtime::VariableDeclaration* instruction
+        Runtime::VariableDeclaration* instruction
 ) const {
     Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 
@@ -137,7 +137,7 @@ Runtime::Error Interpreter::_make_variable(
 
 Runtime::Error Interpreter::_make_array(
         const std::shared_ptr<Runtime::Environment>& environment,
-        const Runtime::ArrayDeclaration* instruction
+        Runtime::ArrayDeclaration* instruction
 ) const {
     Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 
@@ -149,7 +149,7 @@ Runtime::Error Interpreter::_make_array(
 
 Runtime::Error Interpreter::_make_function(
         const std::shared_ptr<Runtime::Environment>& environment,
-        const Runtime::FunctionDeclaration* instruction
+        Runtime::FunctionDeclaration* instruction
 ) const {
     Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 
@@ -162,6 +162,231 @@ Runtime::Error Interpreter::_make_function(
 Runtime::Error Interpreter::_make_library(std::shared_ptr<Runtime::Environment> environment, std::string key) const {
     std::cout << "todo:: implement Interpreter::_make_library" << std::endl;
     return Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+}
+
+
+Runtime::Error Interpreter::_assign(
+        std::shared_ptr<Runtime::Environment> environment,
+        Runtime::VariableAssignment* instruction
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    result = environment->assign_var(instruction->get_key(), instruction->get_value());
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_assign(
+        std::shared_ptr<Runtime::Environment> environment,
+        Runtime::ArrayElementAssignment* instruction
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    result = environment->assign_var(instruction->get_key(), instruction->get_value(), instruction->get_index());
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_assign(
+        std::shared_ptr<Runtime::Environment> environment,
+        Runtime::FunctionAssignment* instruction
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    result = environment->assign_fun(instruction->get_key(), instruction->get_value());
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_get_value(
+        std::shared_ptr<Runtime::Environment> environment,
+        const std::string& key,
+        std::shared_ptr<Runtime::Variable>& out_value
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    out_value = environment->get_var_val(key);
+
+    if (!out_value) {
+        result = Runtime::SCRIPTING_RUNTIME_ERROR_NOT_YET_DECLARED;
+    }
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_get_value(
+        std::shared_ptr<Runtime::Environment> environment,
+        Runtime::ArrayElementValue* instruction,
+        std::shared_ptr<Runtime::Variable>& out_value
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    out_value = environment->get_var_val(instruction->get_key(), instruction->get_index());
+
+    if (!out_value) {
+        result = Runtime::SCRIPTING_RUNTIME_ERROR_NOT_YET_DECLARED;
+    }
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_get_value(
+        std::shared_ptr<Runtime::Environment> environment,
+        const std::string& key,
+        std::shared_ptr<Runtime::Function>& out_value
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    out_value = environment->get_fun_val(key);
+
+    if (!out_value) {
+        result = Runtime::SCRIPTING_RUNTIME_ERROR_NOT_YET_DECLARED;
+    }
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_get_reference(
+        std::shared_ptr<Runtime::Environment> environment,
+        const std::string& key,
+        std::shared_ptr<Runtime::Variable>& out_reference
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    out_reference = environment->get_var_ref(key);
+
+    if (!out_reference) {
+        result = Runtime::SCRIPTING_RUNTIME_ERROR_NOT_YET_DECLARED;
+    }
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_get_reference(
+        std::shared_ptr<Runtime::Environment> environment,
+        const std::string& key,
+        std::shared_ptr<Runtime::Array>& out_reference
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    out_reference = environment->get_arr_ref(key);
+
+    if (!out_reference) {
+        result = Runtime::SCRIPTING_RUNTIME_ERROR_NOT_YET_DECLARED;
+    }
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_get_reference(
+        std::shared_ptr<Runtime::Environment> environment,
+        const std::string& key,
+        std::shared_ptr<Runtime::Function>& out_reference
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    out_reference = environment->get_fun_ref(key);
+
+    if (!out_reference) {
+        result = Runtime::SCRIPTING_RUNTIME_ERROR_NOT_YET_DECLARED;
+    }
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_execute_native(
+        std::shared_ptr<Runtime::Environment> environment,
+        Runtime::ExecuteNative* instruction,
+        std::shared_ptr<Runtime::Variable>& out_result
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    Runtime::Args<Runtime::Variable> arguments;
+    arguments.reserve(instruction->get_number_of_arguments());
+
+    unsigned int i = 0u;
+    while (result == Runtime::SCRIPTING_RUNTIME_ERROR_OK && i < instruction->get_number_of_arguments()) {
+        arguments.emplace_back(new Runtime::Variable());
+        result = _evaluate_instructions(environment, instruction->get_argument_instruction_at(i), arguments.at(i));
+
+        ++i;
+    }
+
+    result = environment->execute_fun(instruction->get_key(), out_result, arguments);
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_execute_koi(
+        std::shared_ptr<Runtime::Environment> environment,
+        const std::string& key,
+        std::shared_ptr<Runtime::Variable>& out_result
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+//    result = environment->execute_fun(instruction->get_key(), out_result);//todo:: support args
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_return_variable(
+        std::shared_ptr<Runtime::Environment> environment,
+        Runtime::Instruction* instruction,
+        std::shared_ptr<Runtime::Variable>& out_result
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+//    result = environment->execute_fun(instruction->get_key(), out_result);
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_import_library(
+        std::shared_ptr<Runtime::Environment> environment,
+        const std::string& key
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+//    result = environment->execute_fun(instruction->get_key(), out_result);
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_import_library(
+        std::shared_ptr<Runtime::Environment> environment,
+        Runtime::ImportLibraryKoi* instruction
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+//    result = environment->execute_fun(instruction->get_key(), out_result);
+
+    return result;
+}
+
+
+Runtime::Error Interpreter::_remove(
+        std::shared_ptr<Runtime::Environment> environment,
+        const std::string& key
+) const {
+    Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
+
+    result = environment->remove(key);
+
+
+    return result;
 }
 
 } // Scripting

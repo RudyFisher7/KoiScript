@@ -53,6 +53,17 @@ Instruction* Instruction::get_next() {
     return _next;
 }
 
+
+void Instruction::set_next(Instruction* value) {
+    delete _next;
+    _next = value;
+}
+
+
+Instruction::~Instruction() {
+        delete _next;
+}
+
 } // Runtime
 } // Scripting
 } // Koi

@@ -51,8 +51,27 @@ public:
             _argument_instructions(std::move(in_argument_instructions)) {
     }
 
+    ~Execute() override {
+        for (Instruction* instruction: _argument_instructions) {
+            delete instruction;
+        }
+
+        delete _next;
+    }
+
+
+    unsigned int get_number_of_arguments() const {
+        return _argument_instructions.size();
+    }
+
+
     const std::vector<Instruction*>& get_argument_instructions() const {
         return _argument_instructions;
+    }
+
+
+    Instruction* get_argument_instruction_at(unsigned int i) const {
+        return _argument_instructions.at(i);
     }
 };
 
