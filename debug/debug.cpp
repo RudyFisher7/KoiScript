@@ -33,7 +33,7 @@
 #include "scripting/runtime/variant/array.hpp"
 #include "scripting/runtime/variant/function.hpp"
 #include "scripting/runtime/variant/variable.hpp"
-#include "scripting/runtime/instruction.hpp"
+#include "scripting/runtime/instruction/instruction.hpp"
 #include "scripting/interpreter.hpp"
 
 #include <cstring>
@@ -99,11 +99,10 @@ int main() {
         global_environment->get_var_val("msg")
     };
 
-    std::shared_ptr<KoiRuntime::Instruction> first = std::make_shared<KoiRuntime::Instruction>(
-        KoiRuntime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAR,
-        KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT,
+    KoiRuntime::Instruction* first = new KoiRuntime::VariableDeclaration(
         "msg_2",
-        nullptr
+        nullptr,
+        KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT
     );
 
     //todo:: 4. run

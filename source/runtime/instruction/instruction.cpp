@@ -23,7 +23,7 @@
  */
 
 
-#include "scripting/runtime/instruction.hpp"
+#include "scripting/runtime/instruction/instruction.hpp"
 
 
 namespace Koi {

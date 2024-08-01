@@ -67,8 +67,12 @@ add_library(${PROJECT_NAME} STATIC
     include/scripting/runtime/lib/i_library.hpp
     source/interpreter.cpp
     include/scripting/interpreter.hpp
-    source/runtime/instruction.cpp
-    include/scripting/runtime/instruction.hpp
+    source/runtime/instruction/instruction.cpp
+    include/scripting/runtime/instruction/instruction.hpp
+    include/scripting/runtime/instruction/declaration.hpp
+    include/scripting/runtime/instruction/assignment.hpp
+    include/scripting/runtime/instruction/import.hpp
+    include/scripting/runtime/instruction/execute.hpp
     #    source/runtime/meta/fun_lit.cpp
 #    include/scripting/runtime/meta/fun_lit.hpp
 #    source/runtime/meta/i_lit.cpp

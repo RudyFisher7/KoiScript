@@ -29,7 +29,7 @@
 namespace Koi {
 namespace Scripting {
 
-Runtime::Error Interpreter::interpret(std::shared_ptr<Runtime::Environment> root_environment, std::shared_ptr<Runtime::Instruction> instructions, std::shared_ptr<Runtime::Variable>& out_result) const {
+Runtime::Error Interpreter::interpret(std::shared_ptr<Runtime::Environment> root_environment, Runtime::Instruction* instructions, std::shared_ptr<Runtime::Variable>& out_result) const {
     return _evaluate_instructions(root_environment, instructions, out_result);
 }
 
@@ -44,68 +44,55 @@ Runtime::Error Interpreter::_evaluate_instructions(const std::shared_ptr<Runtime
 
     Runtime::Instruction* current_instruction = instructions;
 
-    while(result == Runtime::SCRIPTING_RUNTIME_ERROR_OK && current_instruction) {
+    while(result == Runtime::SCRIPTING_RUNTIME_ERROR_OK && current_instruction != nullptr) {
         switch (current_instruction->get_type()) {
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAR: {
-                auto instruction = static_cast<Runtime::VariableDeclaration*>(current_instruction);
-                result = _make_variable(environment, instruction->get_key(), instruction->get_data_type());
-            }
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAR:
+                result = _make_variable(environment, static_cast<Runtime::VariableDeclaration*>(current_instruction));
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ARR: {
-                auto instruction = static_cast<Runtime::ArrayDeclaration*>(current_instruction);
-                result = _make_array(environment, instruction->get_key(), instruction->get_data_type());
-            }
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ARR:
+                result = _make_array(environment, static_cast<Runtime::ArrayDeclaration*>(current_instruction));
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_FUN: {
-                auto instruction = static_cast<Runtime::FunctionDeclaration*>(current_instruction);
-                result = _make_function(
-                        environment, instruction->get_key(),
-                        instruction->get_data_type(),
-                        instruction->get_parameter_types()
-                );
-            }
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_FUN:
+                result = _make_function(environment, static_cast<Runtime::FunctionDeclaration*>(current_instruction));
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ASN_VAR: {
-                auto instruction = static_cast<Runtime::VariableAssignment*>(current_instruction);
-                result = environment->assign_var(instruction->get_key(), *instruction->get_value());
-            }
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ASN_VAR:
+                result = _assign(environment, static_cast<Runtime::VariableAssignment*>(current_instruction));
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ASN_ARR: {
-                auto instruction = static_cast<Runtime::ArrayElementAssignment*>(current_instruction);
-                result = environment->assign_var(instruction->get_key(), *instruction->get_value(), instruction->get_index());
-            }
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ASN_ARR:
+                result = _assign(environment, static_cast<Runtime::ArrayElementAssignment*>(current_instruction));
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ASN_FUN: {
-                auto instruction = static_cast<Runtime::FunctionAssignment*>(current_instruction);
-                result = environment->assign_fun(instruction->get_key(), *instruction->get_value());
-            }
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ASN_FUN:
+                result = _assign(environment, static_cast<Runtime::FunctionAssignment*>(current_instruction));
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_LIB_KOI:
                 result = _make_library(environment, current_instruction->get_key());
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_VAR: //todo:: this value is needed for something...
-                value_variable = environment->get_var_val(current_instruction->get_key());
+                result = _get_value(environment, current_instruction->get_key(), value_variable);
+                break;
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_ARR_VAR: //todo:: this value is needed for something...
+                result = _get_value(environment, static_cast<Runtime::ArrayElementValue*>(current_instruction), value_variable);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_FUN: //todo:: this value is needed for something...
-                value_function = environment->get_fun_val(current_instruction->get_key());
+                result = _get_value(environment, current_instruction->get_key(), value_function);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_VAR: //todo:: this reference is needed for something...
-                value_variable = environment->get_var_ref(current_instruction->get_key());
+                result = _get_reference(environment, current_instruction->get_key(), value_variable);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_ARR: //todo:: this reference is needed for something...
-                value_array = environment->get_arr_ref(current_instruction->get_key());
+                result = _get_reference(environment, current_instruction->get_key(), value_variable);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_FUN: //todo:: this reference is needed for something...
-                value_function = environment->get_fun_ref(current_instruction->get_key());
+                result = _get_reference(environment, current_instruction->get_key(), value_function);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_EXE_NATIVE: //todo:: the result here is needed for something...
-                result = _execute_native(Runtime::Environment::make_child_environment(environment), current_instruction->get_key(), out_result);
+                result = _execute_native(Runtime::Environment::make_child_environment(environment), static_cast<Runtime::ExecuteNative*>(current_instruction), out_result);
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_EXE_KOI: //todo:: the result here is needed for something...
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_EXE_KOI:
                 result = _execute_koi(Runtime::Environment::make_child_environment(environment), current_instruction->get_key(), out_result);//todo:: this function enters the function's body and calls this function recursively
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_RET_VAR: //todo:: the result here is needed for something...
-                //todo:: implement evaluation of return variable
+                result = _return_variable(environment, current_instruction, out_result);
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_RET_ARR: //todo:: the result here is needed for something... need to know return type of Function executing so can enter the correct evaluate_instructions() function
 //                out_result = fixme::
@@ -118,10 +105,8 @@ Runtime::Error Interpreter::_evaluate_instructions(const std::shared_ptr<Runtime
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_IMP_NATIVE:
                 result = _import_library(environment, current_instruction->get_key());
                 break;
-            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_IMP_KOI: {
-                auto instruction = static_cast<Runtime::ImportLibraryKoi*>(current_instruction);
-                result = _import_library(environment, instruction->get_key(), instruction->get_path());
-            }
+            case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_IMP_KOI:
+                result = _import_library(environment, static_cast<Runtime::ImportLibraryKoi*>(current_instruction));
                 break;
             case Runtime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REM:
                 result = _remove(environment, current_instruction->get_key());
@@ -140,12 +125,11 @@ Runtime::Error Interpreter::_evaluate_instructions(const std::shared_ptr<Runtime
 
 Runtime::Error Interpreter::_make_variable(
         const std::shared_ptr<Runtime::Environment>& environment,
-        const std::string& key,
-        Runtime::BasicType type
+        const Runtime::VariableDeclaration* instruction
 ) const {
     Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 
-    result = environment->declare_var(key, type);
+    result = environment->declare_var(instruction->get_key(), instruction->get_data_type());
 
     return result;
 }
@@ -153,12 +137,11 @@ Runtime::Error Interpreter::_make_variable(
 
 Runtime::Error Interpreter::_make_array(
         const std::shared_ptr<Runtime::Environment>& environment,
-        const std::string& key,
-        Runtime::BasicType type
+        const Runtime::ArrayDeclaration* instruction
 ) const {
     Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 
-    result = environment->declare_arr(key, type);
+    result = environment->declare_arr(instruction->get_key(), instruction->get_data_type());
 
     return result;
 }
@@ -166,13 +149,11 @@ Runtime::Error Interpreter::_make_array(
 
 Runtime::Error Interpreter::_make_function(
         const std::shared_ptr<Runtime::Environment>& environment,
-        const std::string& key,
-        Runtime::BasicType return_type,
-        const std::vector<Runtime::BasicType>& parameter_types
+        const Runtime::FunctionDeclaration* instruction
 ) const {
     Runtime::Error result = Runtime::SCRIPTING_RUNTIME_ERROR_OK;
 
-    result = environment->declare_fun(key, return_type, parameter_types);
+    result = environment->declare_fun(instruction->get_key(), instruction->get_data_type(), instruction->get_parameter_types());
 
     return result;
 }

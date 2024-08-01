@@ -30,7 +30,11 @@
 #include "scripting/runtime/basic_type.hpp"
 #include "scripting/runtime/error.hpp"
 #include "scripting/runtime/environment.hpp"
-#include "scripting/runtime/instruction.hpp"
+#include "scripting/runtime/instruction/assignment.hpp"
+#include "scripting/runtime/instruction/declaration.hpp"
+#include "scripting/runtime/instruction/execute.hpp"
+#include "scripting/runtime/instruction/import.hpp"
+#include "scripting/runtime/instruction/instruction.hpp"
 #include "scripting/runtime/variant/array.hpp"
 #include "scripting/runtime/variant/function.hpp"
 #include "scripting/runtime/variant/variable.hpp"
@@ -56,38 +60,39 @@ public:
     Interpreter& operator=(Interpreter&& rhs) = default;
 
 
-    Runtime::Error interpret(std::shared_ptr<Runtime::Environment> root_environment, std::shared_ptr<Runtime::Instruction> instructions, std::shared_ptr<Runtime::Variable>& out_result) const;
+    Runtime::Error interpret(std::shared_ptr<Runtime::Environment> root_environment, Runtime::Instruction* instructions, std::shared_ptr<Runtime::Variable>& out_result) const;
 
 
 protected:
-    Runtime::Error _evaluate_instructions(const std::shared_ptr<Runtime::Environment>& environment, std::shared_ptr<Runtime::Instruction>& instructions, std::shared_ptr<Runtime::Variable>& out_result) const;
-    Runtime::Error _evaluate_instructions(const std::shared_ptr<Runtime::Environment>& environment, std::shared_ptr<Runtime::Instruction>& instructions, std::shared_ptr<Runtime::Array>& out_result) const;
-    Runtime::Error _evaluate_instructions(const std::shared_ptr<Runtime::Environment>& environment, std::shared_ptr<Runtime::Instruction>& instructions, std::shared_ptr<Runtime::Function>& out_result) const;
+    Runtime::Error _evaluate_instructions(const std::shared_ptr<Runtime::Environment>& environment, Runtime::Instruction* instruction, std::shared_ptr<Runtime::Variable>& out_result) const;
+    Runtime::Error _evaluate_instructions(const std::shared_ptr<Runtime::Environment>& environment, Runtime::Instruction* instruction, std::shared_ptr<Runtime::Array>& out_result) const;
+    Runtime::Error _evaluate_instructions(const std::shared_ptr<Runtime::Environment>& environment, Runtime::Instruction* instruction, std::shared_ptr<Runtime::Function>& out_result) const;
 
     //todo:: user-defined function that call metas
-    Runtime::Error _make_variable(const std::shared_ptr<Runtime::Environment>& environment, const std::string& key, Runtime::BasicType type) const;
-    Runtime::Error _make_array(const std::shared_ptr<Runtime::Environment>& environment, const std::string& key, Runtime::BasicType type) const;
-    Runtime::Error _make_function(const std::shared_ptr<Runtime::Environment>& environment, const std::string& key, Runtime::BasicType return_type, const std::vector<Runtime::BasicType>& parameter_types) const;
+    Runtime::Error _make_variable(const std::shared_ptr<Runtime::Environment>& environment, const Runtime::VariableDeclaration* instruction) const;
+    Runtime::Error _make_array(const std::shared_ptr<Runtime::Environment>& environment, const Runtime::ArrayDeclaration* instruction) const;
+    Runtime::Error _make_function(const std::shared_ptr<Runtime::Environment>& environment, const Runtime::FunctionDeclaration* instruction) const;
     Runtime::Error _make_library(std::shared_ptr<Runtime::Environment> environment, std::string key) const;
 
+    Runtime::Error _assign(std::shared_ptr<Runtime::Environment> environment, const Runtime::VariableAssignment* instruction) const;
+    Runtime::Error _assign(std::shared_ptr<Runtime::Environment> environment, const Runtime::ArrayElementAssignment* instruction) const;
+    Runtime::Error _assign(std::shared_ptr<Runtime::Environment> environment, const Runtime::FunctionAssignment* instruction) const;
+
     Runtime::Error _get_value(std::shared_ptr<Runtime::Environment> environment, std::string key, std::shared_ptr<Runtime::Variable>& out_value) const;
-    Runtime::Error _get_value(std::shared_ptr<Runtime::Environment> environment, std::string key, int index, std::shared_ptr<Runtime::Variable>& out_value) const;
+    Runtime::Error _get_value(std::shared_ptr<Runtime::Environment> environment, const Runtime::ArrayElementValue* instruction, std::shared_ptr<Runtime::Variable>& out_value) const;
     Runtime::Error _get_value(std::shared_ptr<Runtime::Environment> environment, std::string key, std::shared_ptr<Runtime::Function>& out_value) const;
 
     Runtime::Error _get_reference(std::shared_ptr<Runtime::Environment> environment, std::string key, std::shared_ptr<Runtime::Variable>& out_reference) const;
     Runtime::Error _get_reference(std::shared_ptr<Runtime::Environment> environment, std::string key, std::shared_ptr<Runtime::Array>& out_reference) const;
     Runtime::Error _get_reference(std::shared_ptr<Runtime::Environment> environment, std::string key, std::shared_ptr<Runtime::Function>& out_reference) const;
 
-    Runtime::Error _execute_native(std::shared_ptr<Runtime::Environment> environment, std::string key, std::shared_ptr<Runtime::Variable>& out_result) const;
+    Runtime::Error _execute_native(std::shared_ptr<Runtime::Environment> environment, const Runtime::ExecuteNative* instruction, std::shared_ptr<Runtime::Variable>& out_result) const;
     Runtime::Error _execute_koi(std::shared_ptr<Runtime::Environment> environment, std::string key, std::shared_ptr<Runtime::Variable>& out_result) const;
 
-    Runtime::Error _assign(std::shared_ptr<Runtime::Environment> environment, std::string key, std::shared_ptr<Runtime::Variable> value) const;
-    Runtime::Error _assign(std::shared_ptr<Runtime::Environment> environment, std::string key, int index, std::shared_ptr<Runtime::Variable> value) const;
-    Runtime::Error _assign(std::shared_ptr<Runtime::Environment> environment, std::string key, std::shared_ptr<Runtime::Array> value) const;
-    Runtime::Error _assign(std::shared_ptr<Runtime::Environment> environment, std::string key, std::shared_ptr<Runtime::Function> value) const;
+    Runtime::Error _return_variable(std::shared_ptr<Runtime::Environment> environment, const Runtime::Instruction* instruction, std::shared_ptr<Runtime::Variable>& out_result) const;
 
     Runtime::Error _import_library(std::shared_ptr<Runtime::Environment> environment, std::string key) const;
-    Runtime::Error _import_library(std::shared_ptr<Runtime::Environment> environment, std::string key, std::string path) const;
+    Runtime::Error _import_library(std::shared_ptr<Runtime::Environment> environment, const Runtime::ImportLibraryKoi* instruction) const;
 
     Runtime::Error _remove(std::shared_ptr<Runtime::Environment> environment, std::string key) const;
 };

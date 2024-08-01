@@ -54,6 +54,7 @@ public:
         SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ASN_FUN,
         SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_LIB_KOI,
         SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_VAR,
+        SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_ARR_VAR,
         SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_FUN,
         SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_VAR,
         SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_REF_ARR,
@@ -90,138 +91,29 @@ public:
     std::string get_key() const;
 
     Instruction* get_next();
-
-//    const Type type;
-//    BasicType data_type;
-//    std::vector<BasicType> parameter_types;
-//
-//    std::string key;
-//    std::string path;
-//
-//    int index;
-//    std::shared_ptr<Variable> value_variable;
-//    std::shared_ptr<Function> value_function;
-//
-//    std::shared_ptr<Instruction> next;
-
 };
 
 
-template<Instruction::Type TypeValue>
-class DataDeclaration: public Instruction {
-protected:
-    BasicType _data_type;
-
-public:
-    DataDeclaration(
-            std::string in_key,
-            Instruction* in_next,
-            BasicType in_data_type
-    ):
-            Instruction(TypeValue, std::move(in_key), in_next),
-            _data_type(in_data_type) {
-    }
-
-
-    BasicType get_data_type() const {
-        return _data_type;
-    }
-};
-
-
-typedef DataDeclaration<Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ARR> ArrayDeclaration;
-typedef DataDeclaration<Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAR> VariableDeclaration;
-
-
-class FunctionDeclaration: public DataDeclaration<Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_FUN> {
-protected:
-    std::vector<BasicType> _parameter_types;
-
-public:
-    FunctionDeclaration(
-            BasicType in_return_type,
-            std::string in_key,
-            Instruction* in_next,
-            std::vector<BasicType> in_parameter_types
-    ):
-            DataDeclaration(std::move(in_key), in_next, in_return_type),
-            _parameter_types(std::move(in_parameter_types)) {
-    }
-
-
-    const std::vector<BasicType>& get_parameter_types() const {
-        return _parameter_types;
-    }
-};
-
-
-template<typename T, Instruction::Type TypeValue>
-class Assignment: public Instruction {
-protected:
-    std::shared_ptr<T> _data_value;
-
-public:
-    Assignment(
-            std::string in_key,
-            Instruction* in_next,
-            std::shared_ptr<T> in_data_value
-    ):
-            Instruction(TypeValue, in_key, in_next),
-            _data_value(std::move(in_data_value)) {
-    }
-
-    std::shared_ptr<T> get_value() const {
-        return _data_value;
-    }
-};
-
-
-typedef Assignment<Variable, Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ASN_VAR> VariableAssignment;
-typedef Assignment<Function, Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ASN_FUN> FunctionAssignment;
-
-
-class ArrayElementAssignment: public Assignment<Variable, Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_ASN_ARR> {
+class ArrayElementValue: public Instruction {
 protected:
     int _index;
 
 public:
-    ArrayElementAssignment(
+    ArrayElementValue(
             std::string in_key,
             Instruction* in_next,
-            std::shared_ptr<Variable> in_data_value,
             int in_index
     ):
-            Assignment(std::move(in_key), in_next, std::move(in_data_value)),
+            Instruction(
+                    Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_ARR_VAR,
+                    std::move(in_key),
+                    in_next
+            ),
             _index(in_index) {
     }
 
     int get_index() const {
         return _index;
-    }
-};
-
-
-class ImportLibraryKoi: public Instruction {
-protected:
-    std::string _path;
-
-public:
-    ImportLibraryKoi(
-            std::string in_key,
-            Instruction* in_next,
-            std::string in_path
-    ):
-            Instruction(
-                    Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_IMP_KOI,
-                    std::move(in_key),
-                    in_next
-            ),
-            _path(std::move(in_path)) {
-    }
-
-
-    std::string get_path() const {
-        return _path;
     }
 };
 
