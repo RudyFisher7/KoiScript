@@ -44,8 +44,15 @@ public:
     void import(std::shared_ptr<Environment> environment) const override;
 
 private:
+    // special
     static Error print(const Args<Variable>& args, Ret<Variable>& ret);
+
+    // arrays
     static Error append(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret);
+    static Error insert(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret);
+
+    // variable and function info
+    static Error size(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret);
 };
 
 } // Runtime

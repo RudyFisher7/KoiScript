@@ -36,6 +36,7 @@ namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
+const unsigned int Variable::SIMPLE_SIZE = 1u;
 const unsigned int Variable::MAX_SIZE = 64u;//fixme:: build configuration or similar since this depends on token size
 const std::string Variable::VOID_STRING("\"<void>\"");
 
@@ -72,14 +73,14 @@ Variable::Variable(BasicType in_type) {
 
 
 Variable::Variable(char in_value):
-        _size(sizeof(char)),
+        _size(SIMPLE_SIZE),
         _type(SCRIPTING_RUNTIME_BASIC_TYPE_TEXT) {
     set_value(&in_value, 1u);
 }
 
 
 Variable::Variable(int in_value):
-        _size(sizeof(int)),
+        _size(SIMPLE_SIZE),
         _type(SCRIPTING_RUNTIME_BASIC_TYPE_INT),
         _value_int(in_value) {
 
@@ -87,7 +88,7 @@ Variable::Variable(int in_value):
 
 
 Variable::Variable(float in_value):
-        _size(sizeof(float)),
+        _size(SIMPLE_SIZE),
         _type(SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT),
         _value_float(in_value) {
 
@@ -440,7 +441,7 @@ void Variable::set_value_void() {
 
 void Variable::set_value(bool value) {
     _destroy_string_if_string();
-    _size = sizeof(bool);
+    _size = SIMPLE_SIZE;
     _type = SCRIPTING_RUNTIME_BASIC_TYPE_BOOL;
     _value_bool = value;
 }
@@ -448,13 +449,13 @@ void Variable::set_value(bool value) {
 
 void Variable::set_value(char value) {
     _destroy_string_if_string();
-    set_value(&value, 1u);
+    set_value(&value, SIMPLE_SIZE);
 }
 
 
 void Variable::set_value(int value) {
     _destroy_string_if_string();
-    _size = sizeof(int);
+    _size = SIMPLE_SIZE;
     _type = SCRIPTING_RUNTIME_BASIC_TYPE_INT;
     _value_int = value;
 }
@@ -462,7 +463,7 @@ void Variable::set_value(int value) {
 
 void Variable::set_value(float value) {
     _destroy_string_if_string();
-    _size = sizeof(float);
+    _size = SIMPLE_SIZE;
     _type = SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT;
     _value_float = value;
 }

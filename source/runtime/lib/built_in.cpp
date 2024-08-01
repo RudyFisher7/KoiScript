@@ -46,7 +46,8 @@ void BuiltIn::import(std::shared_ptr<Environment> environment) const {
             Function(
                     BuiltIn::print,
                     SCRIPTING_RUNTIME_BASIC_TYPE_VOID,
-                    {SCRIPTING_RUNTIME_BASIC_TYPE_TEXT}
+                    {SCRIPTING_RUNTIME_BASIC_TYPE_TEXT},
+                    4u
             )
     );
 
@@ -67,7 +68,52 @@ void BuiltIn::import(std::shared_ptr<Environment> environment) const {
                     {
                             SCRIPTING_RUNTIME_BASIC_TYPE_KEY,
                             SCRIPTING_RUNTIME_BASIC_TYPE_DYNAMIC,
-                    }
+                    },
+                    11u
+            )
+    );
+
+    environment->declare_fun(
+            "insert",
+            SCRIPTING_RUNTIME_BASIC_TYPE_BOOL,
+            {
+                    SCRIPTING_RUNTIME_BASIC_TYPE_KEY,
+                    SCRIPTING_RUNTIME_BASIC_TYPE_DYNAMIC,
+                    SCRIPTING_RUNTIME_BASIC_TYPE_INT,
+            }
+    );
+
+    environment->assign_fun(
+            "insert",
+            Function(
+                    std::bind(BuiltIn::insert, environment, std::placeholders::_1, std::placeholders::_2),
+                    SCRIPTING_RUNTIME_BASIC_TYPE_BOOL,
+                    {
+                            SCRIPTING_RUNTIME_BASIC_TYPE_KEY,
+                            SCRIPTING_RUNTIME_BASIC_TYPE_DYNAMIC,
+                            SCRIPTING_RUNTIME_BASIC_TYPE_INT,
+                    },
+                    16u
+            )
+    );
+
+    environment->declare_fun(
+            "size",
+            SCRIPTING_RUNTIME_BASIC_TYPE_INT,
+            {
+                    SCRIPTING_RUNTIME_BASIC_TYPE_KEY,
+            }
+    );
+
+    environment->assign_fun(
+            "size",
+            Function(
+                    std::bind(BuiltIn::insert, environment, std::placeholders::_1, std::placeholders::_2),
+                    SCRIPTING_RUNTIME_BASIC_TYPE_INT,
+                    {
+                            SCRIPTING_RUNTIME_BASIC_TYPE_KEY,
+                    },
+                    25u
             )
     );
 }
@@ -83,7 +129,7 @@ Error BuiltIn::print(const Args<Variable>& args, Ret<Variable>& ret) {
 
 Error BuiltIn::append(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret) {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
-    std::shared_ptr<Array> array_ref = environment->get_arr_ref(args.at(0u)->get_string());
+    std::shared_ptr<Array> array_ref = environment->get_arr_ref(args.at(0u)->get_c_string());
 
     if (array_ref) {
         if (array_ref->get_type() == args.at(1u)->get_type()) {
@@ -96,6 +142,67 @@ Error BuiltIn::append(std::shared_ptr<Environment> environment, const Args<Varia
     }
 
     ret->set_value_void();
+    return result;
+}
+
+
+Error BuiltIn::insert(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+    std::shared_ptr<Array> array_ref = environment->get_arr_ref(args.at(0u)->get_c_string());
+
+    if (array_ref) {
+        if (array_ref->size() <= static_cast<unsigned int>(args.at(2u)->get_int())) {
+            result = SCRIPTING_RUNTIME_ERROR_INDEX_OUT_OF_BOUNDS;
+        } else if (array_ref->get_type() != args.at(1u)->get_type()) {
+            result = SCRIPTING_RUNTIME_ERROR_TYPE_MISMATCH;
+        } else {
+            auto it = array_ref->cbegin() + args.at(2u)->get_int();
+            array_ref->insert(it, *args.at(1u));
+            ret->set_value(true);
+        }
+    } else {
+        result = SCRIPTING_RUNTIME_ERROR_NOT_YET_DECLARED;
+    }
+
+    if (result != SCRIPTING_RUNTIME_ERROR_OK) {
+        ret->set_value(false);
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::size(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    std::shared_ptr<Variable> variable_ref;
+    std::shared_ptr<Array> array_ref;
+    std::shared_ptr<Function> function_ref;
+    switch (environment->get_declaration_type(args.at(0u)->get_c_string())) {
+        case Environment::SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_VAR:
+            variable_ref = environment->get_var_ref(args.at(0u)->get_c_string());
+            ret->set_value(static_cast<int>(variable_ref->get_size()));
+            break;
+        case Environment::SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_ARR:
+            array_ref = environment->get_arr_ref(args.at(0u)->get_c_string());
+            ret->set_value(static_cast<int>(array_ref->size()));
+            break;
+        case Environment::SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_FUN:
+            function_ref = environment->get_fun_ref(args.at(0u)->get_c_string());
+            ret->set_value(static_cast<int>(variable_ref->get_size()));
+            break;
+        default:
+            ret->set_value(-1);
+            break;
+    }
+
+
+    if (variable_ref) {
+        ret->set_value(static_cast<int>(variable_ref->get_size()));
+    } else {
+        result = SCRIPTING_RUNTIME_ERROR_NOT_YET_DECLARED;
+    }
+
     return result;
 }
 

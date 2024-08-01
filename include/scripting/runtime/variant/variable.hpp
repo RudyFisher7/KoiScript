@@ -39,6 +39,7 @@ namespace Runtime {
 
 class Variable final {
 public:
+    static const unsigned int SIMPLE_SIZE;
     static const unsigned int MAX_SIZE;
     static const std::string VOID_STRING;
 

@@ -54,6 +54,7 @@ using Fun = std::function<Error(const Args<ArgT>&, Ret<RetT>&)>;
 
 class Function final: public Fun<Variable, Variable> {
 private:
+    unsigned int _size;
     BasicType _return_type = SCRIPTING_RUNTIME_BASIC_TYPE_VOID;
     std::vector<BasicType> _parameter_types;
 
@@ -65,9 +66,9 @@ public:
     }
 
     Function() = default;
-    Function(Fun<Variable, Variable> fn, BasicType  in_return_type);
+    Function(Fun<Variable, Variable> fn, BasicType  in_return_type, unsigned int in_size);
     Function(BasicType in_return_type, std::vector<BasicType> in_parameter_types);
-    Function(Fun<Variable, Variable> fn, BasicType  in_return_type, std::vector<BasicType> in_parameter_types);
+    Function(Fun<Variable, Variable> fn, BasicType  in_return_type, std::vector<BasicType> in_parameter_types, unsigned int in_size);
 
     Function(const Function& rhs) = default;
     Function(Function&& rhs) = default;
@@ -88,6 +89,7 @@ public:
      */
     Error operator()(const Args<Variable>& args, Ret<Variable>& ret) const;
 
+    unsigned int get_size() const;
     BasicType get_return_type() const;
     const std::vector<BasicType>& get_parameter_types() const;
 

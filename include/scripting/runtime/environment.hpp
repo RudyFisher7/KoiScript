@@ -46,8 +46,9 @@ namespace Scripting {
 namespace Runtime {
 
 class Environment {
-protected:
+public:
     enum DeclarationType: int {
+        SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_INVALID = -1,
         SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_MIN = 0,
         SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_VAR = SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_MIN,
         SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_ARR,
@@ -55,6 +56,8 @@ protected:
         SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_SIZE
     };
 
+
+protected:
     std::map<std::string, DeclarationType> _all_declarations;
     std::map<std::string, std::shared_ptr<Variable>> _variables;
     std::map<std::string, std::shared_ptr<Array>> _arrays;
@@ -97,6 +100,7 @@ public:
 
     Error remove(const std::string& key);
 
+    DeclarationType get_declaration_type(const std::string& key) const;
 
     void set_parent_environment(std::shared_ptr<Environment> in_parent);
 

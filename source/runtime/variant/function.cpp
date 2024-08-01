@@ -34,9 +34,11 @@ namespace Runtime {
 
 Function::Function(
         Fun<Variable, Variable> fn,
-        BasicType in_return_type
+        BasicType in_return_type,
+        unsigned int in_size
 ):
         Fun<Variable, Variable>(std::move(fn)),
+        _size(in_size),
         _return_type(in_return_type),
         _parameter_types() {
 
@@ -53,6 +55,7 @@ Function::Function(
                     return SCRIPTING_RUNTIME_ERROR_OK;
                 }
         ),
+        _size(1u),
         _return_type(in_return_type),
         _parameter_types(std::move(in_parameter_types)) {
 
@@ -62,9 +65,11 @@ Function::Function(
 Function::Function(
         Fun<Variable, Variable> fn,
         BasicType in_return_type,
-        std::vector<BasicType> in_parameter_types
+        std::vector<BasicType> in_parameter_types,
+        unsigned int in_size
 ):
         Fun<Variable, Variable>(std::move(fn)),
+        _size(in_size),
         _return_type(in_return_type),
         _parameter_types(std::move(in_parameter_types)) {
 
@@ -107,6 +112,11 @@ Error Function::operator()(const Args<Variable>& args, Ret<Variable>& ret) const
     }
 
     return result;
+}
+
+
+unsigned int Function::get_size() const {
+    return _size;
 }
 
 

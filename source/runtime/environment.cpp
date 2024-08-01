@@ -285,6 +285,17 @@ Error Environment::remove(const std::string& key) {
 }
 
 
+Environment::DeclarationType Environment::get_declaration_type(const std::string& key) const {
+    DeclarationType result = SCRIPTING_ENVIRONMENT_DECLARATION_TYPE_INVALID;
+
+    if (_has_key(key)) {
+        result = _all_declarations.at(key);
+    }
+
+    return result;
+}
+
+
 void Environment::set_parent_environment(std::shared_ptr<Environment> in_parent) {
     _parent = std::move(in_parent);
 }
