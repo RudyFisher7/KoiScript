@@ -37,43 +37,44 @@ These act on the runtime environment.
 
 ## Built-In Functions
 These are part of the runtime environment.
-### special
-- print
-### arrays
-- append
-- insert
-### variable and function info
-- size
+### control
+- if
+- while
 ### logical
-- and
-- or
-- is_true
-- not
-- equals
-- greater_than
-- lesser_then
-- greater_than_or_equal_to
-- lesser_than_or_equal_to
+- land
+- lor
+- lnot
+- eq
+- gt
+- lt
+- ge
+- le
 ### arithmetic
 #### unary
 - abs
 - neg
-- floor
-- round
+- flr
+- rnd
 - ceil
-#### binary
+#### multary
 - add
 - sub
 - mul
 - div
 - mod
-#### unary bitwise
-- shift_left
-- shift_right
-- bit_or
-- bit_xor
-- bit_and
-- bit_not
-### control
-- if
-- while
+### bitwise
+#### unary
+- bshl
+- bshr
+#### multary
+- bor
+- bxor
+- band
+- bnot
+### arrays
+- append
+- insert
+### variable and function info
+- size
+### special
+- print

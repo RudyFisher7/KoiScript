@@ -44,8 +44,43 @@ public:
     void import(std::shared_ptr<Environment> environment) const override;
 
 private:
-    // special
-    static Error print(const Args<Variable>& args, Ret<Variable>& ret);
+    // control
+    static Error cif(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret);
+    static Error cwhile(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret);
+
+    // logical
+    static Error land(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error lor(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error lnot(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error eq(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error gt(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error lt(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error ge(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error le(const Args<Variable>& args, Ret<Variable>& ret);
+
+    // arithmetic, unary
+    static Error abs(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error neg(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error flr(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error rnd(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error ceil(const Args<Variable>& args, Ret<Variable>& ret);
+
+    // arithmetic, multary
+    static Error add(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error sub(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error mul(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error div(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error mod(const Args<Variable>& args, Ret<Variable>& ret);
+
+    // bitwise, unary
+    static Error bshl(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error bshr(const Args<Variable>& args, Ret<Variable>& ret);
+
+    // bitwise, multary
+    static Error bor(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error bxor(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error band(const Args<Variable>& args, Ret<Variable>& ret);
+    static Error bnot(const Args<Variable>& args, Ret<Variable>& ret);
 
     // arrays
     static Error append(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret);
@@ -54,8 +89,8 @@ private:
     // variable and function info
     static Error size(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret);
 
-    // logical
-    static Error land(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret);
+    // special
+    static Error print(const Args<Variable>& args, Ret<Variable>& ret);
 };
 
 } // Runtime

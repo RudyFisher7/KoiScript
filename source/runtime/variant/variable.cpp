@@ -153,6 +153,11 @@ Variable::Variable(Variable&& rhs) noexcept {
 }
 
 
+Variable::~Variable() {
+    _destroy_string_if_string();
+}
+
+
 Variable& Variable::operator=(const Variable& rhs) {
     if (this != &rhs) {
         _copy(rhs);
@@ -190,11 +195,6 @@ Variable& Variable::operator=(Variable&& rhs) noexcept {
     }
 
     return *this;
-}
-
-
-Variable::~Variable() {
-    _destroy_string_if_string();
 }
 
 

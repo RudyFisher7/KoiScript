@@ -84,19 +84,39 @@ public:
     Variable(Variable&& rhs) noexcept;
 
 
+    ~Variable();
+
+
     Variable& operator=(const Variable& rhs);
 
 
     Variable& operator=(Variable&& rhs) noexcept;
 
 
-    ~Variable();
-
-
     bool operator==(const Variable& rhs) const;
 
 
     bool operator!=(const Variable& rhs) const;
+
+
+    Variable operator!() const;
+    bool operator>(const Variable& rhs) const;//todo::
+    bool operator<(const Variable& rhs) const;
+    bool operator>=(const Variable& rhs) const;
+    bool operator<=(const Variable& rhs) const;
+
+    Variable operator~() const;
+    Variable operator<<(const Variable& rhs) const;
+    Variable operator>>(const Variable& rhs) const;
+    Variable operator&(const Variable& rhs) const;
+    Variable operator|(const Variable& rhs) const;
+    Variable operator^(const Variable& rhs) const;
+
+    Variable operator+(const Variable& rhs) const;
+    Variable operator-(const Variable& rhs) const;
+    Variable operator*(const Variable& rhs) const;
+    Variable operator/(const Variable& rhs) const;
+    Variable operator%(const Variable& rhs) const;
 
 
     explicit operator bool() const;
@@ -163,6 +183,13 @@ public:
 
 
     void set_id(const std::string& value);
+
+
+    Variable abs() const;
+    Variable negate() const;
+    Variable floor() const;
+    Variable round() const;
+    Variable ceiling() const;
 
 
     friend std::ostream& operator<<(std::ostream& lhs, const Variable& rhs);

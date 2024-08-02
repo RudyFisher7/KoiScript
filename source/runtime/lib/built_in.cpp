@@ -128,7 +128,7 @@ void BuiltIn::import(std::shared_ptr<Environment> environment) const {
     environment->assign_fun(
             "and",
             Function(
-                    std::bind(BuiltIn::land, environment, std::placeholders::_1, std::placeholders::_2),
+                    BuiltIn::land,
                     SCRIPTING_RUNTIME_BASIC_TYPE_BOOL,
                     {
                             SCRIPTING_RUNTIME_BASIC_TYPE_VAR_ARGS,
@@ -139,10 +139,291 @@ void BuiltIn::import(std::shared_ptr<Environment> environment) const {
 }
 
 
-Error BuiltIn::print(const Args<Variable>& args, Ret<Variable>& ret) {
+Error BuiltIn::cif(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret) {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
-    std::cout << args.at(0u)->get_c_string() << std::endl;
-    ret->set_value_void();
+
+    if (*args.at(0u)) {
+        //todo:: allow functions as args
+    } else if (args.size() >= 3u) {
+        //todo:: else case
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::cwhile(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    //fixme:: needs to be a function in the condition
+    while (*args.at(0u)) {
+        //todo:: allow functions as args
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::land(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    bool is_true = true;
+
+    auto it = args.cbegin();
+    auto end = args.cend();
+    while (is_true && it != end) {
+        is_true = it->get()->get_bool();
+        ++it;
+    }
+
+    ret->set_value(is_true);
+
+    return result;
+}
+
+
+Error BuiltIn::lor(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    bool is_true = false;
+
+    auto it = args.cbegin();
+    auto end = args.cend();
+    while (!is_true && it != end) {
+        is_true = it->get()->get_bool();
+        ++it;
+    }
+
+    ret->set_value(is_true);
+
+    return result;
+}
+
+
+Error BuiltIn::lnot(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    ret->set_value(!args.at(0u)->get_bool());
+
+    return result;
+}
+
+
+Error BuiltIn::eq(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    ret->set_value(*args.at(0u) == *args.at(1u));
+
+    return result;
+}
+
+
+Error BuiltIn::gt(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    ret->set_value(*args.at(0u) > *args.at(1u));
+
+    return result;
+}
+
+
+Error BuiltIn::lt(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    ret->set_value(*args.at(0u) < *args.at(1u));
+
+    return result;
+}
+
+
+Error BuiltIn::ge(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    ret->set_value(*args.at(0u) >= *args.at(1u));
+
+    return result;
+}
+
+
+Error BuiltIn::le(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    ret->set_value(*args.at(0u) <= *args.at(1u));
+
+    return result;
+}
+
+
+Error BuiltIn::abs(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = args.at(0u)->abs();
+
+    return result;
+}
+
+
+Error BuiltIn::neg(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = args.at(0u)->negate();
+
+    return result;
+}
+
+
+Error BuiltIn::flr(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = args.at(0u)->floor();
+
+    return result;
+}
+
+
+Error BuiltIn::rnd(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = args.at(0u)->round();
+
+    return result;
+}
+
+
+Error BuiltIn::ceil(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = args.at(0u)->ceiling();
+
+    return result;
+}
+
+
+Error BuiltIn::add(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = *args.at(0);
+    for (unsigned int i = 1u; i < args.size(); ++i) {
+        *ret = *ret + *args.at(i);
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::sub(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = *args.at(0);
+    for (unsigned int i = 1u; i < args.size(); ++i) {
+        *ret = *ret - *args.at(i);
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::mul(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = *args.at(0);
+    for (unsigned int i = 1u; i < args.size(); ++i) {
+        *ret = *ret * *args.at(i);
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::div(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = *args.at(0);
+    for (unsigned int i = 1u; i < args.size(); ++i) {
+        *ret = *ret / *args.at(i);
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::mod(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = *args.at(0);
+    for (unsigned int i = 1u; i < args.size(); ++i) {
+        *ret = *ret % *args.at(i);
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::bshl(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = *args.at(0);
+    for (unsigned int i = 1u; i < args.size(); ++i) {
+        *ret = *ret << *args.at(i);
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::bshr(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = *args.at(0);
+    for (unsigned int i = 1u; i < args.size(); ++i) {
+        *ret = *ret >> *args.at(i);
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::bor(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = *args.at(0);
+    for (unsigned int i = 1u; i < args.size(); ++i) {
+        *ret = *ret | *args.at(i);
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::bxor(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = *args.at(0);
+    for (unsigned int i = 1u; i < args.size(); ++i) {
+        *ret = *ret ^ *args.at(i);
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::band(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = *args.at(0);
+    for (unsigned int i = 1u; i < args.size(); ++i) {
+        *ret = *ret & *args.at(i);
+    }
+
+    return result;
+}
+
+
+Error BuiltIn::bnot(const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    *ret = ~(*args.at(0));
+
     return result;
 }
 
@@ -227,20 +508,10 @@ Error BuiltIn::size(std::shared_ptr<Environment> environment, const Args<Variabl
 }
 
 
-Error BuiltIn::land(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret) {
+Error BuiltIn::print(const Args<Variable>& args, Ret<Variable>& ret) {
     Error result = SCRIPTING_RUNTIME_ERROR_OK;
-
-    bool is_true = true;
-
-    auto it = args.cbegin();
-    auto end = args.cend();
-    while (is_true && it != end) {
-        is_true = is_true && it->get()->get_bool();
-        ++it;
-    }
-
-    ret->set_value(is_true);
-
+    std::cout << args.at(0u)->get_c_string() << std::endl;
+    ret->set_value_void();
     return result;
 }
 
