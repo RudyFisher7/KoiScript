@@ -53,6 +53,9 @@ private:
 
     // variable and function info
     static Error size(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret);
+
+    // logical
+    static Error land(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret);
 };
 
 } // Runtime

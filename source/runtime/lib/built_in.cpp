@@ -116,6 +116,26 @@ void BuiltIn::import(std::shared_ptr<Environment> environment) const {
                     25u
             )
     );
+
+    environment->declare_fun(
+            "and",
+            SCRIPTING_RUNTIME_BASIC_TYPE_BOOL,
+            {
+                    SCRIPTING_RUNTIME_BASIC_TYPE_VAR_ARGS,
+            }
+    );
+
+    environment->assign_fun(
+            "and",
+            Function(
+                    std::bind(BuiltIn::land, environment, std::placeholders::_1, std::placeholders::_2),
+                    SCRIPTING_RUNTIME_BASIC_TYPE_BOOL,
+                    {
+                            SCRIPTING_RUNTIME_BASIC_TYPE_VAR_ARGS,
+                    },
+                    25u
+            )
+    );
 }
 
 
@@ -202,6 +222,24 @@ Error BuiltIn::size(std::shared_ptr<Environment> environment, const Args<Variabl
     } else {
         result = SCRIPTING_RUNTIME_ERROR_NOT_YET_DECLARED;
     }
+
+    return result;
+}
+
+
+Error BuiltIn::land(std::shared_ptr<Environment> environment, const Args<Variable>& args, Ret<Variable>& ret) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    bool is_true = true;
+
+    auto it = args.cbegin();
+    auto end = args.cend();
+    while (is_true && it != end) {
+        is_true = is_true && it->get()->get_bool();
+        ++it;
+    }
+
+    ret->set_value(is_true);
 
     return result;
 }
