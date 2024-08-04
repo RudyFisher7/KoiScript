@@ -100,7 +100,7 @@ public:
 
 
     Variable operator!() const;
-    bool operator>(const Variable& rhs) const;//todo::
+    bool operator>(const Variable& rhs) const;
     bool operator<(const Variable& rhs) const;
     bool operator>=(const Variable& rhs) const;
     bool operator<=(const Variable& rhs) const;

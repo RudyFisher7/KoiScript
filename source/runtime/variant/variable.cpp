@@ -212,6 +212,375 @@ bool Variable::operator!=(const Variable& rhs) const {
 }
 
 
+Variable Variable::operator!() const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            result.set_value(!get_bool());
+            break;
+        default:
+            KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+bool Variable::operator>(const Variable& rhs) const {
+    bool result = false;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+        KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+bool Variable::operator<(const Variable& rhs) const {
+    bool result = false;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+        KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+bool Variable::operator>=(const Variable& rhs) const {
+    bool result = false;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+        KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+bool Variable::operator<=(const Variable& rhs) const {
+    bool result = false;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+        KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+Variable Variable::operator~() const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+        KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+
+Variable Variable::operator<<(const Variable& rhs) const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+            KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+
+Variable Variable::operator>>(const Variable& rhs) const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+            KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+
+Variable Variable::operator&(const Variable& rhs) const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+            KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+Variable Variable::operator|(const Variable& rhs) const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+            KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+Variable Variable::operator^(const Variable& rhs) const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+            KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+
+Variable Variable::operator+(const Variable& rhs) const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+            KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+Variable Variable::operator-(const Variable& rhs) const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+            KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+Variable Variable::operator*(const Variable& rhs) const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+            KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+Variable Variable::operator/(const Variable& rhs) const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+            KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
+Variable Variable::operator%(const Variable& rhs) const {
+    Variable result;
+
+    switch (_type) {
+        case SCRIPTING_RUNTIME_BASIC_TYPE_VOID:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_BOOL:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_INT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_FLOAT:
+            break;
+        case SCRIPTING_RUNTIME_BASIC_TYPE_TEXT:
+            break;
+        default:
+            KOI_LOG("Unrecognised BasicType.");
+            break;
+    }
+
+    return result;
+}
+
+
 Variable::operator bool() const {
     return get_bool();
 }
