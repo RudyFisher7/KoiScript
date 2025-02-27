@@ -36,10 +36,15 @@ int(MyObjectInt& x) my_add_2 {
 };
 
 
-while<bool<int>>(is_less_than, x, size, {
+while<bool<int>>(&is_less_than, x, size, {
     # & is the reference operator, also used when passing in as a reference parameter. #
     assign<int>(&x, add<int>(x, 1));
 });
+
+
+bool(bool(int)& f, int x) my_func {
+    return f(x);
+};
 
 
 library MyLibrary {
