@@ -1,0 +1,21 @@
+
+<class_definition> ::= 'class' <class_name> ':' <scoped_type> <class_body> ';'
+<class_body> ::= '{' [<variable_creation> ';' [<variable_creation> ';']] '}'
+<class_name> ::= <identifier>
+<class_field_identifier> ::= <identifier> '.' <identifier>
+
+<function_definition> ::= <scoped_type>'('[<complex_type>[','<complex_type>]]')' '\s' <identifier> <function_body> ';'
+<function_body> ::= '{' [<expression>[',' <expression>]] '}'
+<function_call> ::= <identifier>'(' [<expression>[',' <expression>]] ')'
+
+<expression> ::= <function_call> | <variable> | <variable_creation>
+<variable_creation> ::= <scoped_type> '\s' <identifier>[<initializer>]';'
+<complex_type> ::= <scoped_type>['('[<complex_type>[','<complex_type>]]')']
+<scoped_type> ::= <type>['::'<type>]
+<type> ::= <built_in_type> | <class_name>
+<initializer> ::= '{'<variable>[','<variable>]'}'
+<variable> ::= <literal> | <identifier> | <class_field_identifier>
+<literal> ::= <bool_literal> | <char_literal> | <integer_literal> | <float_literal> | <string_literal>
+
+<built_in_type> ::= 'bool' | 'char' | 'int' | 'float' | 'string' | 'Object'
+<identifier> ::= a-zA-Z-z\_[a-zA-Z0-9\_]
