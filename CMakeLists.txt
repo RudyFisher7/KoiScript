@@ -98,6 +98,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 #)
 
 
+#add_subdirectory(lexicon_files)
+
 add_subdirectory(debug)
 
 # fixme:: toggle with build option

@@ -44,7 +44,7 @@ while<bool<int>>(&is_less_than, x, size, int(){
 
 
 bool(bool(int)& f, int x) my_func {
-    return f(x);
+    -> f(x);
 };
 
 
@@ -67,7 +67,7 @@ these are containers, from the container library
 import<container>(); # built-in library #
 import<MyLibrary>("path/to/my_library.koi"); # user-defined library #
 
-container::array<int> my_array {0, 4, 3};
+container::array<int> my_array {3, 0, 4, 3};
 container::set<int> my_set {0, 7, 3};
 container::dictionary<container::pair<int, string>> my_dictionary {{1, "my key is 1"}, {4, "my key is 4"}};
 
