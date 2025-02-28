@@ -23,7 +23,7 @@
  */
 
 
-#include "scripting/runtime/variant.hpp"
+#include "scripting/runtime/meta/val.hpp"
 
 
 namespace Koi {

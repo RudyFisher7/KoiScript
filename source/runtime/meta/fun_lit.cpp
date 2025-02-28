@@ -23,26 +23,33 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
+#include <utility>
 
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#include "scripting/runtime/meta/fun_lit.hpp"
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
 
+FunLit::FunLit(Function in_value, Body in_body, Ret in_ret):
+        _value(std::move(in_value)),
+        _body(std::move(in_body)),
+        _ret(std::move(in_ret)) {
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
-
-    int result = Catch::Session().run( argc, argv );
-
-    // your clean-up...
-
-    return result;
 }
+
+
+std::string FunLit::get_key() const {
+    return "funlit";
+}
+
+
+Error FunLit::run(IMeta::Args arguments, Variant& out_result) const {
+    out_result = Variant(_value);
+    return SCRIPTING_RUNTIME_ERROR_OK;
+}
+
+} // Runtime
+} // Scripting
+} // Koi

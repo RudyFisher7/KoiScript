@@ -23,26 +23,42 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
+#include "scripting/runtime/meta/print.hpp"
 
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
+#include "scripting/runtime/variant/variable.hpp"
 
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#include <ostream>
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
+
+std::string Print::get_key() const {
+    return "print";
+}
 
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
+Error Print::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    int result = Catch::Session().run( argc, argv );
+    IMeta::Args empty_args;
+    for (auto& argument: arguments) {//fixme::
+        std::shared_ptr<IVariant> argument_result;
+        result = argument->run(empty_args, argument_result);
 
-    // your clean-up...
+        if (result == SCRIPTING_RUNTIME_ERROR_OK) {
+            std::cout << argument_result->get_c_string();
+        }
+    }
+
+    std::cout << std::endl;
+
+//    out_result = std::unique_ptr<Variable>();
 
     return result;
 }
+
+} // Runtime
+} // Scripting
+} // Koi

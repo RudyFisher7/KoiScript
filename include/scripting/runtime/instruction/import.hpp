@@ -23,26 +23,44 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
-
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#ifndef KOI_SCRIPTING_RUNTIME_IMPORT_HPP
+#define KOI_SCRIPTING_RUNTIME_IMPORT_HPP
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+#include "scripting/runtime/instruction/instruction.hpp"
 
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
 
-    int result = Catch::Session().run( argc, argv );
+class ImportLibraryKoi: public Instruction {
+protected:
+    std::string _path;
 
-    // your clean-up...
+public:
+    ImportLibraryKoi(
+            std::string in_key,
+            Instruction* in_next,
+            std::string in_path
+    ):
+            Instruction(
+                    Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_IMP_KOI,
+                    std::move(in_key),
+                    in_next
+            ),
+            _path(std::move(in_path)) {
+    }
 
-    return result;
+
+    std::string get_path() const {
+        return _path;
+    }
+};
+
 }
+}
+}
+
+
+#endif //KOI_SCRIPTING_RUNTIME_IMPORT_HPP

@@ -27,7 +27,7 @@
 #define KOI_SCRIPTING_RUNTIME_VARIABLE_HPP
 
 
-#include "scripting/type.hpp"
+#include "scripting/runtime/basic_type.hpp"
 
 #include <ostream>
 #include <string>
@@ -39,12 +39,13 @@ namespace Runtime {
 
 class Variable final {
 public:
+    static const unsigned int SIMPLE_SIZE;
     static const unsigned int MAX_SIZE;
     static const std::string VOID_STRING;
 
 private:
     unsigned int _size = 0u;
-    BasicType _type = SCRIPTING_BASIC_TYPE_VOID;
+    BasicType _type = SCRIPTING_RUNTIME_BASIC_TYPE_VOID;
     union {
         bool _value_bool = false;
         int _value_int;
@@ -54,6 +55,8 @@ private:
 
 public:
     Variable();
+
+    explicit Variable(BasicType in_type);
 
 
     explicit Variable(char in_value);
@@ -69,6 +72,7 @@ public:
 
 
     Variable(const char* in_value, unsigned int size);
+    Variable(const char* in_value, unsigned int size, BasicType in_type);//fixme:: don't need type of key
 
 
     explicit Variable(const std::string& in_value);
@@ -80,13 +84,13 @@ public:
     Variable(Variable&& rhs) noexcept;
 
 
+    ~Variable();
+
+
     Variable& operator=(const Variable& rhs);
 
 
-    Variable& operator=(Variable&& rhs);
-
-
-    ~Variable();
+    Variable& operator=(Variable&& rhs) noexcept;
 
 
     bool operator==(const Variable& rhs) const;
@@ -95,52 +99,56 @@ public:
     bool operator!=(const Variable& rhs) const;
 
 
-    operator bool() const;
+    Variable operator!() const;
+    bool operator>(const Variable& rhs) const;
+    bool operator<(const Variable& rhs) const;
+    bool operator>=(const Variable& rhs) const;
+    bool operator<=(const Variable& rhs) const;
+
+    Variable operator~() const;
+    Variable operator<<(const Variable& rhs) const;
+    Variable operator>>(const Variable& rhs) const;
+    Variable operator&(const Variable& rhs) const;
+    Variable operator|(const Variable& rhs) const;
+    Variable operator^(const Variable& rhs) const;
+
+    Variable operator+(const Variable& rhs) const;
+    Variable operator-(const Variable& rhs) const;
+    Variable operator*(const Variable& rhs) const;
+    Variable operator/(const Variable& rhs) const;
+    Variable operator%(const Variable& rhs) const;
 
 
-    operator char() const;
+    explicit operator bool() const;
 
 
-    operator int() const;
+    explicit operator char() const;
 
 
-    operator float() const;
+    explicit operator int() const;
 
 
-    operator const char*() const;
+    explicit operator float() const;
 
 
-    operator std::string() const;
+    explicit operator const char*() const;
 
 
-    unsigned int get_size() const;
-
+    explicit operator std::string() const;
 
     BasicType get_type() const;
 
 
+    unsigned int get_size() const;
     bool get_bool() const;
-
-
-    /**
-     * @brief Function that can be used to explicitly get the char
-     * representation of the variant when there is ambiguity otherwise
-     * such as the cases when interfacing with certain json libraries.
-     * @return The char representation of this variant.
-     */
     char get_char() const;
-
-
     int get_int() const;
-
-
     float get_float() const;
-
-
+    const char* get_c_string() const;
     std::string get_string() const;
 
 
-    const char* get_c_string() const;
+    bool is_same_type(const Variable& other) const;
 
 
     void set_value_void();
@@ -160,22 +168,36 @@ public:
 
     void set_value(const char* value, unsigned int size);
 
+    void set_id(const char* value, unsigned int size);
+
 
     void set_value(const char* value);
 
 
     void move_value(char** value);
 
+    void move_id(char** value);
+
 
     void set_value(const std::string& value);
 
 
+    void set_id(const std::string& value);
+
+
+    Variable abs() const;
+    Variable negate() const;
+    Variable floor() const;
+    Variable round() const;
+    Variable ceiling() const;
+
+
     friend std::ostream& operator<<(std::ostream& lhs, const Variable& rhs);
 
-
 private:
-    void _copy(const Variable& rhs);
+    bool _equals(const Variable& rhs) const;
 
+    void _copy(const Variable& rhs);
 
     void _destroy_string_if_string();
 };

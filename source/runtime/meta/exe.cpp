@@ -23,71 +23,63 @@
  */
 
 
-#include "../include/scripting/type.hpp"
-
 #include <utility>
-#include <string>
+
+#include "scripting/runtime/meta/exe.hpp"
 
 
 namespace Koi {
 namespace Scripting {
+namespace Runtime {
 
-
-Type::Type(): return_type(SCRIPTING_BASIC_TYPE_INVALID), parameter_types({}) {
-
-}
-
-
-Type::Type(BasicType in_return_type):
-        return_type(in_return_type),
-        array_dimensions(0u),
-        parameter_types({}) {
+Exe::Exe() {
 
 }
 
 
-Type::~Type() {
+Exe::Exe(std::string in_key, IExe::Body in_body_meta_instructions):
+    _key(std::move(in_key)),
+    _body_meta_instructions(std::move(in_body_meta_instructions)) {
 
 }
 
 
-Type::Type(
-        BasicType in_return_type,
-        unsigned int in_array_dimensions,
-        std::vector<BasicType>&& in_parameter_types
-):
-        return_type(in_return_type),
-        array_dimensions(in_array_dimensions),
-        parameter_types(std::move(in_parameter_types)) {
+Exe::~Exe() {
 
 }
 
 
-std::ostream& operator<<(std::ostream& lhs, const Type& rhs) {
-    lhs << "{\"_class:\": \"Type\", \"return_type\": " << std::to_string(rhs.return_type) << ", \"array_dimensions\": " << std::to_string(rhs.array_dimensions) << ", \"parameter_types\": [";
+std::string Exe::get_key() const {
+    return _key;
+}
 
-    auto it = rhs.parameter_types.cbegin();
-    auto end = rhs.parameter_types.cend();
 
-    while (it != end) {
-        lhs << std::to_string(*it);
 
-        if ((it + 1u) != end) {
-            lhs << ", ";
+Error Exe::run(IMeta::Args arguments, IMeta& out_result) const {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+    IMeta::Args empty_args;
+
+    unsigned int i = 0u;
+//    while (result == SCRIPTING_RUNTIME_ERROR_OK && i < arguments.size()) {
+//        result = arguments.at(i)->run(empty_args, *arg_results.at(i));
+//        ++i;
+//    }
+
+    i = 0u;
+    while (result == SCRIPTING_RUNTIME_ERROR_OK && i < _body_meta_instructions.size()) {
+        IMeta temp_result;
+        result = _body_meta_instructions.at(i)->run(arguments, temp_result);//fixme:: arguments passed in here is implementation detail
+        ++i;
+
+        if (i >= _body_meta_instructions.size()) {
+            out_result = temp_result;
         }
-
-        ++it;
     }
 
-    lhs << "]}";
-
-    return lhs;
+    return result;
 }
 
-
-TypeDecorator* TypeDecorator::get_next_return_type() const {
-    return _return_type_decorator;
-}
-
-}
-}
+} // Runtime
+} // Scripting
+} // Koi

@@ -23,53 +23,40 @@
  */
 
 
-#include "scripting/runtime/global_environment.hpp"
+#ifndef KOI_SCRIPTING_RUNTIME_META_HPP
+#define KOI_SCRIPTING_RUNTIME_META_HPP
 
-#include "scripting/log/log.hpp"
 
-#include <ostream>
+#include "scripting/runtime/error.hpp"
+#include "scripting/runtime/variant/i_variant.hpp"
+
 #include <string>
+#include <map>
+#include <memory>
+#include <vector>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-Error GlobalEnvironment::exe(const std::string& key, const std::vector<std::shared_ptr<Ast::Node>>& args) const {
-    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+class IMeta {
+public:
+    typedef std::vector<std::shared_ptr<IMeta>> Args;
 
-    if (key == "print") {
-        Runtime::Variable arg;
-    }
-
-    return result;
-}
+public:
+    virtual std::string get_key() const = 0;
+    virtual Error run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) = 0;
+};
 
 
-Error GlobalEnvironment::print(const Runtime::Variable& value) const {
-    Error result = SCRIPTING_RUNTIME_ERROR_OK;
-
-    if (
-            value.get_type() == BasicType::SCRIPTING_BASIC_TYPE_VOID
-            || value.get_type() == BasicType::SCRIPTING_BASIC_TYPE_INVALID
-    ) {
-        result = SCRIPTING_RUNTIME_ERROR_TYPE_MISMATCH;
-    }
-
-    if (result == SCRIPTING_RUNTIME_ERROR_OK) {
-        std::cout << value << std::endl;
-    }
-
-    KOI_LOG_IF_NOT(
-            result == SCRIPTING_RUNTIME_ERROR_OK,
-            std::string("Variant of type: ")
-            + std::to_string(value.get_type())
-            + std::string(" is invalid for native print() function.")
-    );
-
-    return result;
-}
+class IExe: public IMeta {
+public:
+    typedef std::vector<std::shared_ptr<IMeta>> Body;
+};
 
 } // Runtime
 } // Scripting
 } // Koi
+
+#endif //KOI_SCRIPTING_RUNTIME_META_HPP

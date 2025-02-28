@@ -23,26 +23,27 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
-
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#include "scripting/runtime/meta/ref.hpp"
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
+
+Ref::Ref(std::string in_key, std::shared_ptr<Environment> in_environment)
+        : IEnv(in_key, in_environment) {
+
+}
 
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
+Error Ref::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    int result = Catch::Session().run( argc, argv );
-
-    // your clean-up...
+//    std::shared_ptr<IVariant> ref = _environment->get(_key);
 
     return result;
 }
+
+} // Runtime
+} // Scripting
+} // Koi

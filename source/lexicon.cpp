@@ -30,87 +30,59 @@ namespace Koi {
 namespace Scripting {
 
 Lexicon::Lexicon() {
-    _single_char_tokens = {
+    _tokens = {
             // mirrored enclosures
-            {'(', Token::SCRIPTING_TOKEN_TYPE_GROUPING_START},
-            {')', Token::SCRIPTING_TOKEN_TYPE_GROUPING_END},
-            {'{', Token::SCRIPTING_TOKEN_TYPE_SCOPE_START},
-            {'}', Token::SCRIPTING_TOKEN_TYPE_SCOPE_END},
-            {'<', Token::SCRIPTING_TOKEN_TYPE_ID_START},
-            {'>', Token::SCRIPTING_TOKEN_TYPE_ID_END},
-            {'[', Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_START},
-            {']', Token::SCRIPTING_TOKEN_TYPE_ARRAY_SIZE_END},
+            {"(", Token::SCRIPTING_TOKEN_TYPE_GROUPING_START},
+            {")", Token::SCRIPTING_TOKEN_TYPE_GROUPING_END},
+            {"{", Token::SCRIPTING_TOKEN_TYPE_SCOPE_START},
+            {"}", Token::SCRIPTING_TOKEN_TYPE_SCOPE_END},
+            {"<", Token::SCRIPTING_TOKEN_TYPE_TEMPLATE_START},
+            {">", Token::SCRIPTING_TOKEN_TYPE_TEMPLATE_END},
 
             // bookend enclosures
-            {'\'', Token::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND},
-            {'#', Token::SCRIPTING_TOKEN_TYPE_COMMENT_BOOKEND},
+            {"\"", Token::SCRIPTING_TOKEN_TYPE_LITERAL_STRING_BOOKEND},
+            {"#", Token::SCRIPTING_TOKEN_TYPE_COMMENT_BOOKEND},
+
+            // operators
+            {"&", Token::SCRIPTING_TOKEN_TYPE_OPERATOR_REFERENCE},
+            {".", Token::SCRIPTING_TOKEN_TYPE_OPERATOR_MEMBER_ACCESS},
+            {"->", Token::SCRIPTING_TOKEN_TYPE_OPERATOR_RETURN},
+            {":", Token::SCRIPTING_TOKEN_TYPE_OPERATOR_INHERITANCE},
+            {"::", Token::SCRIPTING_TOKEN_TYPE_OPERATOR_SCOPE},
 
             // delimiters
-            {':', Token::SCRIPTING_TOKEN_TYPE_COMBINER},
-            {',', Token::SCRIPTING_TOKEN_TYPE_SEPARATOR},
-            {';', Token::SCRIPTING_TOKEN_TYPE_DELIMITER},
+            {",", Token::SCRIPTING_TOKEN_TYPE_SEPARATOR},
+            {";", Token::SCRIPTING_TOKEN_TYPE_DELIMITER},
+
+            // built-in types
+            {"object_t", Token::SCRIPTING_TOKEN_TYPE_BUILT_IN_TYPE_OBJECT},
+            {"bool_t", Token::SCRIPTING_TOKEN_TYPE_BUILT_IN_TYPE_BOOL},
+            {"char_t", Token::SCRIPTING_TOKEN_TYPE_BUILT_IN_TYPE_CHAR},
+            {"int_t", Token::SCRIPTING_TOKEN_TYPE_BUILT_IN_TYPE_INT},
+            {"float_t", Token::SCRIPTING_TOKEN_TYPE_BUILT_IN_TYPE_FLOAT},
+            {"string_t", Token::SCRIPTING_TOKEN_TYPE_BUILT_IN_TYPE_STRING},
+
+            // keywords
+            {"false", Token::SCRIPTING_TOKEN_TYPE_LITERAL_BOOL_FALSE},
+            {"true", Token::SCRIPTING_TOKEN_TYPE_LITERAL_BOOL_TRUE},
+            {"class", Token::SCRIPTING_TOKEN_TYPE_CLASS},
+            {"library", Token::SCRIPTING_TOKEN_TYPE_LIBRARY},
+            {"import", Token::SCRIPTING_TOKEN_TYPE_IMPORT},
     };
-
-    _keywords = {
-            // var types
-            {"void", Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_VOID},
-            {"bool", Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_BOOL},
-            {"int", Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_INT},
-            {"float", Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_FLOAT},
-            {"text", Token::SCRIPTING_TOKEN_TYPE_SPECIFIER_TEXT},
-
-            // declaration metas
-            {"var", Token::SCRIPTING_TOKEN_TYPE_VAR_META},
-            {"fun", Token::SCRIPTING_TOKEN_TYPE_FUN_META},
-
-            // evaluation metas
-            {"exe", Token::SCRIPTING_TOKEN_TYPE_EXE_META},
-            {"val", Token::SCRIPTING_TOKEN_TYPE_VAL_META},
-            {"ref", Token::SCRIPTING_TOKEN_TYPE_REF_META},
-            {"lib", Token::SCRIPTING_TOKEN_TYPE_LIB_META},
-            {"imp", Token::SCRIPTING_TOKEN_TYPE_IMP_META},
-
-            // resulters
-            {"ret", Token::SCRIPTING_TOKEN_TYPE_RESULTER},
-
-            // reserved keywords
-            {"true", Token::SCRIPTING_TOKEN_TYPE_BOOL},
-            {"false", Token::SCRIPTING_TOKEN_TYPE_BOOL},
-
-            // reserved ids
-            {"_args", Token::SCRIPTING_TOKEN_TYPE_RESERVED_ID},
-    };
-}
-
-
-Token::Type Lexicon::get_type(const char& key, bool is_verbatim) const {
-    Token::Type result = Token::SCRIPTING_TOKEN_TYPE_INVALID;
-
-    auto it = _single_char_tokens.find(key);
-
-    if (it != _single_char_tokens.end()) {
-        result = it->second;
-    }
-
-    return result;
 }
 
 
 Token::Type Lexicon::get_type(const std::string& key, bool is_verbatim) const {
     Token::Type result = Token::SCRIPTING_TOKEN_TYPE_INVALID;
 
-    auto it = _keywords.find(key);
+    auto it = _tokens.find(key);
 
-    if (it != _keywords.end()) {
+    if (it != _tokens.end()) {
         result = it->second;
     } else if (is_verbatim) {
-        result = Token::SCRIPTING_TOKEN_TYPE_TEXT;
+        result = Token::SCRIPTING_TOKEN_TYPE_LITERAL_STRING;
     } else {
         result = get_non_bool_value_type(key);
-    }
-
-    if (result == Token::SCRIPTING_TOKEN_TYPE_INVALID && is_valid_id(key)) {
-        result = Token::SCRIPTING_TOKEN_TYPE_ID;
     }
 
     return result;
@@ -232,9 +204,9 @@ Token::Type Lexicon::get_non_bool_value_type(const std::string& value) const {
 
     if (has_a_num) {
         if (has_decimal) {
-            result = Token::SCRIPTING_TOKEN_TYPE_FLOAT;
+            result = Token::SCRIPTING_TOKEN_TYPE_LITERAL_FLOAT;
         } else if (is_valid_num) {
-            result = Token::SCRIPTING_TOKEN_TYPE_INT;
+            result = Token::SCRIPTING_TOKEN_TYPE_LITERAL_INT;
         }
     }
 

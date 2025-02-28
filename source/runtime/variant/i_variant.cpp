@@ -23,26 +23,67 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
-
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#include "scripting/runtime/variant/i_variant.hpp"
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
 
+IVariant::IVariant(IVariant::Type in_type): _variant_type(in_type) {
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
-
-    int result = Catch::Session().run( argc, argv );
-
-    // your clean-up...
-
-    return result;
 }
+
+
+bool IVariant::operator==(const IVariant& rhs) const {
+    return _equals(rhs);
+}
+
+
+bool IVariant::operator!=(const IVariant& rhs) const {
+    return !_equals(rhs);
+}
+
+
+IVariant::operator bool() const {
+    return get_bool();
+}
+
+
+IVariant::operator char() const {
+    return get_char();
+}
+
+
+IVariant::operator int() const {
+    return get_int();
+}
+
+
+IVariant::operator float() const {
+    return get_float();
+}
+
+
+IVariant::operator const char*() const {
+    return get_c_string();
+}
+
+
+IVariant::operator std::string() const {
+    return get_string();
+}
+
+
+IVariant::Type IVariant::get_variant_type() const {
+    return _variant_type;
+}
+
+
+BasicType IVariant::get_type() const {
+    return _type;
+}
+
+} // Runtime
+} // Scripting
+} // Koi

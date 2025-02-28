@@ -23,26 +23,30 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
+#include <utility>
 
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#include "scripting/runtime/meta/var_lit.hpp"
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
 
+VarLit::VarLit(Variable in_value): _value(std::move(in_value)) {
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
-
-    int result = Catch::Session().run( argc, argv );
-
-    // your clean-up...
-
-    return result;
 }
+
+
+std::string VarLit::get_key() const {
+    return "";
+}
+
+
+Error VarLit::run(IMeta::Args arguments, Variant& out_result) const {
+    out_result = Variant(_value);
+    return SCRIPTING_RUNTIME_ERROR_OK;
+}
+
+} // Runtime
+} // Scripting
+} // Koi

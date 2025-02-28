@@ -10,43 +10,71 @@ in mind. Not to be mistaken for the stunning koilang (tsevhu): https://youtu.be/
 Not yet implemented.
 - ...
 
+## Datatypes
+- bool
+- int
+- float
+- text
+- key
+- array (of bool, int, float, text, or key)
+
+
+## Meta Functions
+These act on the runtime environment.
+### makes stuff
+- var
+- arr
+- fun
+- lib
+### does stuff
+- val
+- ref
+- asn
+- exe
+- imp
+### removes stuff
+- rem
 
 ## Built-In Functions
-### special
-- assign
-- print
-### variable and function info
-- size
+These are part of the runtime environment.
+### control
+- if
+- while
 ### logical
-- and
-- or
-- is_true
-- not
-- equals
-- greater_than
-- lesser_then
-- greater_than_or_equal_to
-- lesser_than_or_equal_to
+- land
+- lor
+- lnot
+- eq
+- gt
+- lt
+- ge
+- le
 ### arithmetic
 #### unary
 - abs
 - neg
-- floor
-- round
+- flr
+- rnd
 - ceil
-#### binary
+#### multary
 - add
 - sub
 - mul
 - div
 - mod
-#### unary bitwise
-- shift_left
-- shift_right
-- bit_or
-- bit_xor
-- bit_and
-- bit_not
-### control
-- if
-- while
+### bitwise
+#### unary
+- bshl
+- bshr
+#### multary
+- bor
+- bxor
+- band
+- bnot
+### arrays
+- append
+- insert
+### variable and function info
+- size
+### special
+- print

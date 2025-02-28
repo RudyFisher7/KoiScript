@@ -23,13 +23,18 @@
  */
 
 
-#include "scripting/assembler.hpp"
-#include "scripting/abstract_syntax_tree/node.hpp"
+//#include "scripting/assembler.hpp"
+//#include "scripting/abstract_syntax_tree/node.hpp"
 #include "scripting/lexer.hpp"
 //#include "scripting/parser.hpp"
 #include "scripting/extensions/extensions.hpp"
 #include "scripting/runtime/environment.hpp"
-#include "scripting/runtime/variable.hpp"
+#include "scripting/runtime/lib/built_in.hpp"
+#include "scripting/runtime/variant/array.hpp"
+#include "scripting/runtime/variant/function.hpp"
+#include "scripting/runtime/variant/variable.hpp"
+#include "scripting/runtime/instruction/instruction.hpp"
+#include "scripting/interpreter.hpp"
 
 #include <cstring>
 #include <fstream>
@@ -37,6 +42,9 @@
 #include <string>
 #include <memory>
 #include <map>
+
+
+namespace KoiRuntime = Koi::Scripting::Runtime;
 
 
 int main() {
@@ -70,7 +78,7 @@ int main() {
 
     std::cout << tokens << std::endl;
 
-    // 2. parse
+    //todo:: 2. parse
 //    Koi::Scripting::Parser parser;
 //    std::shared_ptr<Koi::Scripting::Ast::Node> ast_tree;
 //    parser.parse(tokens, ast_tree);
@@ -78,16 +86,41 @@ int main() {
 //    std::cout << *ast_tree << std::endl;
 
     //todo:: 3. assemble
-    Koi::Scripting::Runtime::Environment environment;
-    Koi::Scripting::Assembler assembler;
+    std::shared_ptr<KoiRuntime::Environment> global_environment = std::make_shared<KoiRuntime::Environment>();
 
-    assembler.assemble(environment);
+    KoiRuntime::BuiltIn built_in_lib;
+    built_in_lib.import(global_environment);
+
+    global_environment->declare_var("msg", KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_TEXT);
+    global_environment->assign_var("msg", KoiRuntime::Variable("hello world!"));
+
+    KoiRuntime::Ret<KoiRuntime::Variable> ret = std::make_shared<KoiRuntime::Variable>();
+    KoiRuntime::Args<KoiRuntime::Variable> args_1 {
+        global_environment->get_var_val("msg")
+    };
+
+    KoiRuntime::Instruction* first = new KoiRuntime::ExecuteNative(
+        "print",
+        nullptr,
+        {new KoiRuntime::Instruction(KoiRuntime::Instruction::SCRIPTING_RUNTIME_INSTRUCTION_TYPE_META_VAL_VAR, "msg")}
+    );
 
     //todo:: 4. run
-    Koi::Scripting::Runtime::Variable runtime_result;
+    Koi::Scripting::Interpreter interpreter;
+    KoiRuntime::Error interpreter_error = interpreter.interpret(global_environment, first, ret);
 
-    std::cout << "Runtime result: " << runtime_result << std::endl;
+//    KoiRuntime::Error fun_res = global_environment->execute_fun("print", ret, args_1);
 
+//    KoiRuntime::Args<KoiRuntime::Variable> args_2 {
+//            std::make_shared<KoiRuntime::Variable>("toasty_array", std::strlen("toasty_array"), KoiRuntime::SCRIPTING_RUNTIME_BASIC_TYPE_KEY),
+//            std::make_shared<KoiRuntime::Variable>("you got appended me!"),
+//    };
+//
+//    KoiRuntime::Error fun_res_2 = global_environment->execute_fun("append", ret, args_2);
+
+    std::cout << "Interpreter result: " << interpreter_error << " - " << *ret << std::endl;
+
+    delete first;
 
     return 0;
 }

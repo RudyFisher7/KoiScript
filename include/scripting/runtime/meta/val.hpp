@@ -23,58 +23,40 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_VARIANT_HPP
-#define KOI_SCRIPTING_RUNTIME_VARIANT_HPP
+#ifndef KOI_SCRIPTING_RUNTIME_VAL_HPP
+#define KOI_SCRIPTING_RUNTIME_VAL_HPP
 
 
-#include "scripting/runtime/array.hpp"
-#include "scripting/runtime/function.hpp"
-#include "scripting/runtime/variable.hpp"
+#include "scripting/runtime/meta/i_meta.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Variant final {
-public:
-    enum Type: int {
-        SCRIPTING_RUNTIME_VARIANT_TYPE_INVALID = -1,
-        SCRIPTING_RUNTIME_VARIANT_TYPE_MIN = 0,
-        SCRIPTING_RUNTIME_VARIANT_TYPE_VAR = SCRIPTING_RUNTIME_VARIANT_TYPE_MIN,
-        SCRIPTING_RUNTIME_VARIANT_TYPE_REF,
-        SCRIPTING_RUNTIME_VARIANT_TYPE_ARR,
-        SCRIPTING_RUNTIME_VARIANT_TYPE_FUN,
-        SCRIPTING_RUNTIME_VARIANT_TYPE_SIZE
-    };
-
+class Val final: public IMeta {
 private:
-    Type _type = SCRIPTING_RUNTIME_VARIANT_TYPE_INVALID;
-    int _ref_value;
-    Variable _variable_value;
-    Array _array_value;
-    Function _function_value;
+    Variant _value;
 
 public:
-    Type get_type() const;
+    explicit Val(const Variant& in_value);
 
-    int get_reference() const;
+    Val(const Val& rhs) = default;
+    Val(Val&& rhs) = default;
 
-    Variable get_variable() const;
-    void get_variable_by_move(Variable& out_result);
-    Variable& get_variable_by_reference();
+    ~Val() = default;
 
-    Array get_array() const;
-    void get_array_by_move(Array& out_result);
-    Array& get_array_by_reference();
+    Val& operator=(const Val& rhs) = default;
+    Val& operator=(Val&& rhs) = default;
 
-    Function get_function() const;
-    void get_function_by_move(Function& out_result);
-    Function& get_function_by_reference();
+    std::string get_key() const override;
+
+    Error run(IMeta::Args arguments, IMeta& out_result) const override;
+
 };
 
 } // Runtime
 } // Scripting
 } // Koi
 
-#endif //KOI_SCRIPTING_RUNTIME_VARIANT_HPP
+#endif //KOI_SCRIPTING_RUNTIME_VAL_HPP

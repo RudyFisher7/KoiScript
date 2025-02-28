@@ -23,26 +23,44 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
 
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#ifndef KOI_SCRIPTING_RUNTIME_I_DECL_HPP
+#define KOI_SCRIPTING_RUNTIME_I_DECL_HPP
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+#include "scripting/runtime/meta/i_meta.hpp"
+
+#include "scripting/runtime/environment.hpp"
+
+#include <memory>
 
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
 
-    int result = Catch::Session().run( argc, argv );
+class IEnv: public IMeta {
+protected:
+    std::string _key;
+    std::shared_ptr<Environment> _environment;
 
-    // your clean-up...
+public:
+    IEnv(std::string in_key, std::shared_ptr<Environment> in_environment);
 
-    return result;
+    IEnv(const IEnv& rhs) = default;
+    IEnv(IEnv&& rhs) = default;
+
+    virtual ~IEnv() = default;
+
+    IEnv& operator=(const IEnv& rhs) = default;
+    IEnv& operator=(IEnv&& rhs) = default;
+
+    std::string get_key() const override;
+};
+
 }
+}
+}
+
+
+#endif //KOI_SCRIPTING_RUNTIME_I_DECL_HPP

@@ -23,32 +23,32 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_ARRAY_HPP
-#define KOI_SCRIPTING_RUNTIME_ARRAY_HPP
+#include "scripting/runtime/meta/var.hpp"
 
-
-#include "scripting/runtime/variable.hpp"
-
-#include <vector>
+#include <utility>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Array final {
-private:
-    std::vector<Variable> _values;
-public:
-    Variable& operator[](unsigned int i);
+Var::Var(std::string in_key, std::shared_ptr<Environment> in_environment):
+        IEnv(std::move(in_key), std::move(in_environment)) {
+}
 
-    unsigned int get_size() const;
-    const Variable& cget_at(unsigned int i) const;
-    Variable& get_at(unsigned int i);
-};
+
+Error Var::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+
+//    bool declaration_result = _environment->register_declaration(_key);
+
+//    if (!declaration_result) {
+//        result = SCRIPTING_RUNTIME_ERROR_ALREADY_EXISTS;
+//    }
+
+    return result;
+}
 
 } // Runtime
 } // Scripting
 } // Koi
-
-#endif //KOI_SCRIPTING_RUNTIME_ARRAY_HPP

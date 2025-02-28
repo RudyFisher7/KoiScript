@@ -23,26 +23,46 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
+#ifndef KOI_SCRIPTING_RUNTIME_ARRAY_HPP
+#define KOI_SCRIPTING_RUNTIME_ARRAY_HPP
 
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
+
+#include "scripting/runtime/basic_type.hpp"
+#include "scripting/runtime/variant/variable.hpp"
 
 #include <string>
-#include <iostream>
-#include <limits>
 #include <vector>
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
 
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
+class Array final: public std::vector<Variable> {
+private:
+    BasicType _type = SCRIPTING_RUNTIME_BASIC_TYPE_INVALID;
 
-    int result = Catch::Session().run( argc, argv );
+public:
+    Array() = default;
+    explicit Array(BasicType in_type);
 
-    // your clean-up...
+    Array(const Array& rhs) = default;
+    Array(Array&& rhs) = default;
 
-    return result;
-}
+    ~Array() = default;
+
+    Array& operator=(const Array& rhs) = default;
+    Array& operator=(Array&& rhs) = default;
+
+    BasicType get_type() const;
+
+    bool is_same_type(const Array& other) const;
+
+};
+
+} // Runtime
+} // Scripting
+} // Koi
+
+#endif //KOI_SCRIPTING_RUNTIME_ARRAY_HPP

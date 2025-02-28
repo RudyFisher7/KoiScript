@@ -23,26 +23,55 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
-
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#ifndef KOI_SCRIPTING_RUNTIME_FUN_LIT_HPP
+#define KOI_SCRIPTING_RUNTIME_FUN_LIT_HPP
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+#include "scripting/runtime/meta/i_meta.hpp"
+
+#include "scripting/runtime/data/function.hpp"
+
+#include <memory>
 
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
 
-    int result = Catch::Session().run( argc, argv );
+class FunLit final: public IMeta {
+public:
+    typedef std::vector<std::shared_ptr<const IMeta>> Body;
+    typedef std::shared_ptr<const IMeta> Ret;
 
-    // your clean-up...
 
-    return result;
-}
+private:
+    Function _value;//fixme::
+
+    Body _body;
+    Ret _ret;
+
+
+public:
+    FunLit() = default;
+
+    explicit FunLit(Function in_value, Body in_body, Ret in_ret);
+
+    FunLit(const FunLit& rhs) = default;
+    FunLit(FunLit&& rhs) = default;
+
+    ~FunLit() = default;
+
+    FunLit& operator=(const FunLit& rhs) = default;
+    FunLit& operator=(FunLit&& rhs) = default;
+
+    std::string get_key() const override;
+    Error run(IMeta::Args arguments, IMeta& out_result) const override;
+
+};
+
+} // Runtime
+} // Scripting
+} // Koi
+
+
+#endif //KOI_SCRIPTING_RUNTIME_FUN_LIT_HPP

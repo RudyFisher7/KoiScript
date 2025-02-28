@@ -23,12 +23,37 @@
  */
 
 
-#include "scripting/runtime/array.hpp"
+#ifndef KOI_SCRIPTING_RUNTIME_VAR_HPP
+#define KOI_SCRIPTING_RUNTIME_VAR_HPP
+
+
+#include "scripting/runtime/meta/i_env.hpp"
+
+#include <memory>
+#include <string>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
+
+class Var final: public IEnv {
+public:
+    Var(std::string in_key, std::shared_ptr<Environment> in_environment);
+
+    Var(const Var& rhs) = default;
+    Var(Var&& rhs) = default;
+
+    ~Var() override = default;
+
+    Var& operator=(const Var& rhs) = default;
+    Var& operator=(Var&& rhs) = default;
+
+    Error run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) override;//todo:: inside body, add arg[1] as declaration in _environment
+};
+
 } // Runtime
 } // Scripting
 } // Koi
+
+#endif //KOI_SCRIPTING_RUNTIME_VAR_HPP

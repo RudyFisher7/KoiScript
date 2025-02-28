@@ -23,26 +23,35 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
-
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#ifndef KOI_SCRIPTING_RUNTIME_ASSIGN_HPP
+#define KOI_SCRIPTING_RUNTIME_ASSIGN_HPP
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+#include "scripting/runtime/meta/i_env.hpp"
 
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
 
-    int result = Catch::Session().run( argc, argv );
+class Assign final: public IEnv {
+public:
+    Assign(std::string in_key, std::shared_ptr<Environment> in_environment);
 
-    // your clean-up...
+    Assign(const Assign& rhs) = default;
+    Assign(Assign&& rhs) = default;
 
-    return result;
-}
+    ~Assign() override = default;
+
+    Assign& operator=(const Assign& rhs) = default;
+    Assign& operator=(Assign&& rhs) = default;
+
+    Error run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) override;//todo:: inside body, assign arg[1] with arg[2] in _environment
+};
+
+} // Runtime
+} // Scripting
+} // Koi
+
+
+#endif //KOI_SCRIPTING_RUNTIME_ASSIGN_HPP

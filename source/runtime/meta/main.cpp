@@ -23,26 +23,42 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
+#include <utility>
 
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#include "scripting/runtime/meta/main.hpp"
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
+
+std::string Main::get_key() const {
+    return "main";
+}
 
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
+Error Main::run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) {
+    Error result = SCRIPTING_RUNTIME_ERROR_OK;
 
-    int result = Catch::Session().run( argc, argv );
+    IMeta::Args cmdln_args;
+    if (arguments.size() == 2u) {
+        cmdln_args.push_back(arguments.at(0u));
+        result = arguments.at(1u)->run(cmdln_args, out_result);
 
-    // your clean-up...
+//        IMeta::Args empty_args;
+//        Variant commandline_arguments;
+//        result = arguments.at(0u)->run(empty_args, commandline_arguments);
+//        _environment.register_declaration("cmdln_args");
+//        _environment.register_assignment("cmdln_args", std::make_shared<const LitVal>(commandline_arguments));
+//
+//        ++i;
+    } else if (arguments.size() == 1u) {
+        result = arguments.at(0u)->run(cmdln_args, out_result);
+    }
 
     return result;
 }
+
+} // Runtime
+} // Scripting
+} // Koi

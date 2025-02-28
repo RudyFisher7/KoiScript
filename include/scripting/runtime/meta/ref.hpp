@@ -23,21 +23,34 @@
  */
 
 
-#include "scripting/runtime/function.hpp"
+#ifndef KOI_SCRIPTING_RUNTIME_REF_HPP
+#define KOI_SCRIPTING_RUNTIME_REF_HPP
+
+
+#include "scripting/runtime/meta/i_env.hpp"
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-Error Function::operator()(const std::vector<Variable>& arguments, Variable& out_returned_value) const {
-    Error result = SCRIPTING_RUNTIME_ERROR_OK;
+class Ref final: public IEnv {
+public:
+    Ref(std::string in_key, std::shared_ptr<Environment> in_environment);
 
+    Ref(const Ref& rhs) = default;
+    Ref(Ref&& rhs) = default;
 
+    ~Ref() = default;
 
-    return result;
-}
+    Ref& operator=(const Ref& rhs) = default;
+    Ref& operator=(Ref&& rhs) = default;
+
+    Error run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) override;
+};
 
 } // Runtime
 } // Scripting
 } // Koi
+
+#endif //KOI_SCRIPTING_RUNTIME_REF_HPP

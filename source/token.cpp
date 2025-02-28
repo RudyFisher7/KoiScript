@@ -33,10 +33,13 @@
 
 namespace Koi { namespace Scripting {
 
+const char* Token::TRUE_BOOL = "True";
+
+
 Token Token::from(Type in_type, const char* in_value_string) {
     switch (in_type) {
         case SCRIPTING_TOKEN_TYPE_BOOL:
-            return Token(in_type, in_value_string == "true");
+            return Token(in_type, in_value_string == TRUE_BOOL);
         case SCRIPTING_TOKEN_TYPE_INT:
             return Token(in_type, std::atoi(in_value_string));
         case SCRIPTING_TOKEN_TYPE_FLOAT:
@@ -431,10 +434,6 @@ Token::operator std::string() const {
 
 
 std::ostream& operator<<(std::ostream& lhs, const Token& rhs) {
-    if (rhs.get_value_string() == "1") {
-        int i = 0;
-    }
-
     lhs << R"({"_value": ")"
     << rhs.get_value_string()
     << R"(", "_internal_type": ")"

@@ -23,26 +23,27 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
-
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#include "scripting/runtime/variant/array.hpp"
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
 
+Array::Array(BasicType in_type): _type(in_type) {
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
-
-    int result = Catch::Session().run( argc, argv );
-
-    // your clean-up...
-
-    return result;
 }
+
+
+BasicType Array::get_type() const {
+    return _type;
+}
+
+
+bool Array::is_same_type(const Array& other) const {
+    return get_type() == other.get_type();
+}
+
+} // Runtime
+} // Scripting
+} // Koi

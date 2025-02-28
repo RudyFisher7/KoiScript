@@ -23,26 +23,48 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
+#ifndef KOI_SCRIPTING_RUNTIME_MAIN_HPP
+#define KOI_SCRIPTING_RUNTIME_MAIN_HPP
 
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
+
+#include "i_meta.hpp"
+
+#include "scripting/runtime/error.hpp"
+#include "scripting/runtime/environment.hpp"
+#include "scripting/runtime/variant/i_variant.hpp"
 
 #include <string>
-#include <iostream>
-#include <limits>
+#include <map>
+#include <memory>
 #include <vector>
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
+
+class Main final: public IExe {
+private:
+    mutable Environment _environment;
+
+public:
+    Main() = default;
+
+    Main(const Main& rhs) = default;
+    Main(Main&& rhs) = default;
+
+    Main& operator=(const Main& rhs) = default;
+    Main& operator=(Main&& rhs) = default;
+
+    ~Main() = default;
 
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
+    std::string get_key() const override;
+    Error run(IMeta::Args arguments, std::shared_ptr<IVariant>& out_result) override;
+};
 
-    int result = Catch::Session().run( argc, argv );
+} // Runtime
+} // Scripting
+} // Koi
 
-    // your clean-up...
-
-    return result;
-}
+#endif //KOI_SCRIPTING_RUNTIME_MAIN_HPP

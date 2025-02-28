@@ -23,26 +23,41 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
-
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#ifndef KOI_SCRIPTING_RUNTIME_VAR_LIT_HPP
+#define KOI_SCRIPTING_RUNTIME_VAR_LIT_HPP
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+#include "scripting/runtime/meta/i_meta.hpp"
+
+#include "scripting/runtime/data/variable.hpp"
 
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
 
-    int result = Catch::Session().run( argc, argv );
+class VarLit final: public IMeta {
+private:
+    Variable _value;
 
-    // your clean-up...
+public:
+    VarLit() = default;
+    explicit VarLit(Variable in_value);
 
-    return result;
-}
+    VarLit(const VarLit& rhs) = default;
+    VarLit(VarLit&& rhs) = default;
+
+    ~VarLit() = default;
+
+    VarLit& operator=(const VarLit& rhs) = default;
+    VarLit& operator=(VarLit&& rhs) = default;
+
+    std::string get_key() const override;
+    Error run(IMeta::Args arguments, IMeta& out_result) const override;
+};
+
+} // Runtime
+} // Scripting
+} // Koi
+
+#endif //KOI_SCRIPTING_RUNTIME_VAR_LIT_HPP

@@ -23,37 +23,26 @@
  */
 
 
-#ifndef KOI_SCRIPTING_RUNTIME_FUNCTION_HPP
-#define KOI_SCRIPTING_RUNTIME_FUNCTION_HPP
+#include "scripting/runtime/meta/i_env.hpp"
 
-
-#include "scripting/runtime/error.hpp"
-#include "scripting/runtime/variable.hpp"
-#include "scripting/type.hpp"
-
-#include <memory>
-#include <vector>
+#include <utility>
 
 
 namespace Koi {
 namespace Scripting {
 namespace Runtime {
 
-class Function final {
-private:
-    BasicType _return_type = SCRIPTING_BASIC_TYPE_VOID;
+IEnv::IEnv(std::string in_key, std::shared_ptr<Environment> in_environment):
+        _key(std::move(in_key)),
+        _environment(std::move(in_environment)) {
 
-    std::vector<BasicType> _parameter_types;
-
-    //todo:: statements
-
-public:
-    Error operator()(const std::vector<Variable>& arguments, Variable& out_returned_value) const;
-};
+}
 
 
-} // Runtime
-} // Scripting
-} // Koi
+std::string IEnv::get_key() const {
+    return _key;
+}
 
-#endif //KOI_SCRIPTING_RUNTIME_FUNCTION_HPP
+}
+}
+}

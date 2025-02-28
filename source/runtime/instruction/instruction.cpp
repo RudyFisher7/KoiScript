@@ -23,26 +23,47 @@
  */
 
 
-//#include "scripting/runtime/data/array.hpp"
-
-#include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <string>
-#include <iostream>
-#include <limits>
-#include <vector>
+#include "scripting/runtime/instruction/instruction.hpp"
 
 
-//namespace KoiScript = Koi::Scripting::Runtime;
+namespace Koi {
+namespace Scripting {
+namespace Runtime {
 
+Instruction::Instruction(
+        Type in_type,
+        std::string in_key,
+        Instruction* in_next
+): _type(in_type), _key(std::move(in_key)), _next(in_next) {
 
-int main( int argc, char* argv[] ) {
-    // your setup ...
-
-    int result = Catch::Session().run( argc, argv );
-
-    // your clean-up...
-
-    return result;
 }
+
+
+Instruction::Type Instruction::get_type() const {
+    return _type;
+}
+
+
+std::string Instruction::get_key() const {
+    return _key;
+}
+
+
+Instruction* Instruction::get_next() {
+    return _next;
+}
+
+
+void Instruction::set_next(Instruction* value) {
+    delete _next;
+    _next = value;
+}
+
+
+Instruction::~Instruction() {
+        delete _next;
+}
+
+} // Runtime
+} // Scripting
+} // Koi
