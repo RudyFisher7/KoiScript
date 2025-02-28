@@ -39,7 +39,7 @@ namespace Scripting {
 //todo:: add built-in functions as reserved ids
 class Lexicon {
 protected:
-    std::unordered_map<std::string, Token::Type> _tokens;
+    std::unordered_map<std::string, TokenType> _tokens;
 
 public:
     Lexicon();

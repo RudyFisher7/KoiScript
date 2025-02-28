@@ -1,5 +1,1 @@
-var<msg>:text;
-
-asn<msg>('hello world!');
-
-exe<print>(val<msg>());
+var hello_world string_t {"hello world!"};

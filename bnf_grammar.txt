@@ -4,54 +4,51 @@
 <library_body> ::= '{' {<statement>} '}' ';'
 <library_import> ::= 'import' '<' <scoped_type> '>' '('  ')' ';'
 
-<class_definition> ::= 'class' <type_name> <inheritance_operator> <scoped_type> <class_body>
+<class_definition> ::= 'class' <class_type_name> <inheritance_operator> <template_class_type> <class_body>
+    | 'class' <class_type_name> <class_template_definition> <inheritance_operator> <template_class_type_specialization> <template_class_body>
 <class_body> ::= '{' {<variable_creation>} '}' ';'
+<template_class_body> ::= '{' {<template_variable_creation>} '}' ';'
 <class_variable_access> ::= <identifier> {<member_access_operator> <identifier>}
+<template_class_type_specialization> ::= <class_type> <class_template_fill>
+<class_template_definition> ::= '<' <identifier> <inheritance_operator> <template_class_type_specialization> {',' <identifier> <inheritance_operator> <template_class_type_specialization>} [','] '>'
+<variable_creation> ::= 'var' <identifier> <template_class_type> [<initializer>] ';'
+<template_variable_creation> ::= 'var' <identifier> <template_class_type> [<initializer>] ';'
+    | 'var' <identifier> <identifier> [<initializer>] ';'
 
-<function_creation> ::= <function_signature> <identifier> <function_body> ';'
+<function_definition> ::= 'func' <identifier> <function_signature> <function_body>
+    | 'func' <identifier> <template_definition> <template_function_signature> <function_body>
 <anonymous_function_creation> ::= <function_signature> <function_body>
+    | 'func' <template_definition> <template_function_signature> <function_body>
 <function_signature> ::= <scoped_type>'(' <function_parameters> ')'
-<function_body> ::= '{' {{<expression> ';'} {<statement> ';'}} <return_operator> <expression> ';' '}'
+<template_function_signature> ::= <scoped_type>'(' <function_parameters> ')'
+    | <identifier>'(' <template_function_parameters> ')'
+<function_body> ::= '{' {{<expression> ';'} {<statement> ';'}} <return_operator> <expression> ';' '}' ';'
 <function_call> ::= <identifier> '(' <function_arguments> ')' ';'
-<function_parameters> ::= [<complex_type> <identifier> {',' <complex_type> <identifier>} [',']]
+<template_function_call> ::= <identifier> '(' <function_arguments> ')' ';' | <identifier> <template_fill> '(' <function_arguments> ')' ';'
+<function_parameters> ::= [<any_type> <identifier> {',' <any_type> <identifier>} [',']]
+<template_function_parameters> ::= [<any_type> <identifier> {',' <any_type> <identifier>} [',']]
+    | [<identifier> <identifier> {<template_another_function_parameter>} [',']]
+<template_another_function_parameter> ::= {',' <any_type> <identifier>} | {',' <identifier> <identifier>}
 <function_arguments> ::= [<expression> {',' <expression>} [',']]
 
-<variable_creation> ::= <scoped_type> <identifier> [<reference_operator>] [<variable_initializer>] ';'
-<anonymous_variable_creation> ::= <scoped_type> [<variable_initializer>]
-<variable_access> ::= <literal> | <identifier> | <class_variable_access> | <reference_operator> <identifier> | <reference_operator> <class_variable_access>
-<variable_initializer> ::= '{' <variable_initializer_list> '}'
-<variable_initializer_list> ::= <variable_initializer_expression> {',' <variable_initializer_expression>} [',']
-<variable_initializer_expression> ::= <function_call> | <variable_access> | <anonymous_variable_creation>
-<literal> ::= <bool_literal> | <char_literal> | <integer_literal> | <float_literal> | <string_literal>
-
-<complex_type> ::= <scoped_type> {'(' {<complex_type> {',' <complex_type>}} ')' [<reference_operator>]}
+<any_type> ::= <class_type> | <function_type>
 <scoped_type> ::= <type> {'::' <type>} [<reference_operator>]
-<type> ::= <built_in_type> | <type_name>
-<type_name> ::= a-zA-Z\_+ '_t'
 
 <statement> ::= <variable_creation>
 <expression> ::= <function_call> | <variable_access> | <anonymous_function_creation> | <anonymous_variable_creation>
+
+<class_template_fill> ::= '<'  '>'
 
 <reference_operator> ::= '&'
 <member_access_operator> ::= '.'
 <return_operator> ::= 'return'
 <inheritance_operator> ::= ':'
-<built_in_type> ::= 'bool_t' | 'char_t' | 'int_t' | 'float_t' | 'string_t' | 'object_t'
+<scope_operator> ::= '::'
+<class_type> ::= 'bool_t' | 'char_t' | 'number_t' | 'int_t' | 'float_t' | 'string_t' | 'object_t' | <class_type_name>
+<class_type_name> ::= a-zA-Z\_+ '_t'
 <identifier> ::= a-zA-Z-z\_ [a-zA-Z0-9\_*] ^\_t
 <bool_literal> ::= 'true' | 'false'
 <char_literal> ::= '\'' . '\''
 <integer_literal> ::= 0-9+
 <float_literal> ::= 0-9+ '.' 0-9+
 <string_literal> ::= '"' .* '"'
-
-
-# I really want templates but this is making it really complex and no idea how to even implement so this part can be postponed.
-<class_template_definition> ::= 'template' '<' 'type_name' <type_name_placeholder> <inheritance_operator> {',' <type_name_placeholder> <inheritance_operator>} [','] '>' 'class' <type_name> <inheritance_operator> <template_filled_scoped_type> <template_class_body>
-<template_class_body> ::= '{' {<template_placeholder_variable_creation>} '}' ';'
-<template_placeholder_variable_creation> ::= <scoped_type> <identifier> [<reference_operator>] [<variable_initializer>] ';' | <type_name_placeholder> <identifier> [<reference_operator>] ';'
-<type_name_placeholder> ::= <identifier>
-<template_filled_complex_type> ::= <complex_type> [<complex_template_fill>]
-<template_filled_scoped_type> ::= <scoped_type> [<scoped_template_fill>]
-<complex_template_fill> ::= '<' <complex_type> [<complex_template_fill] '>'
-<scoped_template_fill> ::= '<' <scoped_type> [<scoped_template_fill] '>'
-# End template generators.

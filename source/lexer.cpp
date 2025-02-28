@@ -29,6 +29,7 @@
 
 #include <cstring>
 #include <iostream>
+#include <regex>
 #include <string>
 
 
@@ -52,9 +53,9 @@ Lexer::Error Lexer::lex(const char* script, unsigned long size, std::vector<Toke
         }
     }
 
-    if (it == end) {
-        out_tokens.emplace_back(Token::SCRIPTING_TOKEN_TYPE_EOF, false);
-    }
+//    if (it == end) {
+//        out_tokens.emplace_back(*it, TokenType::TOKEN_TYPE_EOF);
+//    }
 
     return result;
 }
@@ -68,7 +69,7 @@ Lexer::Error Lexer::_lex(const char** start, const char* end, std::vector<Token>
     std::memset(multi_char_token_backlog, 0, MAX_TOKEN_SIZE);
     unsigned int i = 0u;
 
-    Token::Type type = Token::SCRIPTING_TOKEN_TYPE_INVALID;
+    TokenType type = TokenType::TOKEN_TYPE_INVALID;
 
     while (it != end && !_is_lexing_verbatim && result == SCRIPTING_LEXER_ERROR_OK) {
         while (it != end && std::isspace(*it)) {
@@ -78,7 +79,7 @@ Lexer::Error Lexer::_lex(const char** start, const char* end, std::vector<Token>
         if (it != end) {
             type = _lexicon.get_type(*it, _is_lexing_verbatim);
 
-            if (type != Token::SCRIPTING_TOKEN_TYPE_INVALID) {
+            if (type != TokenType::TOKEN_TYPE_INVALID) {
                 if (i > 0u) {
                     result = _add_multi_char_token(multi_char_token_backlog, i, out_tokens);
                     std::memset(multi_char_token_backlog, 0, i);
@@ -89,7 +90,7 @@ Lexer::Error Lexer::_lex(const char** start, const char* end, std::vector<Token>
                     result = _add_single_char_token(*it, out_tokens);
                 }
 
-                if (type == Token::SCRIPTING_TOKEN_TYPE_VERBATIM_BOOKEND) {
+                if (type == TokenType::TOKEN_TYPE_STRING_LITERAL_BOOKEND) {
                     _is_lexing_verbatim = true;
                 }
             } else {

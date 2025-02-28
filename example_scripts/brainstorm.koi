@@ -25,7 +25,7 @@ class MyObject : object {
 };
 
 
-class<type : int> MyObjectGeneric : object {
+class MyObjectGeneric<type : int> : object {
     var default string_t {"hello default"};
     var my_int_generic type; # defaults #
     var my_int_referent int&; # defaults to null #
@@ -48,7 +48,7 @@ func my_add int(my_int x) {
 };
 
 
-func<type : number> my_add_generic type(type x) {
+func my_add_generic<type : number> type(type x) {
     return add<type>(x, cast<type>(x.nanni));
 };
 
@@ -70,7 +70,7 @@ while<bool<int>>(&is_less_than, x, size, int(){
 
 
 func my_func bool(bool(int)& f, int x) {
-    -> f(x);
+    return f(x);
 };
 
 
