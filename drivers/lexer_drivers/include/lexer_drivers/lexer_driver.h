@@ -32,7 +32,7 @@ const char* koi_script_lexer_get_text(void);
 const char* koi_script_lexer_get_file_path(void);
 int koi_script_lexer_get_line_index(void);
 
-char* koi_script_lexer_get_token_type_name(int type);
+char* koi_script_lexer_get_token_type_name(int type);//fixme:: put this in common folder
 
 
 #endif //KOISCRIPT_LEXER_DRIVER_H
