@@ -54,6 +54,7 @@ return                      return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_RETURN;
 ;                           return KOI_SCRIPT_TOKEN_TYPE_DELIMITER;
 [a-zA-Z\_][a-zA-Z0-9\_]*    return KOI_SCRIPT_TOKEN_TYPE_IDENTIFIER;
 .                           return KOI_SCRIPT_TOKEN_TYPE_UNRECOGNIZED;
+
 %%
 
 /* User code section */

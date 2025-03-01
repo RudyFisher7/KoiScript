@@ -1,4 +1,6 @@
 var x int_t {0};
 func hello float_t() { return &obj.default; };
 var my_array container_t::array_t<object_t> {4u, -1, null, 123.0u, -689};
-class my_type_t : int_t {};[
+class my_type_t : int_t {};[-
+hello();
+&hello;
