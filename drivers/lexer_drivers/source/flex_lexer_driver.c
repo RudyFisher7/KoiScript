@@ -24,7 +24,7 @@
 
 
 #include "lexer_drivers/lexer_driver.h"
-#include "lexer_drivers/token_type.h"
+#include "../../common/include/drivers_common/token_type.h"
 
 #include "lex.yy.c"
 

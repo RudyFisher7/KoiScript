@@ -3,7 +3,7 @@
 
 %{
 
-#include "lexer_drivers/token_type.h"
+#include "drivers_common/token_type.h"
 
 
 int yyline_index = 1;

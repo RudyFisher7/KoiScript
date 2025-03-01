@@ -42,7 +42,7 @@ add_library(${PROJECT_NAME} STATIC
         ${PROJECT_BINARY_DIR}/flex/lex.yy.c
         include/lexer_drivers/lexer_driver.h
         source/flex_lexer_driver.c
-        include/lexer_drivers/token_type.h
+        ../common/include/drivers_common/token_type.h
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -51,6 +51,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         include
+        ../common/include
         PRIVATE ${PROJECT_BINARY_DIR}/flex
 )
 
