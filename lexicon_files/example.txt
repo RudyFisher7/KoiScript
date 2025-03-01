@@ -1,0 +1,3 @@
+var x int_t;
+func hello float_t() {};
+var container_t::array_t my_array {};

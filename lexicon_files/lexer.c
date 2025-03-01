@@ -24,16 +24,30 @@
 
 
 #include "lexer.h"
-#include "token.h"
+
+#include "lex.yy.c"
+
+#include <stdio.h>
 
 
-int main(void) {
 
-    if (koi_script_lexer_load_script("C:\\dev\\koi_script\\lexicon_files\\example.txt")) {
-        return -1;
+int koi_script_lexer_load_script(char* script_path) {
+    int result = -1;
+
+    FILE* script = fopen(script_path, "r");
+    if (script != NULL) {
+        yyin = script;
+        result = 0;
     }
 
-    while (koi_script_lexer_lex() != KOI_SCRIPT_TOKEN_TYPE_EOF) {}
+    return result;
+}
 
-    return 0;
+
+int koi_script_lexer_lex(void) {
+    int result = yylex();
+
+    printf("%d: %s\n",result, yytext);
+
+    return result;
 }

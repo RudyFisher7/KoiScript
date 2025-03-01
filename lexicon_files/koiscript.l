@@ -2,75 +2,45 @@
 /*  Definition section  */
 
 %{
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-/* token types */
-enum yytokentype {
-   CHAR = 258,
-   INT,
-   FLOAT,
-   ASTERISK,
-   LEFT_PARENTHESIS,
-   RIGHT_PARENTHESIS,
-   LEFT_BRACKET,
-   RIGHT_BRACKET,
-   NAME,
-   SEMICOLON,
-};
-
-int num_lines = 0;
-
+#include "token.h"
 %}
 
 %%
 
    /* Rules section  */
 [\t ]+         /* ignore whitespace */
-char    return CHAR;
-int     return INT;
-float   return FLOAT;
-\*      return ASTERISK;
-\(      return LEFT_PARENTHESIS;
-\)      return RIGHT_PARENTHESIS;
-\[      return LEFT_BRACKET;
-\]      return RIGHT_BRACKET;
-[a-zA-Z][a-zA-Z0-9]* return NAME;
-;       return SEMICOLON;
-\n      num_lines++;
+var     return KOI_SCRIPT_TOKEN_TYPE_VAR;
+func    return KOI_SCRIPT_TOKEN_TYPE_FUNC;
+class   return KOI_SCRIPT_TOKEN_TYPE_CLASS;
+object_t     return KOI_SCRIPT_TOKEN_TYPE_CLASS_OBJECT;
+bool_t     return KOI_SCRIPT_TOKEN_TYPE_CLASS_BOOL;
+char_t     return KOI_SCRIPT_TOKEN_TYPE_CLASS_CHAR;
+number_t    return KOI_SCRIPT_TOKEN_TYPE_CLASS_NUMBER;
+int_t   return KOI_SCRIPT_TOKEN_TYPE_CLASS_INT;
+uint_t   return KOI_SCRIPT_TOKEN_TYPE_CLASS_UINT;
+float_t   return KOI_SCRIPT_TOKEN_TYPE_CLASS_FLOAT;
+ufloat_t   return KOI_SCRIPT_TOKEN_TYPE_CLASS_UFLOAT;
+string_t   return KOI_SCRIPT_TOKEN_TYPE_CLASS_STRING;
+[a-zA-Z\_][a-zA-Z0-9\_]*\_t return KOI_SCRIPT_TOKEN_TYPE_CLASS_TYPE_NAME;
+\'\'      return KOI_SCRIPT_TOKEN_TYPE_CHAR_LITERAL;
+\"\"      return KOI_SCRIPT_TOKEN_TYPE_STRING_LITERAL;
+\(      return KOI_SCRIPT_TOKEN_TYPE_GROUPING_START;
+\)      return KOI_SCRIPT_TOKEN_TYPE_GROUPING_END;
+\{      return KOI_SCRIPT_TOKEN_TYPE_BODY_START;
+\}      return KOI_SCRIPT_TOKEN_TYPE_BODY_END;
+\<      return KOI_SCRIPT_TOKEN_TYPE_GENERIC_START;
+\>      return KOI_SCRIPT_TOKEN_TYPE_GENERIC_END;
+\.       return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_MEMBER_ACCESS;
+:       return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_INHERITANCE;
+::       return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_SCOPE;
+&       return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_REFERENCE;
+return       return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_RETURN;
+,       return KOI_SCRIPT_TOKEN_TYPE_SEPARATOR;
+;       return KOI_SCRIPT_TOKEN_TYPE_DELIMITER;
+\n      return KOI_SCRIPT_TOKEN_TYPE_NEW_LINE;
+<<EOF>> return KOI_SCRIPT_TOKEN_TYPE_EOF;
+[a-zA-Z\_][a-zA-Z0-9\_]* return KOI_SCRIPT_TOKEN_TYPE_IDENTIFIER;
 %%
 
 /* User code section */
-int yywrap() {}
-int main (int argc, char **argv)
-{
-    int token;
-
-    while (token = yylex ()) {
-        switch (token) {
-            case CHAR: printf ("CHAR\n");
-                       break;
-            case INT: printf ("INT\n");
-                       break;
-            case FLOAT: printf ("FLOAT\n");
-                       break;
-            case ASTERISK: printf ("ASTERISK\n");
-                       break;
-            case LEFT_PARENTHESIS: printf ("LEFT_PARENTHESIS\n");
-                       break;
-            case RIGHT_PARENTHESIS: printf ("RIGHT_PARENTHESIS\n");
-                       break;
-            case LEFT_BRACKET: printf ("LEFT_BRACKET\n");
-                       break;
-            case RIGHT_BRACKET: printf ("RIGHT_BRACKET\n");
-                       break;
-            case NAME: printf ("NAME: %s\n", yytext);
-                       break;
-            case SEMICOLON: printf ("SEMICOLON\n\n");
-                       break;
-            default:  printf ("Unexpected token\n");
-        }
-    }
-    printf ("Number of lines scanned: %d\n", num_lines);
-}
+int yywrap() { return KOI_SCRIPT_TOKEN_TYPE_EOF; }

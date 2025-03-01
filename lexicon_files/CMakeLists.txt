@@ -16,21 +16,38 @@ set_target_properties(fl PROPERTIES
 
 include_directories("C:/Program Files (x86)/GnuWin32/include")
 
-#add_library(${PROJECT_NAME} STATIC
-#        lex.yy.c
-#)
-#
-#target_include_directories(${PROJECT_NAME} PUBLIC
-#        .
-#)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/flex)
+
+add_custom_command(
+        OUTPUT ${PROJECT_BINARY_DIR}/flex/lex.yy.c
+        COMMAND flex.exe ${PROJECT_SOURCE_DIR}/koiscript.l
+        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/flex
+        BYPRODUCTS ${PROJECT_BINARY_DIR}/flex/lex.yy.c
+)
+
+add_library(${PROJECT_NAME} STATIC
+        ${PROJECT_BINARY_DIR}/flex/lex.yy.c
+        lexer.h
+        lexer.c
+        token.h
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        fl
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+        .
+        ${PROJECT_BINARY_DIR}/flex
+)
+
 
 add_executable(LexDebug
-        lex.yy.c
-#        main.c
+        main.c
 )
 
 target_link_libraries(LexDebug PRIVATE
-        fl
+        ${PROJECT_NAME}
 )
 
 #target_compile_definitions(${PROJECT_NAME} PRIVATE

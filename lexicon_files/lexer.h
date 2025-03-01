@@ -23,17 +23,11 @@
  */
 
 
-#include "lexer.h"
-#include "token.h"
+#ifndef KOISCRIPT_LEXER_H
+#define KOISCRIPT_LEXER_H
+
+int koi_script_lexer_load_script(char* script_path);
+int koi_script_lexer_lex(void);
 
 
-int main(void) {
-
-    if (koi_script_lexer_load_script("C:\\dev\\koi_script\\lexicon_files\\example.txt")) {
-        return -1;
-    }
-
-    while (koi_script_lexer_lex() != KOI_SCRIPT_TOKEN_TYPE_EOF) {}
-
-    return 0;
-}
+#endif //KOISCRIPT_LEXER_H
