@@ -26,57 +26,37 @@
 //#include "scripting/assembler.hpp"
 //#include "scripting/abstract_syntax_tree/node.hpp"
 #include "scripting/lexer.hpp"
+#include "scripting/token.hpp"
 //#include "scripting/parser.hpp"
-#include "scripting/extensions/extensions.hpp"
-#include "scripting/runtime/environment.hpp"
-#include "scripting/runtime/lib/built_in.hpp"
-#include "scripting/runtime/variant/array.hpp"
-#include "scripting/runtime/variant/function.hpp"
-#include "scripting/runtime/variant/variable.hpp"
-#include "scripting/runtime/instruction/instruction.hpp"
-#include "scripting/interpreter.hpp"
+//#include "scripting/extensions/extensions.hpp"
+//#include "scripting/runtime/environment.hpp"
+//#include "scripting/runtime/lib/built_in.hpp"
+//#include "scripting/runtime/variant/array.hpp"
+//#include "scripting/runtime/variant/function.hpp"
+//#include "scripting/runtime/variant/variable.hpp"
+//#include "scripting/runtime/instruction/instruction.hpp"
+//#include "scripting/interpreter.hpp"
 
-#include <cstring>
-#include <fstream>
+//#include <cstring>
+//#include <fstream>
 #include <iostream>
-#include <string>
-#include <memory>
-#include <map>
-
-
-namespace KoiRuntime = Koi::Scripting::Runtime;
+#include <vector>
+//#include <string>
+//#include <memory>
+//#include <map>
 
 
 int main() {
     std::cout << "KoiScript debug project started" << std::endl;
-    std::string script_file_path(R"(..\example_scripts\hello_world.koi)");
-
-    std::cout << "Loading " << script_file_path << std::endl;
-
-    std::ifstream script_file(script_file_path);
-
-    std::string script;
-    script_file.seekg(0, std::ifstream::end);
-
-    unsigned long script_size = script_file.tellg();
-    char* const script_buffer = new char[script_size + 1u];
-    std::memset(script_buffer, 0, script_size + 1u);
-
-    std::cout << "done.\n" << std::endl;
-
-    script_file.seekg(0, std::ifstream::beg);
-    script_file.read(script_buffer, script_size);
-
-    script_buffer[script_size] = '\0';
-
-    std::cout << "Script:\n" << script_buffer << '\n' << std::endl;
 
     // 1. lex
-    Koi::Scripting::Lexer lexer;
     std::vector<Koi::Scripting::Token> tokens;
-    lexer.lex(script_buffer, script_size, tokens);
+    Koi::Scripting::Lexer lexer;
+    lexer.lex(R"(C:\dev\koi_script\example_scripts\brainstorm.koi)", tokens);
 
-    std::cout << tokens << std::endl;
+    for (auto& token: tokens) {
+        std::cout << "Token: " << lexer.get_token_type_name(token.type) << ", " << token.text << ", " << token.file_path << ":" << token.line_index << std::endl;
+    }
 
     //todo:: 2. parse
 

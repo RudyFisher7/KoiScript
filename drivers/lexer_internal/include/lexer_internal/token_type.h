@@ -23,8 +23,8 @@
  */
 
 
-#ifndef KOISCRIPT_TOKEN_H
-#define KOISCRIPT_TOKEN_H
+#ifndef KOISCRIPT_TOKEN_TYPE_H
+#define KOISCRIPT_TOKEN_TYPE_H
 
 enum KoiScriptTokenType {
     KOI_SCRIPT_TOKEN_TYPE_UNRECOGNIZED = -2,
@@ -86,17 +86,11 @@ enum KoiScriptTokenType {
 
     // special
     KOI_SCRIPT_TOKEN_TYPE_COMMENT,
+    KOI_SCRIPT_TOKEN_TYPE_DOCUMENTATION_COMMENT,
     KOI_SCRIPT_TOKEN_TYPE_WHITE_SPACE,
     KOI_SCRIPT_TOKEN_TYPE_NEW_LINE,
     KOI_SCRIPT_TOKEN_TYPE_EOF,
     KOI_SCRIPT_TOKEN_TYPE_SIZE
 };
 
-struct KoiScriptToken {
-    enum KoiScriptTokenType type;
-    const char* text;
-    const char* file_path;
-    const unsigned long line_number;
-};
-
-#endif //KOISCRIPT_TOKEN_H
+#endif //KOISCRIPT_TOKEN_TYPE_H

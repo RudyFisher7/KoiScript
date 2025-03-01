@@ -14,10 +14,8 @@ object_t ->
 #
 
 
-#
-inheritance determines its base value. for example, Object is empty (nothing) and is used only for reference casting, int is an integer value, etc.
-classes only have
-#
+#inheritance determines its base value. for example, Object is empty (nothing) and is used only for reference casting, int is an integer value, etc.#
+#classes only have#
 class MyObject : object {
     var my_int int; # defaults to 0 #
     var my_int_referent int&; # defaults to null #
@@ -54,11 +52,8 @@ func my_add_generic<type : number> type(type x) {
 
 
 func my_add_2 int(MyObjectInt& x) {
-    #
-    & is the reference operator.
-    x needs to be casted to my_int to get its value since it has multi-inheritance. not casting would result in the
-    first inherited class (e.g., MyObject).
-    #
+    #& is the reference operator. x needs to be casted to my_int to get its value since it has multi-inheritance.#
+    #not casting would result in the first inherited class (e.g., MyObject).#
     return add<int>(cast<my_int>(x), cast<int>(x.nanni));
 };
 
@@ -86,9 +81,7 @@ library MyLibrary {
 
 Library::MyObject my_lib_object {6, 2.5};
 
-#
-these are containers, from the container library
-#
+#these are containers, from the container library#
 
 import<container>(); # built-in library #
 import<MyLibrary>("path/to/my_library.koi"); # user-defined library #
@@ -100,3 +93,4 @@ container::dictionary<container::pair<int, string>> my_dictionary {{1, "my key i
 container::get<container::array<int>>(&my_array, 1); # gets 4 or errors if out of range #
 container::get<container::set<int>>(&my_set, 7); # gets 7 or errors #
 container::get<container::dictionary<int>>(&my_dictionary, 4); # gets "my key is 4" or errors #
+##doc comment##

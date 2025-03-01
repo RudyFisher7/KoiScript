@@ -23,39 +23,22 @@
  */
 
 
-#include "lexer.h"
+#include "lexer_internal/lexer.h"
+#include "lexer_internal/token_type.h"
 
-#include "lex.yy.c"
+#include <stdio.h>
 
 
-int koi_script_lexer_load_script(char* script_path) {
-    int result = -1;
+int main(void) {
 
-    FILE* script = fopen(script_path, "r");
-    if (script != NULL) {
-        yyin = script;
-        result = 0;
+    if (koi_script_lexer_load_script("C:\\dev\\koi_script\\drivers\\lexer_internal\\debug\\example.txt")) {
+        return -1;
     }
 
-    return result;
-}
+    int type = -1;
+    while ((type = koi_script_lexer_next()) != KOI_SCRIPT_TOKEN_TYPE_EOF) {
+        printf("%d: %s at %s:%d\n", type, koi_script_lexer_get_text(), koi_script_lexer_get_file_path(), koi_script_lexer_get_line_index());
+    }
 
-
-int koi_script_lexer_next(void) {
-    return yylex();
-}
-
-
-const char* koi_script_lexer_get_text(void) {
-    return yytext;
-}
-
-
-const char* koi_script_lexer_get_file_path(void) {
-    return yyin->_tmpfname;
-}
-
-
-int koi_script_lexer_get_line_index(void) {
-    return yyline_index;
+    return 0;
 }

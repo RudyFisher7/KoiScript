@@ -26,11 +26,13 @@
 #ifndef KOISCRIPT_LEXER_H
 #define KOISCRIPT_LEXER_H
 
-int koi_script_lexer_load_script(char* script_path);
+int koi_script_lexer_load_script(const char* script_path);
 int koi_script_lexer_next(void);
 const char* koi_script_lexer_get_text(void);
 const char* koi_script_lexer_get_file_path(void);
 int koi_script_lexer_get_line_index(void);
+
+char* koi_script_lexer_get_token_type_name(int type);
 
 
 #endif //KOISCRIPT_LEXER_H

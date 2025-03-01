@@ -3,19 +3,21 @@
 
 %{
 
-#include "token.h"
+#include "lexer_internal/token_type.h"
 
 
 int yyline_index = 1;
+char yyfile_path[256];
 
 %}
 
 %%
 
+##[^(##)\n]*##    return KOI_SCRIPT_TOKEN_TYPE_DOCUMENTATION_COMMENT;
+#[^#\n]*#    return KOI_SCRIPT_TOKEN_TYPE_COMMENT;
 [ \t\r]+         return KOI_SCRIPT_TOKEN_TYPE_WHITE_SPACE;
 \n              { ++yyline_index; return KOI_SCRIPT_TOKEN_TYPE_NEW_LINE; }
 <<EOF>>         return KOI_SCRIPT_TOKEN_TYPE_EOF;
-#[.]*#          return KOI_SCRIPT_TOKEN_TYPE_COMMENT;
 null            return KOI_SCRIPT_TOKEN_TYPE_NULL_LITERAL;
 false           return KOI_SCRIPT_TOKEN_TYPE_BOOL_FALSE_LITERAL;
 true            return KOI_SCRIPT_TOKEN_TYPE_BOOL_TRUE_LITERAL;
@@ -24,7 +26,7 @@ true            return KOI_SCRIPT_TOKEN_TYPE_BOOL_TRUE_LITERAL;
 [0-9]+u                 return KOI_SCRIPT_TOKEN_TYPE_UINT_LITERAL;
 [-]?[0-9]+\.[0-9]+       return KOI_SCRIPT_TOKEN_TYPE_FLOAT_LITERAL;
 [0-9]+\.[0-9]+u         return KOI_SCRIPT_TOKEN_TYPE_UFLOAT_LITERAL;
-\"[^\"]*\"              return KOI_SCRIPT_TOKEN_TYPE_STRING_LITERAL;
+\"[^\"\n]*\"              return KOI_SCRIPT_TOKEN_TYPE_STRING_LITERAL;
 var         return KOI_SCRIPT_TOKEN_TYPE_VAR;
 func        return KOI_SCRIPT_TOKEN_TYPE_FUNC;
 class       return KOI_SCRIPT_TOKEN_TYPE_CLASS;

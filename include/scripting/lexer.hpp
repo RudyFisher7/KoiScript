@@ -27,10 +27,9 @@
 #define KOI_SCRIPTING_LEXER_HPP
 
 
-#include "scripting/lexicon.hpp"
 #include "scripting/token.hpp"
 
-#include <array>
+#include <string>
 #include <vector>
 
 
@@ -39,33 +38,18 @@ namespace Koi { namespace Scripting {
 class Lexer {
 public:
     enum Error: int {
-        SCRIPTING_LEXER_ERROR_UNKNOWN = -1,
         SCRIPTING_LEXER_ERROR_MIN = 0,
         SCRIPTING_LEXER_ERROR_OK = SCRIPTING_LEXER_ERROR_MIN,
-        SCRIPTING_LEXER_ERROR_UNEXPECTED_EOF,
-        SCRIPTING_LEXER_ERROR_UNRECOGNIZED_TOKEN,
-        SCRIPTING_LEXER_ERROR_INVALID_TOKEN,
-        SCRIPTING_LEXER_ERROR_INVALID_ID,
-        SCRIPTING_LEXER_TOKEN_TOO_LARGE
+        SCRIPTING_LEXER_ERROR_FAILED_TO_LOAD_FILE,
+        SCRIPTING_LEXER_ERROR_UNKNOWN,
+        SCRIPTING_LEXER_SIZE
     };
 
-protected:
-    static const unsigned int MAX_TOKEN_SIZE;
-
-    Lexicon _lexicon;
-    bool _is_lexing_verbatim = false;
 
 public:
-    Error lex(const char* script, unsigned long size, std::vector<Token>& out_tokens);
+    Error lex(const char* script_path, std::vector<Token>& out_tokens) const;
 
-protected:
-    Error _lex(const char** start, const char* end, std::vector<Token>& out_tokens);
-    Error _lex_verbatim(const char** start, const char* end, std::vector<Token>& out_tokens);
-
-    Error _add_single_char_token(const char& value, std::vector<Token>& out_tokens) const;
-    Error _add_multi_char_token(const char* start, unsigned int size, std::vector<Token>& out_tokens) const;
-
-
+    std::string get_token_type_name(KoiScriptTokenType type) const;
 };
 
 } // Scripting

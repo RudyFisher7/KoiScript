@@ -4,3 +4,10 @@ var my_array container_t::array_t<object_t> {4u, -1, null, 123.0u, -689};
 class my_type_t : int_t {};[-
 hello();
 &hello;
+# comment here #
+#
+multiline comment
+
+is here
+#
+"this is a string with \n new line and ' and such ;., :"

@@ -3,11 +3,15 @@ project(KoiScript VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wpedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wpedantic")
 
 message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
-#add_library(${PROJECT_NAME} STATIC
+add_library(${PROJECT_NAME} STATIC
+        source/lexer.cpp
+        include/scripting/lexer.hpp
+        include/scripting/token.hpp
+        source/token.cpp
 #    source/log/log.cpp
 #    include/scripting/log/log.hpp
 #
@@ -18,15 +22,15 @@ message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 #    include/scripting/lexicon.hpp
 #    source/lexer.cpp
 #    include/scripting/lexer.hpp
-##    source/parser.cpp
-##    include/scripting/parser.hpp
-##    source/assembler.cpp
-##    include/scripting/assembler.hpp
-##    source/koi_script.cpp
-##    include/scripting/koi_script.hpp
+#    source/parser.cpp
+#    include/scripting/parser.hpp
+#    source/assembler.cpp
+#    include/scripting/assembler.hpp
+#    source/koi_script.cpp
+#    include/scripting/koi_script.hpp
 #
-##    source/abstract_syntax_tree/node.cpp
-##    include/scripting/abstract_syntax_tree/node.hpp
+#    source/abstract_syntax_tree/node.cpp
+#    include/scripting/abstract_syntax_tree/node.hpp
 #
 #    source/extensions/extensions.cpp
 #    include/scripting/extensions/extensions.hpp
@@ -56,18 +60,18 @@ message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 #    include/scripting/runtime/meta/var.hpp
 #    source/runtime/meta/assign.cpp
 #    include/scripting/runtime/meta/assign.hpp
-##    source/runtime/meta/exe.cpp
-##    include/scripting/runtime/meta/exe.hpp
-##    source/runtime/meta/val.cpp
-##    include/scripting/runtime/meta/val.hpp
+#    source/runtime/meta/exe.cpp
+#    include/scripting/runtime/meta/exe.hpp
+#    source/runtime/meta/val.cpp
+#    include/scripting/runtime/meta/val.hpp
 #
 #    source/runtime/meta/main.cpp
 #    include/scripting/runtime/meta/main.hpp
 #    source/runtime/meta/print.cpp
 #    include/scripting/runtime/meta/print.hpp
-#    source/runtime/lib/built_in.cpp
-#    include/scripting/runtime/lib/built_in.hpp
-#    include/scripting/runtime/lib/i_library.hpp
+#    source/runtime/drivers/built_in.cpp
+#    include/scripting/runtime/drivers/built_in.hpp
+#    include/scripting/runtime/drivers/i_library.hpp
 #    source/interpreter.cpp
 #    include/scripting/interpreter.hpp
 #    source/runtime/instruction/instruction.cpp
@@ -77,30 +81,30 @@ message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 #    include/scripting/runtime/instruction/import.hpp
 #    include/scripting/runtime/instruction/execute.hpp
 #    include/scripting/runtime/instruction/get_value.hpp
-#    #    source/runtime/meta/fun_lit.cpp
-##    include/scripting/runtime/meta/fun_lit.hpp
-##    source/runtime/meta/i_lit.cpp
-##    include/scripting/runtime/meta/i_lit.hpp
-##    source/runtime/meta/var_lit.cpp
-##    include/scripting/runtime/meta/var_lit.hpp
-#)
-#
-#target_include_directories(${PROJECT_NAME} PUBLIC
-#    include
-#)
+    #    source/runtime/meta/fun_lit.cpp
+#    include/scripting/runtime/meta/fun_lit.hpp
+#    source/runtime/meta/i_lit.cpp
+#    include/scripting/runtime/meta/i_lit.hpp
+#    source/runtime/meta/var_lit.cpp
+#    include/scripting/runtime/meta/var_lit.hpp
+)
 
-#target_compile_definitions(${PROJECT_NAME} PRIVATE
-#    ENABLE_KOI_SCRIPTING_LOG=1
-#)
-#
-#target_compile_options(${PROJECT_NAME} PRIVATE
-#    -pedantic
-#)
+target_include_directories(${PROJECT_NAME} PUBLIC
+    include
+)
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    ENABLE_KOI_SCRIPTING_LOG=1
+)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC
+        KoiScriptLexerInternal
+)
 
 
-add_subdirectory(lexicon_files)
+add_subdirectory(drivers/lexer_internal)
 
-#add_subdirectory(debug)
+add_subdirectory(debug)
 
 # fixme:: toggle with build option
 #add_subdirectory(test)
