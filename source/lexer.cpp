@@ -26,8 +26,8 @@
 #include "scripting/lexer.hpp"
 
 extern "C" {
-#include "lexer_internal/lexer.h"
-#include "lexer_internal/token_type.h"
+#include "lexer_drivers/lexer_driver.h"
+#include "lexer_drivers/token_type.h"
 }
 
 #include <iostream>

@@ -98,11 +98,11 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-        KoiScriptLexerInternal
+        KoiScriptLexerDriver
 )
 
 
-add_subdirectory(drivers/lexer_internal)
+add_subdirectory(drivers/lexer_drivers)
 
 add_subdirectory(debug)
 

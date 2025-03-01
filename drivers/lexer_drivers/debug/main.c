@@ -23,16 +23,22 @@
  */
 
 
-#ifndef KOISCRIPT_LEXER_H
-#define KOISCRIPT_LEXER_H
+#include "lexer_internal/flex_lexer.h"
+#include "lexer_internal/token_type.h"
 
-int koi_script_lexer_load_script(const char* script_path);
-int koi_script_lexer_next(void);
-const char* koi_script_lexer_get_text(void);
-const char* koi_script_lexer_get_file_path(void);
-int koi_script_lexer_get_line_index(void);
-
-char* koi_script_lexer_get_token_type_name(int type);
+#include <stdio.h>
 
 
-#endif //KOISCRIPT_LEXER_H
+int main(void) {
+
+    if (koi_script_lexer_load_script("C:\\dev\\koi_script\\drivers\\lexer_drivers\\debug\\example.txt")) {
+        return -1;
+    }
+
+    int type = -1;
+    while ((type = koi_script_lexer_next()) != KOI_SCRIPT_TOKEN_TYPE_EOF) {
+        printf("%d: %s at %s:%d\n", type, koi_script_lexer_get_text(), koi_script_lexer_get_file_path(), koi_script_lexer_get_line_index());
+    }
+
+    return 0;
+}

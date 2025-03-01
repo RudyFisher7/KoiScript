@@ -28,7 +28,7 @@
 
 
 extern "C" {
-#include "lexer_internal/token_type.h"
+#include "lexer_drivers/token_type.h"
 }
 
 #include <string>

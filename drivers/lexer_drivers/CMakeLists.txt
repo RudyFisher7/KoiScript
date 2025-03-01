@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(KoiScriptLexerInternal LANGUAGES C)
+project(KoiScriptLexerDriver LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -37,11 +37,12 @@ add_custom_target(
 
 
 # Build the internal lexer c library
+# todo:: allow for different driver implementations in the build system. so far just flex.
 add_library(${PROJECT_NAME} STATIC
         ${PROJECT_BINARY_DIR}/flex/lex.yy.c
-        include/lexer_internal/lexer.h
-        source/lexer.c
-        include/lexer_internal/token_type.h
+        include/lexer_drivers/lexer_driver.h
+        source/flex_lexer_driver.c
+        include/lexer_drivers/token_type.h
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -55,10 +56,10 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 
 # Build the internal lexer library's debug executable
-add_executable(LexerInternalDebug
+add_executable(LexerDriverDebug
         debug/main.c
 )
 
-target_link_libraries(LexerInternalDebug PRIVATE
+target_link_libraries(LexerDriverDebug PRIVATE
         ${PROJECT_NAME}
 )
