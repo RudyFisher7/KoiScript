@@ -282,30 +282,31 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 	*yy_cp = '\0'; \
 	yy_c_buf_p = yy_cp;
 
-#define YY_NUM_RULES 4
-#define YY_END_OF_BUFFER 5
-static yyconst short int yy_accept[12] =
+#define YY_NUM_RULES 13
+#define YY_END_OF_BUFFER 14
+static yyconst short int yy_accept[29] =
     {   0,
-        0,    0,    5,    4,    3,    2,    1,    3,    2,    1,
-        0
+        0,    0,   14,   13,    1,   12,    6,    7,    5,   11,
+       10,    8,    9,   10,   10,   10,    1,   10,   10,   10,
+       10,   10,   10,    3,    2,   10,    4,    0
     } ;
 
 static yyconst int yy_ec[256] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,    2,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    2,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    3,    3,    3,
-        3,    3,    3,    3,    3,    3,    3,    1,    1,    1,
-        1,    1,    1,    1,    4,    4,    4,    4,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        1,    1,    1,    1,    1,    1,    4,    4,    4,    4,
+        1,    2,    1,    1,    1,    1,    1,    1,    1,    4,
+        5,    6,    1,    1,    1,    1,    1,    7,    7,    7,
+        7,    7,    7,    7,    7,    7,    7,    1,    8,    1,
+        1,    1,    1,    1,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+       10,    1,   11,    1,    1,    1,   12,    9,   13,    9,
 
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        4,    4,    1,    1,    1,    1,    1,    1,    1,    1,
+        9,   14,    9,   15,   16,    9,    9,   17,    9,   18,
+       19,    9,    9,   20,    9,   21,    9,    9,    9,    9,
+        9,    9,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -322,33 +323,45 @@ static yyconst int yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst int yy_meta[5] =
+static yyconst int yy_meta[22] =
     {   0,
-        1,    2,    3,    4
+        1,    1,    1,    1,    1,    1,    2,    1,    2,    1,
+        1,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+        2
     } ;
 
-static yyconst short int yy_base[15] =
+static yyconst short int yy_base[30] =
     {   0,
-        0,    0,    8,    9,    0,    0,    0,    0,    0,    0,
-        9,    5,    3,    1
+        0,    0,   34,   35,   31,   35,   35,   35,   35,   35,
+        0,   35,   35,   17,   14,   12,   27,    0,   16,    8,
+        5,    5,   12,    0,    0,    2,    0,   35,   20
     } ;
 
-static yyconst short int yy_def[15] =
+static yyconst short int yy_def[30] =
     {   0,
-       11,    1,   11,   11,   12,   13,   14,   12,   13,   14,
-        0,   11,   11,   11
+       28,    1,   28,   28,   28,   28,   28,   28,   28,   28,
+       29,   28,   28,   29,   29,   29,   28,   29,   29,   29,
+       29,   29,   29,   29,   29,   29,   29,    0,   28
     } ;
 
-static yyconst short int yy_nxt[14] =
+static yyconst short int yy_nxt[57] =
     {   0,
-        4,    5,    6,    7,   10,    9,    8,   11,    3,   11,
-       11,   11,   11
+        4,    5,    6,    7,    8,    9,    4,   10,   11,   12,
+       13,   11,   14,   15,   11,   16,   11,   11,   11,   11,
+       11,   18,   27,   26,   25,   24,   23,   22,   17,   21,
+       20,   19,   17,   28,    3,   28,   28,   28,   28,   28,
+       28,   28,   28,   28,   28,   28,   28,   28,   28,   28,
+       28,   28,   28,   28,   28,   28
     } ;
 
-static yyconst short int yy_chk[14] =
+static yyconst short int yy_chk[57] =
     {   0,
-        1,    1,    1,    1,   14,   13,   12,    3,   11,   11,
-       11,   11,   11
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,   29,   26,   23,   22,   21,   20,   19,   17,   16,
+       15,   14,    5,    3,   28,   28,   28,   28,   28,   28,
+       28,   28,   28,   28,   28,   28,   28,   28,   28,   28,
+       28,   28,   28,   28,   28,   28
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -364,22 +377,30 @@ static char *yy_last_accepting_cpos;
 char *yytext;
 #line 1 ".\\koiscript.l"
 #define INITIAL 0
-/*
- * Sample Scanner1:
- * Description: Replace the string "username" from standard input
- *              with the user's login name (e.g. lgao)
- * Usage: (1) $ flex sample1.lex
- *        (2) $ gcc lex.yy.c -lfl
- *        (3) $ ./a.out
- *            stdin> username
- *	      stdin> Ctrl-D
- * Question: What is the purpose of '%{' and '%}'?
- *           What else could be included in this section?
- */
-#line 15 ".\\koiscript.l"
-/* need this for the call to getlogin() below */
-#include <unistd.h>
-#line 383 "lex.yy.c"
+/* decl.l */
+/*  Definition section  */
+#line 5 ".\\koiscript.l"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* token types */
+enum yytokentype {
+   CHAR = 258,
+   INT,
+   FLOAT,
+   ASTERISK,
+   LEFT_PARENTHESIS,
+   RIGHT_PARENTHESIS,
+   LEFT_BRACKET,
+   RIGHT_BRACKET,
+   NAME,
+   SEMICOLON,
+};
+
+int num_lines = 0;
+
+#line 404 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -530,9 +551,11 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 19 ".\\koiscript.l"
+#line 27 ".\\koiscript.l"
 
-#line 536 "lex.yy.c"
+
+   /* Rules section  */
+#line 559 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -583,13 +606,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 12 )
+				if ( yy_current_state >= 29 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 9 );
+		while ( yy_base[yy_current_state] != 35 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -617,25 +640,70 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 20 ".\\koiscript.l"
-{ return 1; }
+#line 30 ".\\koiscript.l"
+/* ignore whitespace */
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 21 ".\\koiscript.l"
-{ return 2; }
+#line 31 ".\\koiscript.l"
+return CHAR;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 22 ".\\koiscript.l"
-{ }
+#line 32 ".\\koiscript.l"
+return INT;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 23 ".\\koiscript.l"
+#line 33 ".\\koiscript.l"
+return FLOAT;
+	YY_BREAK
+case 5:
+YY_RULE_SETUP
+#line 34 ".\\koiscript.l"
+return ASTERISK;
+	YY_BREAK
+case 6:
+YY_RULE_SETUP
+#line 35 ".\\koiscript.l"
+return LEFT_PARENTHESIS;
+	YY_BREAK
+case 7:
+YY_RULE_SETUP
+#line 36 ".\\koiscript.l"
+return RIGHT_PARENTHESIS;
+	YY_BREAK
+case 8:
+YY_RULE_SETUP
+#line 37 ".\\koiscript.l"
+return LEFT_BRACKET;
+	YY_BREAK
+case 9:
+YY_RULE_SETUP
+#line 38 ".\\koiscript.l"
+return RIGHT_BRACKET;
+	YY_BREAK
+case 10:
+YY_RULE_SETUP
+#line 39 ".\\koiscript.l"
+return NAME;
+	YY_BREAK
+case 11:
+YY_RULE_SETUP
+#line 40 ".\\koiscript.l"
+return SEMICOLON;
+	YY_BREAK
+case 12:
+YY_RULE_SETUP
+#line 41 ".\\koiscript.l"
+num_lines++;
+	YY_BREAK
+case 13:
+YY_RULE_SETUP
+#line 42 ".\\koiscript.l"
 ECHO;
 	YY_BREAK
-#line 639 "lex.yy.c"
+#line 707 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -927,7 +995,7 @@ static yy_state_type yy_get_previous_state()
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 12 )
+			if ( yy_current_state >= 29 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -962,11 +1030,11 @@ yy_state_type yy_current_state;
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 12 )
+		if ( yy_current_state >= 29 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 11);
+	yy_is_jam = (yy_current_state == 28);
 
 	return yy_is_jam ? 0 : yy_current_state;
 	}
@@ -1521,10 +1589,39 @@ int main()
 	return 0;
 	}
 #endif
-#line 23 ".\\koiscript.l"
+#line 42 ".\\koiscript.l"
 
-int yywrap(){ return 1; }
-main()
+
+/* User code section */
+int yywrap() {}
+int main (int argc, char **argv)
 {
-  yylex();
+    int token;
+
+    while (token = yylex ()) {
+        switch (token) {
+            case CHAR: printf ("CHAR\n");
+                       break;
+            case INT: printf ("INT\n");
+                       break;
+            case FLOAT: printf ("FLOAT\n");
+                       break;
+            case ASTERISK: printf ("ASTERISK\n");
+                       break;
+            case LEFT_PARENTHESIS: printf ("LEFT_PARENTHESIS\n");
+                       break;
+            case RIGHT_PARENTHESIS: printf ("RIGHT_PARENTHESIS\n");
+                       break;
+            case LEFT_BRACKET: printf ("LEFT_BRACKET\n");
+                       break;
+            case RIGHT_BRACKET: printf ("RIGHT_BRACKET\n");
+                       break;
+            case NAME: printf ("NAME: %s\n", yytext);
+                       break;
+            case SEMICOLON: printf ("SEMICOLON\n\n");
+                       break;
+            default:  printf ("Unexpected token\n");
+        }
+    }
+    printf ("Number of lines scanned: %d\n", num_lines);
 }

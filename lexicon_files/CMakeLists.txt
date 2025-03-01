@@ -14,6 +14,8 @@ set_target_properties(fl PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "C:/Program Files (x86)/GnuWin32/lib"
 )
 
+include_directories("C:/Program Files (x86)/GnuWin32/include")
+
 #add_library(${PROJECT_NAME} STATIC
 #        lex.yy.c
 #)
