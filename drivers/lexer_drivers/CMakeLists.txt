@@ -9,14 +9,14 @@ message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
 
 
 # Include flex stuff
-link_directories("C:/Program Files (x86)/GnuWin32/lib")
+link_directories("C:/GnuWin32/lib")
 add_library(fl STATIC IMPORTED)
 set_target_properties(fl PROPERTIES
-        IMPORTED_LOCATION "C:/Program Files (x86)/GnuWin32/lib/libfl.a"
-        INTERFACE_INCLUDE_DIRECTORIES "C:/Program Files (x86)/GnuWin32/lib"
+        IMPORTED_LOCATION "C:/GnuWin32/lib/libfl.a"
+        INTERFACE_INCLUDE_DIRECTORIES "C:/GnuWin32/lib"
 )
 
-include_directories("C:/Program Files (x86)/GnuWin32/include")
+include_directories("C:/GnuWin32/include")
 
 
 # Create the flex stuff in the binary tree so it gets cleaned up and jazz

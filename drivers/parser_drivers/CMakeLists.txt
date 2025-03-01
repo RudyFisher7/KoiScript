@@ -9,44 +9,34 @@ message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
 
 
 # Include yacc stuff
-link_directories("C:/Program Files (x86)/GnuWin32/lib")
-add_library(fl STATIC IMPORTED)
-set_target_properties(fl PROPERTIES
-        IMPORTED_LOCATION "C:/Program Files (x86)/GnuWin32/lib/libfl.a"
-        INTERFACE_INCLUDE_DIRECTORIES "C:/Program Files (x86)/GnuWin32/lib"
-)
-
-include_directories("C:/Program Files (x86)/GnuWin32/include")
+include_directories("C:/GnuWin32/include")
 
 
-# Create the flex stuff in the binary tree so it gets cleaned up and jazz
+# Create the yacc stuff in the binary tree so it gets cleaned up and jazz
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/yacc)
 
 add_custom_command(
-        OUTPUT ${PROJECT_BINARY_DIR}/yacc/lex.yy.c
-        COMMAND flex.exe ${PROJECT_SOURCE_DIR}/koiscript.y
+        OUTPUT ${PROJECT_BINARY_DIR}/yacc/y.tab.h ${PROJECT_BINARY_DIR}/yacc/y.tab.c
+        COMMAND bison.exe ${PROJECT_SOURCE_DIR}/koiscript.y
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/yacc
-        BYPRODUCTS ${PROJECT_BINARY_DIR}/yacc/lex.yy.c
+        BYPRODUCTS ${PROJECT_BINARY_DIR}/yacc/y.tab.h ${PROJECT_BINARY_DIR}/yacc/y.tab.c
 )
 
 add_custom_target(
-        COMMAND flex.exe ${PROJECT_SOURCE_DIR}/koiscript.l
+        COMMAND bison.exe ${PROJECT_SOURCE_DIR}/koiscript.y
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/yacc
-        BYPRODUCTS ${PROJECT_BINARY_DIR}/yacc/lex.yy.c
+        BYPRODUCTS ${PROJECT_BINARY_DIR}/yacc/y.tab.h ${PROJECT_BINARY_DIR}/yacc/y.tab.c
 )
 
 
 # Build the internal lexer c library
 # todo:: allow for different driver implementations in the build system. so far just flex.
 add_library(${PROJECT_NAME} STATIC
-        ${PROJECT_BINARY_DIR}/yacc/lex.yy.c
+        ${PROJECT_BINARY_DIR}/yacc/y.tab.h
+        ${PROJECT_BINARY_DIR}/yacc/y.tab.c
         include/lexer_drivers/lexer_driver.h
         source/flex_lexer_driver.c
         include/lexer_drivers/token_type.h
-)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE
-        fl
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
