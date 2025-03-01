@@ -27,9 +27,6 @@
 
 #include "lex.yy.c"
 
-#include <stdio.h>
-
-
 
 int koi_script_lexer_load_script(char* script_path) {
     int result = -1;
@@ -44,10 +41,21 @@ int koi_script_lexer_load_script(char* script_path) {
 }
 
 
-int koi_script_lexer_lex(void) {
-    int result = yylex();
+int koi_script_lexer_next(void) {
+    return yylex();
+}
 
-    printf("%d: %s\n",result, yytext);
 
-    return result;
+const char* koi_script_lexer_get_text(void) {
+    return yytext;
+}
+
+
+const char* koi_script_lexer_get_file_path(void) {
+    return yyin->_tmpfname;
+}
+
+
+int koi_script_lexer_get_line_index(void) {
+    return yyline_index;
 }

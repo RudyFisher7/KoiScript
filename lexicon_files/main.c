@@ -26,6 +26,8 @@
 #include "lexer.h"
 #include "token.h"
 
+#include <stdio.h>
+
 
 int main(void) {
 
@@ -33,7 +35,10 @@ int main(void) {
         return -1;
     }
 
-    while (koi_script_lexer_lex() != KOI_SCRIPT_TOKEN_TYPE_EOF) {}
+    int type = -1;
+    while ((type = koi_script_lexer_next()) != KOI_SCRIPT_TOKEN_TYPE_EOF) {
+        printf("%d: %s:%d\n", type, koi_script_lexer_get_text(), koi_script_lexer_get_line_index());
+    }
 
     return 0;
 }

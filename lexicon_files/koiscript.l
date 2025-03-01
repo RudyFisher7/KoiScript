@@ -3,6 +3,9 @@
 
 %{
 #include "token.h"
+
+int yyline_index = 1;
+
 %}
 
 %%
@@ -37,10 +40,13 @@ string_t   return KOI_SCRIPT_TOKEN_TYPE_CLASS_STRING;
 return       return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_RETURN;
 ,       return KOI_SCRIPT_TOKEN_TYPE_SEPARATOR;
 ;       return KOI_SCRIPT_TOKEN_TYPE_DELIMITER;
-\n      return KOI_SCRIPT_TOKEN_TYPE_NEW_LINE;
+\n      ++yyline_index;
 <<EOF>> return KOI_SCRIPT_TOKEN_TYPE_EOF;
 [a-zA-Z\_][a-zA-Z0-9\_]* return KOI_SCRIPT_TOKEN_TYPE_IDENTIFIER;
 %%
 
 /* User code section */
-int yywrap() { return KOI_SCRIPT_TOKEN_TYPE_EOF; }
+int yywrap() {
+    yyline_index = 1;
+    return KOI_SCRIPT_TOKEN_TYPE_EOF;
+}
