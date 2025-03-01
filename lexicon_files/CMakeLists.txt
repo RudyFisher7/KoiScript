@@ -10,7 +10,7 @@ message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
 link_directories("C:/Program Files (x86)/GnuWin32/lib")
 add_library(fl STATIC IMPORTED)
 set_target_properties(fl PROPERTIES
-        IMPORTED_LOCATION "C:/Program Files (x86)/GnuWin32/lib"
+        IMPORTED_LOCATION "C:/Program Files (x86)/GnuWin32/lib/libfl.a"
         INTERFACE_INCLUDE_DIRECTORIES "C:/Program Files (x86)/GnuWin32/lib"
 )
 

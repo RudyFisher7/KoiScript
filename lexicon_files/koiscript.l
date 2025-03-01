@@ -17,9 +17,11 @@
 %}
 
 %%
-username	printf("%s\n", getlogin());
+[a-zA-Z]+   { return 1; }
+[0-9]+      { return 2; }
+[ \t]+      { }
 %%
-
+int yywrap(){ return 1; }
 main()
 {
   yylex();
