@@ -23,8 +23,8 @@
  */
 
 
-#include "lexer_internal/flex_lexer.h"
-#include "lexer_internal/token_type.h"
+#include "lexer_drivers/lexer_driver.h"
+#include "drivers_common/token_type.h"
 
 #include <stdio.h>
 

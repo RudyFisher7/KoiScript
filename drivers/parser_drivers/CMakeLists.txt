@@ -15,13 +15,6 @@ include_directories("C:/GnuWin32/include")
 # Create the yacc stuff in the binary tree so it gets cleaned up and jazz
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/yacc)
 
-add_custom_command(
-        OUTPUT ${PROJECT_BINARY_DIR}/yacc/y.tab.h ${PROJECT_BINARY_DIR}/yacc/y.tab.c
-        COMMAND bison -dy ${PROJECT_SOURCE_DIR}/koiscript.y
-        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/yacc
-        BYPRODUCTS ${PROJECT_BINARY_DIR}/yacc/y.tab.h ${PROJECT_BINARY_DIR}/yacc/y.tab.c
-)
-
 add_custom_target(BisonCommand
         COMMAND bison -dy ${PROJECT_SOURCE_DIR}/koiscript.y
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/yacc
@@ -34,6 +27,7 @@ add_custom_target(BisonCommand
 add_library(${PROJECT_NAME} STATIC
         ${PROJECT_BINARY_DIR}/yacc/y.tab.h
         ${PROJECT_BINARY_DIR}/yacc/y.tab.c
+        ${PROJECT_BINARY_DIR}/../lexer_drivers/flex/lex.yy.c
         include/parser_drivers/parser_driver.h
         source/yacc_parser_driver.c
         ../common/include/drivers_common/token_type.h
@@ -41,7 +35,19 @@ add_library(${PROJECT_NAME} STATIC
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         include
+        ../common/include
         PRIVATE ${PROJECT_BINARY_DIR}/yacc
+        ${PROJECT_BINARY_DIR}/../lexer_drivers/flex
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        KoiScriptLexerDriver
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+        COMMAND bison -dy ${PROJECT_SOURCE_DIR}/koiscript.y
+        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/yacc
+        BYPRODUCTS ${PROJECT_BINARY_DIR}/yacc/y.tab.h ${PROJECT_BINARY_DIR}/yacc/y.tab.c
 )
 
 

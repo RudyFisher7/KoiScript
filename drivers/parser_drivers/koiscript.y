@@ -23,6 +23,11 @@
  */
 
 %{
+#include "lex.yy.c"
+#include <stdio.h>
+
+void yyerror(char * msg);
+
 %}
 
 %token YY_UNRECOGNIZED 257
@@ -190,3 +195,7 @@ ClassType : YY_CLASS_OBJECT
     ;
 
 %%
+
+void yyerror(char * msg) {
+  fprintf(stderr, msg);
+}

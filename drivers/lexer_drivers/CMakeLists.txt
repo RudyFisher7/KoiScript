@@ -22,13 +22,6 @@ include_directories("C:/GnuWin32/include")
 # Create the flex stuff in the binary tree so it gets cleaned up and jazz
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/flex)
 
-add_custom_command(
-        OUTPUT ${PROJECT_BINARY_DIR}/flex/lex.yy.c
-        COMMAND flex.exe ${PROJECT_SOURCE_DIR}/koiscript.l
-        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/flex
-        BYPRODUCTS ${PROJECT_BINARY_DIR}/flex/lex.yy.c
-)
-
 add_custom_target(FlexCommand
         COMMAND flex.exe ${PROJECT_SOURCE_DIR}/koiscript.l
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/flex
@@ -53,6 +46,12 @@ target_include_directories(${PROJECT_NAME} PUBLIC
         include
         ../common/include
         PRIVATE ${PROJECT_BINARY_DIR}/flex
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+        COMMAND flex.exe ${PROJECT_SOURCE_DIR}/koiscript.l
+        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/flex
+        BYPRODUCTS ${PROJECT_BINARY_DIR}/flex/lex.yy.c
 )
 
 
