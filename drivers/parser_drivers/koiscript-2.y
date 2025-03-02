@@ -78,30 +78,57 @@
 
 
 AnonymousFunctionCreation : YY_FUNC FunctionSignature YY_BODY_START YY_OPERATOR_RETURN FunctionArgumentExpression YY_DELIMITER YY_BODY_END ;
-FunctionSignature : ClassType YY_GROUPING_START YY_GROUPING_END ;
+FunctionSignature : ClassType YY_GROUPING_START FunctionParameters YY_GROUPING_END ;
+FunctionParameters : ClassType YY_IDENTIFIER
+    | ClassType YY_IDENTIFIER YY_SEPARATOR
+    | ClassType YY_IDENTIFIER YY_SEPARATOR FunctionParameters
+    ;
 
 AnonymousVariableCreation : YY_VAR ClassType YY_BODY_START FunctionArguments YY_BODY_END ;
-
-ClassType : YY_CLASS_OBJECT | YY_CLASS_BOOL | YY_CLASS_CHAR | YY_CLASS_INT
-    | YY_CLASS_UINT | YY_CLASS_FLOAT | YY_CLASS_UFLOAT | YY_CLASS_STRING
-    | YY_CLASS_TYPE_NAME ;
 
 FunctionArgumentExpression : VariableAccess | FunctionCall | AnonymousVariableCreation ;
 
 FunctionCall : YY_IDENTIFIER YY_GROUPING_START YY_GROUPING_END YY_DELIMITER
     | YY_IDENTIFIER YY_GROUPING_START FunctionArguments YY_GROUPING_END YY_DELIMITER
-    | YY_IDENTIFIER YY_OPERATOR_MEMBER_ACCESS FunctionCall
+    | MoreVariableAccess FunctionCall
     ;
 
 FunctionArguments : FunctionArgumentExpression
-    | FunctionArgumentExpression YY_SEPARATOR
-    | FunctionArgumentExpression YY_SEPARATOR FunctionArguments
+    | MoreFunctionArguments
+    ;
+MoreFunctionArguments : FunctionArgumentExpression YY_SEPARATOR
+    | MoreFunctionArguments FunctionArgumentExpression YY_SEPARATOR
     ;
 
 VariableAccess : YY_IDENTIFIER YY_DELIMITER
     | YY_OPERATOR_REFERENCE YY_IDENTIFIER YY_DELIMITER
-    | YY_IDENTIFIER YY_OPERATOR_MEMBER_ACCESS VariableAccess
-    | YY_OPERATOR_REFERENCE YY_IDENTIFIER YY_OPERATOR_MEMBER_ACCESS VariableAccess
+    | MoreVariableAccess YY_DELIMITER
+    | YY_OPERATOR_REFERENCE MoreVariableAccess YY_DELIMITER
+    ;
+MemberVariableAccess : YY_IDENTIFIER
+    | MemberVariableAccess YY_OPERATOR_MEMBER_ACCESS YY_IDENTIFIER
+    ;
+
+FunctionType : ClassType YY_GROUPING_START YY_GROUPING_END
+    | ClassType YY_GROUPING_START AnonymousFunctionParameters YY_GROUPING_END
+    ;
+
+AnonymousFunctionParameters : ClassType
+    | MoreAnonymousFunctionParameters
+    ;
+MoreAnonymousFunctionParameters : ClassType YY_SEPARATOR
+    | MoreAnonymousFunctionParameters ClassType YY_SEPARATOR
+    ;
+
+ClassType : YY_CLASS_OBJECT
+    | YY_CLASS_BOOL
+    | YY_CLASS_CHAR
+    | YY_CLASS_INT
+    | YY_CLASS_UINT
+    | YY_CLASS_FLOAT
+    | YY_CLASS_UFLOAT
+    | YY_CLASS_STRING
+    | YY_CLASS_TYPE_NAME
     ;
 
 %%
