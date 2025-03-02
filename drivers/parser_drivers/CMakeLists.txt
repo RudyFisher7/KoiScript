@@ -17,13 +17,13 @@ file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/yacc)
 
 add_custom_command(
         OUTPUT ${PROJECT_BINARY_DIR}/yacc/y.tab.h ${PROJECT_BINARY_DIR}/yacc/y.tab.c
-        COMMAND bison.exe ${PROJECT_SOURCE_DIR}/koiscript.y
+        COMMAND bison -dy ${PROJECT_SOURCE_DIR}/koiscript.y
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/yacc
         BYPRODUCTS ${PROJECT_BINARY_DIR}/yacc/y.tab.h ${PROJECT_BINARY_DIR}/yacc/y.tab.c
 )
 
-add_custom_target(
-        COMMAND bison.exe ${PROJECT_SOURCE_DIR}/koiscript.y
+add_custom_target(BisonCommand
+        COMMAND bison -dy ${PROJECT_SOURCE_DIR}/koiscript.y
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/yacc
         BYPRODUCTS ${PROJECT_BINARY_DIR}/yacc/y.tab.h ${PROJECT_BINARY_DIR}/yacc/y.tab.c
 )
@@ -34,9 +34,9 @@ add_custom_target(
 add_library(${PROJECT_NAME} STATIC
         ${PROJECT_BINARY_DIR}/yacc/y.tab.h
         ${PROJECT_BINARY_DIR}/yacc/y.tab.c
-        include/lexer_drivers/lexer_driver.h
-        source/flex_lexer_driver.c
-        include/lexer_drivers/token_type.h
+        include/parser_drivers/parser_driver.h
+        source/yacc_parser_driver.c
+        ../common/include/drivers_common/token_type.h
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

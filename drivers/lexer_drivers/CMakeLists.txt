@@ -29,7 +29,7 @@ add_custom_command(
         BYPRODUCTS ${PROJECT_BINARY_DIR}/flex/lex.yy.c
 )
 
-add_custom_target(
+add_custom_target(FlexCommand
         COMMAND flex.exe ${PROJECT_SOURCE_DIR}/koiscript.l
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/flex
         BYPRODUCTS ${PROJECT_BINARY_DIR}/flex/lex.yy.c

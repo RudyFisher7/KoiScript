@@ -105,6 +105,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 
 
 add_subdirectory(drivers/lexer_drivers)
+add_subdirectory(drivers/parser_drivers)
 
 add_subdirectory(debug)
 
