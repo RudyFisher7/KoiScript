@@ -53,6 +53,8 @@ while (EndLine STREQUAL "" AND i LESS LinesSize)
         set(EnumString "${StrippedLine}")
     endif ()
 
+    string(REPLACE "KOI_SCRIPT_TOKEN_TYPE" "YY" EnumString ${EnumString})
+
     list(APPEND Tokens "%token ${EnumString} ${TokenValue}\n")
 
     MATH(EXPR TokenValue ${TokenValue}+1)
