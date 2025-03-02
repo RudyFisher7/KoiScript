@@ -16,6 +16,7 @@ string(REPLACE "\n" ";" FileLines ${EnumFile})
 
 message(STATUS "Parsing enum for tokens...")
 
+# get the first line with an enum value
 set(StartLine "")
 set(i 0)
 list(LENGTH FileLines LinesSize)
@@ -27,7 +28,10 @@ while (StartLine STREQUAL "" AND i LESS LinesSize)
     MATH(EXPR i ${i}+1)
 endwhile ()
 
+# assign the first line with the enum line, not the one before it as it previously was
 list(GET FileLines ${i} StartLine)
+
+# get the value of the first enum value for using as the first token value
 string(REGEX MATCH "[0-9]+" TokenValue "${StartLine}")
 message(STATUS "Starting at enum value: ${StartLine}")
 if (TokenValue)
@@ -36,12 +40,15 @@ endif ()
 
 set(Tokens "")
 
+# create the list of tokens
 set(EndLine "")
 while (EndLine STREQUAL "" AND i LESS LinesSize)
     list(GET FileLines ${i} Line)
 
+    # remove white space from beginning
     string(STRIP "${Line}" StrippedLine)
 
+    # if there is anything after the num value in the line, remove it
     string(FIND "${StrippedLine}" " " SpaceIndex)
     string(FIND "${StrippedLine}" "," CommaIndex)
 
@@ -53,8 +60,10 @@ while (EndLine STREQUAL "" AND i LESS LinesSize)
         set(EnumString "${StrippedLine}")
     endif ()
 
+    # create the token
     string(REPLACE "KOI_SCRIPT_TOKEN_TYPE" "YY" EnumString ${EnumString})
 
+    # assign the token to the current token value
     list(APPEND Tokens "%token ${EnumString} ${TokenValue}\n")
 
     MATH(EXPR TokenValue ${TokenValue}+1)
