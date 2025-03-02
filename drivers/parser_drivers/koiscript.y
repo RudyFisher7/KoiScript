@@ -75,41 +75,87 @@
 %%
 
 /*fixme:: ScriptBody */
-Script : FunctionBody ;
 
-Expression : VariableAccess | FunctionCall ;
-Statement : VariableCreation | FunctionCreation ;
+Script : LibraryDefinition
+    | ClassDefinition
+    | VariableCreation
+    | FunctionCreation
+    | FunctionCall
+    | VariableAccess
+    | Script VariableCreation
+    | Script FunctionCreation
+    | Script FunctionCall
+    | Script VariableAccess
+    ;
 
-FunctionCreation : YY_FUNC YY_IDENTIFIER FunctionSignature YY_BODY_START FunctionBody YY_BODY_END YY_DELIMITER ;
-AnonymousFunctionCreation : YY_FUNC FunctionSignature YY_BODY_START FunctionBody YY_BODY_END ;
+LibraryDefinition : YY_LIBRARY YY_CLASS_TYPE_NAME YY_BODY_START LibraryBody YY_BODY_END YY_DELIMITER ;
+LibraryBody : VariableCreation
+    | LibraryBody VariableCreation
+    | FunctionCreation
+    | LibraryBody FunctionCreation
+    | ClassDefinition
+    | LibraryBody ClassDefinition
+    ;
+
+
+ClassDefinition : YY_CLASS YY_CLASS_TYPE_NAME YY_OPERATOR_INHERITANCE ClassType YY_BODY_START ClassBody YY_BODY_END YY_DELIMITER ;
+ClassBody : VariableCreation
+    | ClassBody VariableCreation
+    ;
+
+FunctionCreation : YY_FUNC YY_IDENTIFIER FunctionSignature YY_BODY_START FunctionBody YY_OPERATOR_RETURN FunctionArgumentExpression YY_DELIMITER YY_BODY_END YY_DELIMITER ;
+AnonymousFunctionCreation : YY_FUNC FunctionSignature YY_BODY_START FunctionBody YY_OPERATOR_RETURN FunctionArgumentExpression YY_DELIMITER YY_BODY_END ;
+FunctionBody : VariableAccess
+    | FunctionCall
+    | FunctionBody VariableAccess
+    | FunctionBody FunctionCall
+    ;
+
+FunctionArgumentExpression : VariableAccess | FunctionCall | AnonymousVariableCreation | AnonymousFunctionCreation ;
 FunctionSignature : AnyType YY_GROUPING_START FunctionParameters YY_GROUPING_END ;
 FunctionParameters : AnyType YY_IDENTIFIER
-    | AnyType YY_IDENTIFIER YY_SEPARATOR
-    | AnyType YY_IDENTIFIER YY_SEPARATOR FunctionParameters
+    | MoreFunctionParameters
     ;
-FunctionBody : YY_OPERATOR_RETURN Expression YY_DELIMITER
-    | MoreFunctionBody YY_OPERATOR_RETURN Expression YY_DELIMITER
-    ;
-MoreFunctionBody : Expression YY_DELIMITER
-    | Statement YY_DELIMITER
-    | MoreFunctionBody Expression YY_DELIMITER
-    | MoreFunctionBody Statement YY_DELIMITER
+MoreFunctionParameters : AnyType YY_IDENTIFIER YY_SEPARATOR
+    | MoreFunctionParameters AnyType YY_IDENTIFIER YY_SEPARATOR
     ;
 
-
-VariableCreation : YY_VAR YY_IDENTIFIER ClassType YY_DELIMITER
-    | YY_VAR YY_IDENTIFIER ClassType YY_BODY_START FunctionArguments YY_BODY_END YY_DELIMITER ;
-AnonymousVariableCreation : YY_VAR ClassType YY_BODY_START FunctionArguments YY_BODY_END ;
-
-VariableAccess : YY_IDENTIFIER YY_DELIMITER
-    | YY_IDENTIFIER YY_OPERATOR_MEMBER_ACCESS VariableAccess
+VariableCreation : YY_VAR YY_IDENTIFIER AnyType YY_BODY_START VariableInitializer YY_BODY_END YY_DELIMITER ;
+AnonymousVariableCreation : YY_VAR AnyType YY_BODY_START VariableInitializer YY_BODY_END ;
+VariableInitializer : VariableInitializerExpression
+    | MoreVariableInitializerExpressions
     ;
-FunctionCall : YY_IDENTIFIER YY_GROUPING_START FunctionArguments YY_GROUPING_END YY_DELIMITER
-    | YY_IDENTIFIER YY_GROUPING_START YY_GROUPING_END YY_DELIMITER
-    | YY_IDENTIFIER YY_OPERATOR_MEMBER_ACCESS FunctionCall
+
+VariableInitializerExpression : VariableAccess
+    | FunctionCall
+    | AnonymousVariableCreation
     ;
-FunctionArguments : FunctionArgumentExpression | FunctionArgumentExpression YY_SEPARATOR | FunctionArgumentExpression YY_SEPARATOR FunctionArguments ;
-FunctionArgumentExpression : Expression | AnonymousVariableCreation | AnonymousFunctionCreation ;
+MoreVariableInitializerExpressions : VariableAccess YY_SEPARATOR
+    | FunctionCall YY_SEPARATOR
+    | AnonymousVariableCreation YY_SEPARATOR
+    | MoreVariableInitializerExpressions VariableAccess YY_SEPARATOR
+    | MoreVariableInitializerExpressions FunctionCall YY_SEPARATOR
+    | MoreVariableInitializerExpressions AnonymousVariableCreation YY_SEPARATOR
+    ;
+
+FunctionCall : ClassMemberAccess YY_GROUPING_START YY_GROUPING_END YY_DELIMITER
+    | ClassMemberAccess YY_GROUPING_START FunctionArguments YY_GROUPING_END YY_DELIMITER
+    ;
+
+FunctionArguments : FunctionArgumentExpression
+    | MoreFunctionArguments FunctionArgumentExpression
+    | MoreFunctionArguments
+    ;
+MoreFunctionArguments : FunctionArgumentExpression YY_SEPARATOR
+    | MoreFunctionArguments FunctionArgumentExpression YY_SEPARATOR
+    ;
+
+VariableAccess : ClassMemberAccess YY_DELIMITER
+    | YY_OPERATOR_REFERENCE ClassMemberAccess YY_DELIMITER
+    ;
+ClassMemberAccess : YY_IDENTIFIER
+    | ClassMemberAccess YY_OPERATOR_MEMBER_ACCESS YY_IDENTIFIER
+    ;
 
 AnyType : ClassType
     | ClassType YY_OPERATOR_SCOPE ClassType
@@ -121,17 +167,26 @@ AnyType : ClassType
     | ClassType YY_OPERATOR_SCOPE FunctionType YY_OPERATOR_REFERENCE
     ;
 
-FunctionType : AnyType YY_GROUPING_START YY_GROUPING_END
-    | AnyType YY_GROUPING_START AnonymousFunctionParameters YY_GROUPING_END
+FunctionType : ClassType YY_GROUPING_START YY_GROUPING_END
+    | ClassType YY_GROUPING_START AnonymousFunctionParameters YY_GROUPING_END
     ;
+
 AnonymousFunctionParameters : AnyType
-    | AnyType YY_SEPARATOR
-    | AnyType YY_SEPARATOR AnonymousFunctionParameters
+    | MoreAnonymousFunctionParameters
+    ;
+MoreAnonymousFunctionParameters : AnyType YY_SEPARATOR
+    | MoreAnonymousFunctionParameters AnyType YY_SEPARATOR
     ;
 
-ClassType : YY_CLASS_OBJECT | YY_CLASS_BOOL | YY_CLASS_CHAR | YY_CLASS_INT
-    | YY_CLASS_UINT | YY_CLASS_FLOAT | YY_CLASS_UFLOAT | YY_CLASS_STRING
-    | YY_CLASS_TYPE_NAME ;
-
+ClassType : YY_CLASS_OBJECT
+    | YY_CLASS_BOOL
+    | YY_CLASS_CHAR
+    | YY_CLASS_INT
+    | YY_CLASS_UINT
+    | YY_CLASS_FLOAT
+    | YY_CLASS_UFLOAT
+    | YY_CLASS_STRING
+    | YY_CLASS_TYPE_NAME
+    ;
 
 %%
