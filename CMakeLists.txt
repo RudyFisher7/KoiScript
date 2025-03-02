@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.13)
 project(KoiScript VERSION 0.0.1 LANGUAGES CXX)
 
+#todo:: setup local development workspace configuration stuff
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wpedantic")
