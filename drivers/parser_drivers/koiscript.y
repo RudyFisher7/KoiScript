@@ -83,6 +83,7 @@ void yyerror(char * msg);
 
 Script : LibraryDefinition
     | ClassDefinition
+    | GenericClassDefinition
     | VariableCreation
     | FunctionCreation
     | FunctionCall
@@ -192,6 +193,33 @@ ClassType : YY_CLASS_OBJECT
     | YY_CLASS_UFLOAT
     | YY_CLASS_STRING
     | YY_CLASS_TYPE_NAME
+    ;
+
+GenericClassDefinition : YY_CLASS YY_CLASS_TYPE_NAME YY_GENERIC_START GenericClassTypeParameters YY_GENERIC_END YY_OPERATOR_INHERITANCE GenericClassType YY_BODY_START GenericClassBody YY_BODY_END YY_DELIMITER ;
+GenericClassBody : VariableCreation
+    | YY_IDENTIFIER YY_IDENTIFIER YY_DELIMITER
+    | GenericClassBody VariableCreation
+    | GenericClassBody YY_IDENTIFIER YY_IDENTIFIER YY_DELIMITER
+    ;
+
+GenericClassTypeParameters : YY_IDENTIFIER
+    | YY_IDENTIFIER YY_OPERATOR_INHERITANCE AnyType
+    | MoreGenericClassTypeParameters
+    ;
+MoreGenericClassTypeParameters : YY_IDENTIFIER YY_SEPARATOR
+    | YY_IDENTIFIER YY_OPERATOR_INHERITANCE AnyType YY_SEPARATOR
+    | MoreGenericClassTypeParameters YY_IDENTIFIER YY_SEPARATOR
+    | MoreGenericClassTypeParameters YY_IDENTIFIER YY_OPERATOR_INHERITANCE AnyType YY_SEPARATOR
+    ;
+
+GenericClassType : ClassType
+    | YY_CLASS_TYPE_NAME YY_GENERIC_START GenericClassTypeArguments YY_GENERIC_END
+    ;
+GenericClassTypeArguments : GenericClassType
+    | MoreGenericClassTypeArguments
+    ;
+MoreGenericClassTypeArguments : GenericClassType YY_SEPARATOR
+    | MoreGenericClassTypeArguments GenericClassType YY_SEPARATOR
     ;
 
 %%
