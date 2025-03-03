@@ -22,6 +22,12 @@ include_directories("C:/GnuWin32/include")
 # Create the flex stuff in the binary tree so it gets cleaned up and jazz
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/flex)
 
+execute_process(
+        COMMAND flex.exe ${PROJECT_SOURCE_DIR}/koiscript.l
+        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/flex
+)
+
+
 add_custom_target(FlexCommand
         COMMAND flex.exe ${PROJECT_SOURCE_DIR}/koiscript.l
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/flex
@@ -38,6 +44,8 @@ add_library(${PROJECT_NAME} STATIC
         ../common/include/drivers_common/token_type.h
 )
 
+add_dependencies(${PROJECT_NAME} FlexCommand)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE
         fl
 )
@@ -48,11 +56,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC
         PRIVATE ${PROJECT_BINARY_DIR}/flex
 )
 
-add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
-        COMMAND flex.exe ${PROJECT_SOURCE_DIR}/koiscript.l
-        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/flex
-        BYPRODUCTS ${PROJECT_BINARY_DIR}/flex/lex.yy.c
-)
+#add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+#        COMMAND flex.exe ${PROJECT_SOURCE_DIR}/koiscript.l
+#        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/flex
+#        BYPRODUCTS ${PROJECT_BINARY_DIR}/flex/lex.yy.c
+#)
 
 
 # Build the internal lexer library's debug executable

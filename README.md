@@ -10,71 +10,8 @@ in mind. Not to be mistaken for the stunning koilang (tsevhu): https://youtu.be/
 Not yet implemented.
 - ...
 
-## Datatypes
-- bool
-- int
-- float
-- text
-- key
-- array (of bool, int, float, text, or key)
-
-
-## Meta Functions
-These act on the runtime environment.
-### makes stuff
-- var
-- arr
-- fun
-- lib
-### does stuff
-- val
-- ref
-- asn
-- exe
-- imp
-### removes stuff
-- rem
-
-## Built-In Functions
-These are part of the runtime environment.
-### control
-- if
-- while
-### logical
-- land
-- lor
-- lnot
-- eq
-- gt
-- lt
-- ge
-- le
-### arithmetic
-#### unary
-- abs
-- neg
-- flr
-- rnd
-- ceil
-#### multary
-- add
-- sub
-- mul
-- div
-- mod
-### bitwise
-#### unary
-- bshl
-- bshr
-#### multary
-- bor
-- bxor
-- band
-- bnot
-### arrays
-- append
-- insert
-### variable and function info
-- size
-### special
-- print
+## Technical Requirements
+### For Flex and Bison Drivers
+- Install Flex and Yacc/Bison generators at C:/GnuWin32/ and add the bin/ subdirectory to PATH.
+### General
+- Install CMake v3.13+, a generator (Ninja, etc.) and a C99 and C++11 compatible toolchain.

@@ -21,3 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+#include "y.tab.c"
+
+
+int main(void) {
+
+    if (yyin = fopen("C:\\dev\\koi_script\\drivers\\lexer_drivers\\debug\\example.txt", "r")) {
+        return -1;
+    }
+
+//    int type = -1;
+//    while ((type = koi_script_lexer_next()) != KOI_SCRIPT_TOKEN_TYPE_EOF) {
+//        printf("%d: %s at %s:%d\n", type, koi_script_lexer_get_text(), koi_script_lexer_get_file_path(), koi_script_lexer_get_line_index());
+//    }
+
+    int result = yyparse();
+
+    return result;
+}
