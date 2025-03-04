@@ -1,5 +1,5 @@
-bool_t
-object_t
+var my_var int_t {-9};
+my_var;
 
-
-int_t  mytype_t
+var my_var2 object_t {null};
+var my_var2 bool_t {false, true, -9.0, 8.0u, 8u, 8990};

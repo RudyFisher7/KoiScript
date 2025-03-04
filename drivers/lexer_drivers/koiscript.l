@@ -26,7 +26,6 @@
 
 %{
 
-//#include "drivers_common/token_type.h"
 #include "y.tab.h"
 
 
@@ -40,53 +39,53 @@ char yyfile_path[256];
 
 %%
 
-##[^(##)\n]*##    return KOI_SCRIPT_TOKEN_TYPE_DOCUMENTATION_COMMENT;
-#[^#\n]*#    return KOI_SCRIPT_TOKEN_TYPE_COMMENT;
-[ \t\r]+         /* return KOI_SCRIPT_TOKEN_TYPE_WHITE_SPACE; */
-\n              { ++yyline_index; /* return KOI_SCRIPT_TOKEN_TYPE_NEW_LINE; */ }
-null            return KOI_SCRIPT_TOKEN_TYPE_NULL_LITERAL;
-false           return KOI_SCRIPT_TOKEN_TYPE_BOOL_FALSE_LITERAL;
-true            return KOI_SCRIPT_TOKEN_TYPE_BOOL_TRUE_LITERAL;
-\'[^\']*\'      return KOI_SCRIPT_TOKEN_TYPE_CHAR_LITERAL;
-[-]?[0-9]+       return KOI_SCRIPT_TOKEN_TYPE_INT_LITERAL;
-[0-9]+u                 return KOI_SCRIPT_TOKEN_TYPE_UINT_LITERAL;
-[-]?[0-9]+\.[0-9]+       return KOI_SCRIPT_TOKEN_TYPE_FLOAT_LITERAL;
-[0-9]+\.[0-9]+u         return KOI_SCRIPT_TOKEN_TYPE_UFLOAT_LITERAL;
-\"[^\"\n]*\"              return KOI_SCRIPT_TOKEN_TYPE_STRING_LITERAL;
-var         return KOI_SCRIPT_TOKEN_TYPE_VAR;
-func        return KOI_SCRIPT_TOKEN_TYPE_FUNC;
-class       return KOI_SCRIPT_TOKEN_TYPE_CLASS;
-library     return KOI_SCRIPT_TOKEN_TYPE_LIBRARY;
-object_t    return KOI_SCRIPT_TOKEN_TYPE_CLASS_OBJECT;
-bool_t      return KOI_SCRIPT_TOKEN_TYPE_CLASS_BOOL;
-char_t      return KOI_SCRIPT_TOKEN_TYPE_CLASS_CHAR;
-number_t    return KOI_SCRIPT_TOKEN_TYPE_CLASS_NUMBER;
-int_t       return KOI_SCRIPT_TOKEN_TYPE_CLASS_INT;
-uint_t      return KOI_SCRIPT_TOKEN_TYPE_CLASS_UINT;
-float_t     return KOI_SCRIPT_TOKEN_TYPE_CLASS_FLOAT;
-ufloat_t    return KOI_SCRIPT_TOKEN_TYPE_CLASS_UFLOAT;
-string_t    return KOI_SCRIPT_TOKEN_TYPE_CLASS_STRING;
-[a-zA-Z\_][a-zA-Z0-9\_]*\_t return KOI_SCRIPT_TOKEN_TYPE_CLASS_TYPE_NAME;
-\(                          return KOI_SCRIPT_TOKEN_TYPE_GROUPING_START;
-\)                          return KOI_SCRIPT_TOKEN_TYPE_GROUPING_END;
-\{                          return KOI_SCRIPT_TOKEN_TYPE_BODY_START;
-\}                          return KOI_SCRIPT_TOKEN_TYPE_BODY_END;
-\<                          return KOI_SCRIPT_TOKEN_TYPE_GENERIC_START;
-\>                          return KOI_SCRIPT_TOKEN_TYPE_GENERIC_END;
-\.                          return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_MEMBER_ACCESS;
-:                           return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_INHERITANCE;
-::                          return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_SCOPE;
-&                           return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_REFERENCE;
-return                      return KOI_SCRIPT_TOKEN_TYPE_OPERATOR_RETURN;
-,                           return KOI_SCRIPT_TOKEN_TYPE_SEPARATOR;
-;                           return KOI_SCRIPT_TOKEN_TYPE_DELIMITER;
-[a-zA-Z\_][a-zA-Z0-9\_]*    return KOI_SCRIPT_TOKEN_TYPE_IDENTIFIER;
-.                           return KOI_SCRIPT_TOKEN_TYPE_UNRECOGNIZED;
+##[^(##)\n]*##    return YY_DOCUMENTATION_COMMENT;
+#[^#\n]*#    return YY_COMMENT;
+[ \t\r]+         /* return YY_WHITE_SPACE; */
+\n              { ++yyline_index; /* return YY_NEW_LINE; */ }
+null            return YY_NULL_LITERAL;
+false           return YY_BOOL_FALSE_LITERAL;
+true            return YY_BOOL_TRUE_LITERAL;
+\'[^\']*\'      return YY_CHAR_LITERAL;
+[-]?[0-9]+       return YY_INT_LITERAL;
+[0-9]+u                 return YY_UINT_LITERAL;
+[-]?[0-9]+\.[0-9]+       return YY_FLOAT_LITERAL;
+[0-9]+\.[0-9]+u         return YY_UFLOAT_LITERAL;
+\"[^\"\n]*\"              return YY_STRING_LITERAL;
+var         return YY_VAR;
+func        return YY_FUNC;
+class       return YY_CLASS;
+library     return YY_LIBRARY;
+object_t    return YY_CLASS_OBJECT;
+bool_t      return YY_CLASS_BOOL;
+char_t      return YY_CLASS_CHAR;
+number_t    return YY_CLASS_NUMBER;
+int_t       return YY_CLASS_INT;
+uint_t      return YY_CLASS_UINT;
+float_t     return YY_CLASS_FLOAT;
+ufloat_t    return YY_CLASS_UFLOAT;
+string_t    return YY_CLASS_STRING;
+[a-zA-Z\_][a-zA-Z0-9\_]*\_t return YY_CLASS_TYPE_NAME;
+\(                          return YY_GROUPING_START;
+\)                          return YY_GROUPING_END;
+\{                          return YY_BODY_START;
+\}                          return YY_BODY_END;
+\<                          return YY_GENERIC_START;
+\>                          return YY_GENERIC_END;
+\.                          return YY_OPERATOR_MEMBER_ACCESS;
+:                           return YY_OPERATOR_INHERITANCE;
+::                          return YY_OPERATOR_SCOPE;
+&                           return YY_OPERATOR_REFERENCE;
+return                      return YY_OPERATOR_RETURN;
+,                           return YY_SEPARATOR;
+;                           return YY_DELIMITER;
+[a-zA-Z\_][a-zA-Z0-9\_]*    return YY_IDENTIFIER;
+.                           return YY_UNRECOGNIZED;
 
 %%
 
 /* User code section */
 int yywrap() {
     yyline_index = 1;
-    return KOI_SCRIPT_TOKEN_TYPE_EOF;
+    return YY_EOF;
 }
