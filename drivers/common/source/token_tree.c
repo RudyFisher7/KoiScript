@@ -54,6 +54,7 @@ void koi_script_free_token_tree(KoiScriptTokenTreeNode* tree_root) {
         koi_script_free_token_tree(tree_root->children[i]);
     }
 
+    free(tree_root->children);
     free((KoiScriptTokenTreeNode*)tree_root);
     tree_root = NULL;
 }
