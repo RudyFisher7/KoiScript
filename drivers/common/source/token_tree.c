@@ -61,7 +61,15 @@ void koi_script_free_token_tree(KoiScriptTokenTreeNode* tree_root) {
 
 void koi_script_token_tree_append_child(KoiScriptTokenTreeNode* parent, KoiScriptTokenTreeNode* child) {
     if (parent->child_count >= parent->child_capacity) {
-        //todo::grow
+        unsigned int new_capacity = ((parent->child_count * 2u) + 1u);
+        unsigned int new_size = sizeof(KoiScriptTokenTreeNode*) * new_capacity;
+
+        parent->children = (KoiScriptTokenTreeNode**)realloc(parent->children, new_size);
+        parent->child_capacity = new_capacity;
+
+        for (unsigned int i = parent->child_count; i < parent->child_capacity; ++i) {
+            parent->children[i] = NULL;
+        }
     }
 
     parent->children[parent->child_count] = child;
