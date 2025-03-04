@@ -83,6 +83,7 @@ void yyerror(char * msg);
 
 Script : LibraryDefinition
     | ClassDefinition
+    | GenericClassDefinition
     | VariableCreation
     | FunctionCreation
     | FunctionCall
@@ -206,6 +207,102 @@ ClassType : YY_CLASS_OBJECT
     | YY_CLASS_UFLOAT
     | YY_CLASS_STRING
     | YY_CLASS_TYPE_NAME
+    ;
+
+
+/* Generics */
+
+GenericClassDefinition : YY_CLASS YY_CLASS_TYPE_NAME YY_GENERIC_START GenericClassTypeParameters YY_GENERIC_END YY_OPERATOR_INHERITANCE GenericClassInheritedTypes YY_BODY_START GenericClassBody YY_BODY_END YY_DELIMITER ;
+GenericClassInheritedTypes : GenericClassType
+    | MoreGenericClassInheritedTypes GenericClassType
+    ;
+MoreGenericClassInheritedTypes : GenericClassType YY_SEPARATOR
+    | MoreGenericClassInheritedTypes GenericClassType YY_SEPARATOR
+    ;
+GenericClassBody : VariableCreation
+    | YY_IDENTIFIER YY_IDENTIFIER YY_DELIMITER
+    | GenericClassBody VariableCreation
+    | GenericClassBody YY_IDENTIFIER YY_IDENTIFIER YY_DELIMITER
+    ;
+
+GenericClassTypeParameters : YY_IDENTIFIER
+    | YY_IDENTIFIER YY_OPERATOR_INHERITANCE AnyType
+    | MoreGenericClassTypeParameters YY_IDENTIFIER
+    | MoreGenericClassTypeParameters YY_IDENTIFIER YY_OPERATOR_INHERITANCE AnyType
+    | MoreGenericClassTypeParameters
+    ;
+MoreGenericClassTypeParameters : YY_IDENTIFIER YY_SEPARATOR
+    | YY_IDENTIFIER YY_OPERATOR_INHERITANCE AnyType YY_SEPARATOR
+    | MoreGenericClassTypeParameters YY_IDENTIFIER YY_SEPARATOR
+    | MoreGenericClassTypeParameters YY_IDENTIFIER YY_OPERATOR_INHERITANCE AnyType YY_SEPARATOR
+    ;
+
+AnyGenericType : GenericClassType
+    | GenericFunctionType
+    ;
+
+GenericFunctionType : GenericClassType YY_GROUPING_START YY_GROUPING_END
+    | GenericClassType YY_GROUPING_START AnonymousGenericFunctionParameters YY_GROUPING_END
+    ;
+AnonymousGenericFunctionParameters : AnyGenericType
+    | MoreAnonymousGenericFunctionParameters AnyGenericType
+    | MoreAnonymousGenericFunctionParameters
+    ;
+MoreAnonymousGenericFunctionParameters : AnyGenericType YY_SEPARATOR
+    | MoreAnonymousGenericFunctionParameters AnyGenericType YY_SEPARATOR
+    ;
+
+GenericClassType : ClassType
+    | YY_CLASS_TYPE_NAME YY_GENERIC_START GenericClassTypeArguments YY_GENERIC_END
+    ;
+GenericClassTypeArguments : GenericClassType
+    | MoreGenericClassTypeArguments GenericClassType
+    | MoreGenericClassTypeArguments
+    ;
+MoreGenericClassTypeArguments : GenericClassType YY_SEPARATOR
+    | MoreGenericClassTypeArguments GenericClassType YY_SEPARATOR
+    ;
+
+GenericFunctionCreation : YY_FUNC YY_IDENTIFIER GenericFunctionSignature YY_BODY_START GenericFunctionBody YY_OPERATOR_RETURN FunctionArgumentExpression YY_DELIMITER YY_BODY_END ;
+AnonymousGenericFunctionCreation : YY_FUNC GenericFunctionSignature YY_BODY_START GenericFunctionBody YY_OPERATOR_RETURN FunctionArgumentExpression YY_DELIMITER YY_BODY_END ;
+
+FunctionWithGenericTypesCreation : YY_FUNC YY_IDENTIFIER FunctionSignatureWithGenerics YY_BODY_START FunctionBodyWithGenerics YY_OPERATOR_RETURN FunctionArgumentExpression YY_DELIMITER YY_BODY_END ;
+AnonymousFunctionWithGenericTypesCreation : YY_FUNC FunctionSignatureWithGenerics YY_BODY_START FunctionBodyWithGenerics YY_OPERATOR_RETURN FunctionArgumentExpression YY_DELIMITER YY_BODY_END ;
+FunctionSignatureWithGenerics : AnyGenericType YY_GROUPING_START FunctionWithGenericsParameters YY_GROUPING_END
+    | AnyGenericType YY_GROUPING_START FunctionWithGenericsParameters YY_GROUPING_END
+    ;
+FunctionWithGenericsParameters : AnyGenericType YY_IDENTIFIER
+    | MoreFunctionWithGenericsParameters YY_IDENTIFIER YY_IDENTIFIER
+    | MoreFunctionWithGenericsParameters
+    ;
+MoreFunctionWithGenericsParameters : AnyGenericType YY_IDENTIFIER YY_SEPARATOR
+    | MoreFunctionWithGenericsParameters AnyGenericType YY_IDENTIFIER YY_SEPARATOR
+    ;
+FunctionBodyWithGenerics : VariableAccess
+    | VariableCreation
+    | FunctionCall
+    | GenericFunctionBody VariableAccess
+    | GenericFunctionBody VariableCreation
+    | GenericFunctionBody FunctionCall
+    ;
+
+GenericFunctionParameters : AnyGenericType YY_IDENTIFIER
+    | YY_IDENTIFIER YY_IDENTIFIER
+    | MoreGenericFunctionParameters AnyGenericType YY_IDENTIFIER
+    | MoreGenericFunctionParameters YY_IDENTIFIER YY_IDENTIFIER
+    | MoreGenericFunctionParameters
+    ;
+MoreGenericFunctionParameters : AnyGenericType YY_IDENTIFIER YY_SEPARATOR
+    | YY_IDENTIFIER YY_IDENTIFIER YY_SEPARATOR
+    | MoreGenericFunctionParameters AnyGenericType YY_IDENTIFIER YY_SEPARATOR
+    | MoreGenericFunctionParameters YY_IDENTIFIER YY_IDENTIFIER YY_SEPARATOR
+    ;
+GenericFunctionBody : VariableAccess
+    | VariableCreation
+    | FunctionCall
+    | GenericFunctionBody VariableAccess
+    | GenericFunctionBody VariableCreation
+    | GenericFunctionBody FunctionCall
     ;
 
 %%
