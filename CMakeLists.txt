@@ -100,12 +100,12 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
+        KoiScriptDriversCommon
         KoiScriptLexerDriver
 )
 
 
-add_subdirectory(drivers/lexer_drivers)
-add_subdirectory(drivers/parser_drivers)
+add_subdirectory(drivers)
 
 add_subdirectory(debug)
 

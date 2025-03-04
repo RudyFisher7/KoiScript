@@ -23,38 +23,28 @@
  */
 
 
-#include "scripting/lexer.hpp"
-
-extern "C" {
-#include "lexer_drivers/lexer_driver.h"
-#include "drivers_common/token_type.h"
-}
-
-#include <iostream>
+#ifndef KOISCRIPT_TOKEN_TREE_H
+#define KOISCRIPT_TOKEN_TREE_H
 
 
-namespace Koi { namespace Scripting {
-
-Lexer::Error Lexer::lex(const char* script_path, std::vector<Token>& out_tokens) const {
-    if (koi_script_lexer_load_script(script_path) != 0) {
-        return SCRIPTING_LEXER_ERROR_FAILED_TO_LOAD_FILE;
-    }
-
-    Error result = SCRIPTING_LEXER_ERROR_OK;
-
-    int token_type = KOI_SCRIPT_TOKEN_TYPE_INVALID;
-    while ((token_type = koi_script_lexer_next()) != KOI_SCRIPT_TOKEN_TYPE_EOF) {
-
-        out_tokens.emplace_back(static_cast<KoiScriptTokenType>(token_type), koi_script_lexer_get_text(), koi_script_lexer_get_file_path(), koi_script_lexer_get_line_index());
-    }
-
-    return result;
-}
+#include "drivers_common/token.h"
 
 
-std::string Lexer::get_token_type_name(KoiScriptTokenType type) const {
-    return koi_script_lexer_get_token_type_name(type);
-}
+typedef struct koi_script_token_tree_node_t {
+    unsigned long uid;
+    unsigned int child_count;
+    unsigned int child_capacity;
+    struct koi_script_token_tree_node_t** children;
+    KoiScriptToken token;
+} KoiScriptTokenTreeNode;
 
-} // Scripting
-} // Koi
+
+KoiScriptTokenTreeNode* koi_script_create_empty_token_tree(void);
+void koi_script_free_token_tree(KoiScriptTokenTreeNode* tree_root);
+
+void koi_script_token_tree_append_child(KoiScriptTokenTreeNode* parent, KoiScriptTokenTreeNode* child);
+
+void koi_script_print_token_tree(KoiScriptTokenTreeNode* tree_root);
+
+
+#endif //KOISCRIPT_TOKEN_TREE_H

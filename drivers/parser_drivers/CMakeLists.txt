@@ -49,21 +49,19 @@ add_library(${PROJECT_NAME} STATIC
         ${PROJECT_BINARY_DIR}/yacc/y.tab.c
         include/parser_drivers/parser_driver.h
         source/yacc_parser_driver.c
-        ../common/include/drivers_common/token_type.h
 )
 
 add_dependencies(${PROJECT_NAME} FlexCommandForBison BisonCommand)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         include
-        ../common/include
         ${PROJECT_BINARY_DIR}/yacc
         ${PROJECT_BINARY_DIR}/flex
 )
 
-#target_link_libraries(${PROJECT_NAME} PUBLIC
-#        KoiScriptLexerDriver
-#)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        KoiScriptDriversCommon
+)
 
 #add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
 #        COMMAND bison -dy ${PROJECT_SOURCE_DIR}/koiscript.y
