@@ -27,7 +27,8 @@
 
 int main(void) {
 
-    if (yyin = fopen("C:\\dev\\koi_script\\drivers\\lexer_drivers\\debug\\example.txt", "r")) {
+    yyin = fopen("C:\\dev\\koi_script\\drivers\\parser_drivers\\debug\\example.txt", "r");
+    if (yyin == NULL) {
         return -1;
     }
 

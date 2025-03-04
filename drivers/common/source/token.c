@@ -34,5 +34,5 @@ void koi_script_print_token(KoiScriptToken* token) {
         return;
     }
 
-    printf("{type: %d, line_number: %d, %s}", token->type, token->line_number, token->text);
+    printf("{type: %d, line_number: %d, text: %s}", token->type, token->line_number, token->text);
 }

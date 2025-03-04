@@ -77,4 +77,5 @@ add_executable(ParserDriverDebug
 
 target_link_libraries(ParserDriverDebug PRIVATE
         ${PROJECT_NAME}
+        KoiScriptDriversCommon
 )
