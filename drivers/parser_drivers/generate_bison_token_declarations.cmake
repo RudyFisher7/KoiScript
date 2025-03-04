@@ -61,10 +61,10 @@ while (EndLine STREQUAL "" AND i LESS LinesSize)
     endif ()
 
     # create the token
-    string(REPLACE "KOI_SCRIPT_TOKEN_TYPE" "YY" EnumString ${EnumString})
+    string(REPLACE "KOI_SCRIPT_TOKEN_TYPE" "YY" TokenString ${EnumString})
 
     # assign the token to the current token value
-    list(APPEND Tokens "%token ${EnumString} ${TokenValue}\n")
+    list(APPEND Tokens "%token ${TokenString} ${TokenValue}\n")
 
     MATH(EXPR TokenValue ${TokenValue}+1)
 
