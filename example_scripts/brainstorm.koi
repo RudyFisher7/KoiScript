@@ -23,10 +23,11 @@ class MyObject : object {
 };
 
 
-class MyObjectGeneric<type : int> : object {
-    var default string_t {"hello default"};
-    var my_int_generic type; # defaults #
-    var my_int_referent int&; # defaults to null #
+func gen_t<int_t>(gen_t<float_t>)(gen_t<float> x) {};
+
+class gen_t<type : number_t> : object_t {
+    var my_number_generic type; # defaults #
+    var my_int_referent int&; # defaults to null, same as object_t by value and reference #
     var my_float float {0.1};
 };
 
