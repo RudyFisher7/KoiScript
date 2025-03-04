@@ -27,10 +27,22 @@
 #define KOISCRIPT_TOKEN_H
 
 
+typedef union koi_script_token_value_t {
+    char char_value;
+    int bool_value;
+    int int_value;
+    unsigned int uint_value;
+    float float_value;
+    double ufloat_value;
+    char* string_value;
+} KoiScriptTokenValue;
+
+
 typedef struct koi_script_token_t {
     int type;
     unsigned int line_number;
     char* text;
+    KoiScriptTokenValue value;
 } KoiScriptToken;
 
 

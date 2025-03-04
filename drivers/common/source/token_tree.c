@@ -39,7 +39,7 @@ KoiScriptTokenTreeNode* koi_script_create_empty_token_tree(void) {
     result->child_count = 0u;
     result->child_capacity = 0u;
     result->children = NULL;
-    result->token = (KoiScriptToken){0ul, 0u, NULL};
+    result->token = (KoiScriptToken){0ul, 0u, NULL, (KoiScriptTokenValue){0}};
 
     return result;
 }
