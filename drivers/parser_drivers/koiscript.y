@@ -212,6 +212,10 @@ MoreGenericClassTypeParameters : YY_IDENTIFIER YY_SEPARATOR
     | MoreGenericClassTypeParameters YY_IDENTIFIER YY_OPERATOR_INHERITANCE AnyType YY_SEPARATOR
     ;
 
+AnyGenericType : GenericClassType
+    | GenericFunctionType
+    ;
+
 GenericClassType : ClassType
     | YY_CLASS_TYPE_NAME YY_GENERIC_START GenericClassTypeArguments YY_GENERIC_END
     ;
@@ -220,6 +224,34 @@ GenericClassTypeArguments : GenericClassType
     ;
 MoreGenericClassTypeArguments : GenericClassType YY_SEPARATOR
     | MoreGenericClassTypeArguments GenericClassType YY_SEPARATOR
+    ;
+
+GenericAnonymousFunctionCreation : YY_FUNC GenericFunctionSignature YY_BODY_START GenericFunctionBody YY_OPERATOR_RETURN FunctionArgumentExpression YY_DELIMITER YY_BODY_END ;
+GenericFunctionSignature : AnyGenericType YY_GROUPING_START GenericFunctionParameters YY_GROUPING_END ;
+GenericFunctionParameters : AnyGenericType YY_IDENTIFIER
+    | YY_IDENTIFIER YY_IDENTIFIER
+    | MoreGenericFunctionParameters
+    ;
+MoreGenericFunctionParameters : AnyGenericType YY_IDENTIFIER YY_SEPARATOR
+    | MoreGenericFunctionParameters AnyGenericType YY_IDENTIFIER YY_SEPARATOR
+    | YY_IDENTIFIER YY_IDENTIFIER YY_SEPARATOR
+    | MoreGenericFunctionParameters YY_IDENTIFIER YY_IDENTIFIER YY_SEPARATOR
+    ;
+GenericFunctionBody : VariableAccess
+    | FunctionCall
+    | GenericFunctionBody VariableAccess
+    | GenericFunctionBody FunctionCall
+    ;
+
+GenericFunctionType : GenericClassType YY_GROUPING_START YY_GROUPING_END
+    | GenericClassType YY_GROUPING_START AnonymousGenericFunctionParameters YY_GROUPING_END
+    ;
+
+AnonymousGenericFunctionParameters : AnyGenericType
+    | MoreAnonymousGenericFunctionParameters
+    ;
+MoreAnonymousGenericFunctionParameters : AnyGenericType YY_SEPARATOR
+    | MoreAnonymousGenericFunctionParameters AnyGenericType YY_SEPARATOR
     ;
 
 %%
