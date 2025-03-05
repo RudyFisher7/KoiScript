@@ -25,6 +25,8 @@
 %{
 #define YYDEBUG 1
 
+#include "drivers_common/token.h"
+
 #include "lex.yy.c"
 #include <stdio.h>
 
@@ -91,7 +93,7 @@ Script :  VariableCreation
 
 VariableAccess : YY_IDENTIFIER YY_DELIMITER ;
 
-VariableCreation : YY_VAR YY_IDENTIFIER ClassType YY_BODY_START VariableInitializer YY_BODY_END YY_DELIMITER { printf("  --%s--", yytext); } ;
+VariableCreation : YY_VAR YY_IDENTIFIER ClassType YY_BODY_START VariableInitializer YY_BODY_END YY_DELIMITER ;
 VariableInitializer : VariableInitializerExpression
     | MoreVariableInitializerExpressions VariableInitializerExpression
     | MoreVariableInitializerExpressions
@@ -100,30 +102,30 @@ VariableInitializer : VariableInitializerExpression
 VariableInitializerExpression : VariableLiteral
     ;
 
-VariableLiteral : YY_NULL_LITERAL { printf("  %s: %d", yytext, $1); }
-    | YY_BOOL_FALSE_LITERAL { printf("  %s: %d", yytext, $1); }
-    | YY_BOOL_TRUE_LITERAL { printf("  %s: %d", yytext, $1); }
-    | YY_CHAR_LITERAL { printf("  %s: %d", yytext, $1); }
-    | YY_INT_LITERAL { printf("  %s: %d", yytext, $1); }
-    | YY_UINT_LITERAL { printf("  %s: %d", yytext, $1); }
-    | YY_FLOAT_LITERAL { printf("  %s: %d", yytext, $1); }
-    | YY_UFLOAT_LITERAL { printf("  %s: %d", yytext, $1); }
-    | YY_STRING_LITERAL { printf("  %s: %d", yytext, $1); }
+VariableLiteral : YY_NULL_LITERAL { printf("  %s: %d", yytext, koi_script_to_bool(yytext)); }
+    | YY_BOOL_FALSE_LITERAL { printf("  %s: %d", yytext, koi_script_to_bool(yytext)); }
+    | YY_BOOL_TRUE_LITERAL { printf("  %s: %d", yytext, koi_script_to_bool(yytext)); }
+    | YY_CHAR_LITERAL { printf("  %s: %c", yytext, koi_script_to_char(yytext)); }
+    | YY_INT_LITERAL { printf("  %s: %d", yytext, koi_script_to_int(yytext)); }
+    | YY_UINT_LITERAL { printf("  %s: %lu", yytext, koi_script_to_uint(yytext)); }
+    | YY_FLOAT_LITERAL { printf("  %s: %f", yytext, koi_script_to_float(yytext)); }
+    | YY_UFLOAT_LITERAL { printf("  %s: %f", yytext, koi_script_to_ufloat(yytext)); }
+    | YY_STRING_LITERAL { printf("  %s: %s", yytext, koi_script_to_string(yytext)); }
     ;
 
 MoreVariableInitializerExpressions : VariableInitializerExpression YY_SEPARATOR
     | MoreVariableInitializerExpressions VariableInitializerExpression YY_SEPARATOR
     ;
 
-ClassType : YY_CLASS_OBJECT { printf("  %s: %d", yytext, $1); }
-    | YY_CLASS_BOOL { printf("  %s: %d", yytext, $1); }
-    | YY_CLASS_CHAR { printf("  %s: %d", yytext, $1); }
-    | YY_CLASS_INT { printf("  %s: %d", yytext, $1); }
-    | YY_CLASS_UINT { printf("  %s: %d", yytext, $1); }
-    | YY_CLASS_FLOAT { printf("  %s: %d", yytext, $1); }
-    | YY_CLASS_UFLOAT { printf("  %s: %d", yytext, $1); }
-    | YY_CLASS_STRING { printf("  %s: %d", yytext, $1); }
-    | YY_CLASS_TYPE_NAME { printf("  %s: %d", yytext, $1); }
+ClassType : YY_CLASS_OBJECT { printf("  %s", yytext); }
+    | YY_CLASS_BOOL { printf("  %s", yytext); }
+    | YY_CLASS_CHAR { printf("  %s", yytext); }
+    | YY_CLASS_INT { printf("  %s", yytext); }
+    | YY_CLASS_UINT { printf("  %s", yytext); }
+    | YY_CLASS_FLOAT { printf("  %s", yytext); }
+    | YY_CLASS_UFLOAT { printf("  %s", yytext); }
+    | YY_CLASS_STRING { printf("  %s", yytext); }
+    | YY_CLASS_TYPE_NAME { printf("  %s", yytext); }
     ;
 
 %%
