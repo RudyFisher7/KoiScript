@@ -25,10 +25,13 @@
 %{
 #define YYDEBUG 1
 
+#include "drivers_common/token_tree.h"
 #include "drivers_common/token.h"
 
 #include "lex.yy.c"
 #include <stdio.h>
+
+KoiScriptTokenTreeNode* parse_tree = NULL;
 
 void yyerror(char* msg);
 
@@ -93,7 +96,7 @@ Script :  VariableCreation
 
 VariableAccess : YY_IDENTIFIER YY_DELIMITER ;
 
-VariableCreation : YY_VAR YY_IDENTIFIER ClassType YY_BODY_START VariableInitializer YY_BODY_END YY_DELIMITER ;
+VariableCreation : YY_VAR YY_IDENTIFIER ClassType YY_BODY_START VariableInitializer YY_BODY_END YY_DELIMITER { koi_script_print_token_tree($3); } ;
 VariableInitializer : VariableInitializerExpression
     | MoreVariableInitializerExpressions VariableInitializerExpression
     | MoreVariableInitializerExpressions
@@ -102,9 +105,9 @@ VariableInitializer : VariableInitializerExpression
 VariableInitializerExpression : VariableLiteral
     ;
 
-VariableLiteral : YY_NULL_LITERAL { printf("  %s: %d", yytext, koi_script_to_bool(yytext)); }
-    | YY_BOOL_FALSE_LITERAL { printf("  %s: %d", yytext, koi_script_to_bool(yytext)); }
-    | YY_BOOL_TRUE_LITERAL { printf("  %s: %d", yytext, koi_script_to_bool(yytext)); }
+VariableLiteral : YY_NULL_LITERAL { printf("  %s: %d", yytext, 0); }
+    | YY_BOOL_FALSE_LITERAL { printf("  %s: %d", yytext, 0); }
+    | YY_BOOL_TRUE_LITERAL { printf("  %s: %d", yytext, 1); }
     | YY_CHAR_LITERAL { printf("  %s: %c", yytext, koi_script_to_char(yytext)); }
     | YY_INT_LITERAL { printf("  %s: %d", yytext, koi_script_to_int(yytext)); }
     | YY_UINT_LITERAL { printf("  %s: %lu", yytext, koi_script_to_uint(yytext)); }
@@ -118,7 +121,7 @@ MoreVariableInitializerExpressions : VariableInitializerExpression YY_SEPARATOR
     ;
 
 ClassType : YY_CLASS_OBJECT { printf("  %s", yytext); }
-    | YY_CLASS_BOOL { printf("  %s", yytext); }
+    | YY_CLASS_BOOL { printf("  %s", yytext); $$ = koi_script_create_empty_token_tree(); koi_script_print_token_tree($$); }
     | YY_CLASS_CHAR { printf("  %s", yytext); }
     | YY_CLASS_INT { printf("  %s", yytext); }
     | YY_CLASS_UINT { printf("  %s", yytext); }
