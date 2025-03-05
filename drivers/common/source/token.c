@@ -46,7 +46,15 @@ char koi_script_to_char(char* text) {
 
 
 int koi_script_to_bool(char* text) {
-    return atoi(text);
+    int result = 0;
+    
+    if (strcmp(text, "true") == 0) {
+        result = 1;
+    } else if (atoi(text) != 0) {
+        result = 1;
+    }
+
+    return result;
 }
 
 
