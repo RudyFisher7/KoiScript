@@ -39,5 +39,7 @@ int main(void) {
 
     int result = yyparse();
 
+    koi_script_print_token_tree(parse_tree);
+
     return result;
 }
