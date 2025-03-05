@@ -91,7 +91,7 @@ Script :  VariableCreation
 
 VariableAccess : YY_IDENTIFIER YY_DELIMITER ;
 
-VariableCreation : YY_VAR YY_IDENTIFIER ClassType YY_BODY_START VariableInitializer YY_BODY_END YY_DELIMITER { printf("  --%s--", $3); } ;
+VariableCreation : YY_VAR YY_IDENTIFIER ClassType YY_BODY_START VariableInitializer YY_BODY_END YY_DELIMITER { printf("  --%s--", yytext); } ;
 VariableInitializer : VariableInitializerExpression
     | MoreVariableInitializerExpressions VariableInitializerExpression
     | MoreVariableInitializerExpressions
@@ -115,7 +115,7 @@ MoreVariableInitializerExpressions : VariableInitializerExpression YY_SEPARATOR
     | MoreVariableInitializerExpressions VariableInitializerExpression YY_SEPARATOR
     ;
 
-ClassType : YY_CLASS_OBJECT { printf("  %s: %d", yytext, $1); $$ = yytext; }
+ClassType : YY_CLASS_OBJECT { printf("  %s: %d", yytext, $1); }
     | YY_CLASS_BOOL { printf("  %s: %d", yytext, $1); }
     | YY_CLASS_CHAR { printf("  %s: %d", yytext, $1); }
     | YY_CLASS_INT { printf("  %s: %d", yytext, $1); }

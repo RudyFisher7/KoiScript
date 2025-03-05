@@ -46,6 +46,15 @@ typedef struct koi_script_token_t {
 } KoiScriptToken;
 
 
+char koi_script_to_char(char* text);
+int koi_script_to_bool(char* text);
+int koi_script_to_int(char* text);
+unsigned int koi_script_to_uint(char* text);
+float koi_script_to_float(char* text);
+double koi_script_to_ufloat(char* text);
+char* koi_script_to_string(char* text);
+
+
 void koi_script_print_token(KoiScriptToken* token);
 
 

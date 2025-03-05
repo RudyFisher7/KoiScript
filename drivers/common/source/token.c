@@ -25,7 +25,9 @@
 
 #include "drivers_common/token.h"
 
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 
 void koi_script_print_token(KoiScriptToken* token) {
@@ -35,4 +37,51 @@ void koi_script_print_token(KoiScriptToken* token) {
     }
 
     printf("{type: %d, line_number: %d, text: %s}", token->type, token->line_number, token->text);
+}
+
+
+char koi_script_to_char(char* text) {
+    return text[0u];
+}
+
+
+int koi_script_to_bool(char* text) {
+    return atoi(text);
+}
+
+
+int koi_script_to_int(char* text) {
+    return atoi(text);
+}
+
+
+unsigned int koi_script_to_uint(char* text) {
+    char* end = NULL;
+    unsigned int result = strtoul(text, &end, 10);
+
+    return result;
+}
+
+
+float koi_script_to_float(char* text) {
+    char* end = NULL;
+    float result = strtof(text, &end);
+
+    return result;
+}
+
+
+double koi_script_to_ufloat(char* text) {
+    return atof(text);
+}
+
+
+char* koi_script_to_string(char* text) {
+    char* result = NULL;
+
+    unsigned int string_length = strlen(text);
+    result = (char*)malloc(string_length + 1u);
+    result = strcpy(result, text);
+
+    return result;
 }
